@@ -8,8 +8,8 @@ workflows:
 
     environment:
       ios_signing:
-        provisioning_profiles:
-          - VitaFit_AppStore
+        distribution_type: app_store
+        bundle_identifier: com.vitafitapp.fitness
       flutter: stable
       xcode: latest
       cocoapods: default
