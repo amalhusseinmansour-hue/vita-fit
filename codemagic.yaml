@@ -10,6 +10,9 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.vitafitapp.fitness
+        certificate: Automatic
+        provisioning_profiles:
+          - VitaFit_AppStore
       flutter: stable
       xcode: latest
       cocoapods: default
