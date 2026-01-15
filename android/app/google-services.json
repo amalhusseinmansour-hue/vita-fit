@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "100672549900",
+    "project_id": "vitafit-794a6",
+    "storage_bucket": "vitafit-794a6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100672549900:android:dce5fd1ad1b14fbf4baa29",
+        "android_client_info": {
+          "package_name": "com.vitafit.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYoFJ7YtrxCMYbjJvG3LP29Lv0XRmHLpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

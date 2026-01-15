@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سياسة الخصوصية - VitaFit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .logo-header img {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+        }
+
+        .logo-header span {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FF69B4;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+        }
+
+        .page-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #FF69B4;
+        }
+
+        .page-header .update-date {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Sections */
+        .section {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .section:hover {
+            border-color: rgba(255,105,180,0.3);
+        }
+
+        .section h2 {
+            color: #FF69B4;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,105,180,0.2);
+        }
+
+        .section h3 {
+            color: #DDA0DD;
+            font-size: 1.1rem;
+            margin: 20px 0 10px;
+        }
+
+        .section p {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+        }
+
+        .section ul {
+            padding-right: 25px;
+        }
+
+        .section li {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: rgba(255,105,180,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-right: 4px solid #FF69B4;
+            margin: 20px 0;
+        }
+
+        .highlight p {
+            color: #fff;
+            margin: 0;
+        }
+
+        /* Contact Box */
+        .contact-box {
+            background: linear-gradient(135deg, #FF69B4 0%, #DDA0DD 100%);
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .contact-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-box p {
+            margin-bottom: 8px;
+        }
+
+        .contact-box a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0,0,0,0.3);
+            padding: 60px 20px 30px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .footer-brand img {
+            width: 60px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+        }
+
+        .footer-section h4 {
+            color: #FF69B4;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section ul li a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #FF69B4;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo-header">
+                <img src="logo.jpeg" alt="VitaFit">
+                <span>VitaFit</span>
+            </a>
+            <nav class="nav-links">
+                <a href="/#features">المميزات</a>
+                <a href="/#about">عن التطبيق</a>
+                <a href="/contact">تواصلي معنا</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <img src="logo.jpeg" alt="VitaFit">
+            <h1>سياسة الخصوصية</h1>
+            <p class="update-date">آخر تحديث: ديسمبر 2024</p>
+        </div>
+
+        <div class="section">
+            <h2>مقدمة</h2>
+            <p>نحن في VitaFit نقدر خصوصيتك ونلتزم بحماية بياناتك الشخصية. توضح سياسة الخصوصية هذه كيفية جمعنا واستخدامنا وحمايتنا لمعلوماتك عند استخدام تطبيقنا.</p>
+            <p>باستخدامك لتطبيق VitaFit، فإنك توافق على جمع واستخدام معلوماتك وفقاً لهذه السياسة.</p>
+        </div>
+
+        <div class="section">
+            <h2>المعلومات التي نجمعها</h2>
+            <h3>1. معلومات الحساب:</h3>
+            <ul>
+                <li>الاسم الكامل</li>
+                <li>البريد الإلكتروني</li>
+                <li>رقم الهاتف</li>
+                <li>كلمة المرور (مشفرة)</li>
+            </ul>
+
+            <h3>2. معلومات الصحة واللياقة:</h3>
+            <ul>
+                <li>الطول والوزن</li>
+                <li>الأهداف الصحية</li>
+                <li>مستوى النشاط البدني</li>
+                <li>تاريخ التمارين والوجبات</li>
+            </ul>
+
+            <h3>3. معلومات الجهاز:</h3>
+            <ul>
+                <li>نوع الجهاز ونظام التشغيل</li>
+                <li>معرف الجهاز للإشعارات</li>
+                <li>عنوان IP</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>كيف نستخدم معلوماتك</h2>
+            <ul>
+                <li>تقديم خدمات التطبيق وتحسينها</li>
+                <li>تخصيص تجربتك وبرامج التدريب</li>
+                <li>إرسال الإشعارات والتذكيرات</li>
+                <li>معالجة المدفوعات والاشتراكات</li>
+                <li>التواصل معك بشأن حسابك</li>
+                <li>تحسين أمان التطبيق</li>
+                <li>الامتثال للمتطلبات القانونية</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>مشاركة المعلومات</h2>
+            <div class="highlight">
+                <p><strong>لا نبيع أو نؤجر معلوماتك الشخصية لأطراف ثالثة.</strong></p>
+            </div>
+            <p>قد نشارك معلوماتك في الحالات التالية:</p>
+            <ul>
+                <li>مع المدربات المعينات لك (معلومات اللياقة فقط)</li>
+                <li>مع مزودي خدمات الدفع لمعالجة المدفوعات</li>
+                <li>عند الاقتضاء بموجب القانون</li>
+                <li>لحماية حقوقنا وسلامة المستخدمين</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>حماية البيانات</h2>
+            <p>نتخذ إجراءات أمنية صارمة لحماية معلوماتك:</p>
+            <ul>
+                <li>تشفير البيانات أثناء النقل والتخزين</li>
+                <li>استخدام بروتوكولات HTTPS آمنة</li>
+                <li>تخزين كلمات المرور بتشفير قوي</li>
+                <li>مراجعات أمنية دورية</li>
+                <li>تقييد الوصول إلى البيانات للموظفين المصرح لهم</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>حقوقك</h2>
+            <p>لديك الحقوق التالية فيما يتعلق ببياناتك:</p>
+            <ul>
+                <li>الوصول إلى بياناتك الشخصية</li>
+                <li>تصحيح البيانات غير الدقيقة</li>
+                <li>حذف حسابك وبياناتك</li>
+                <li>الاعتراض على معالجة بياناتك</li>
+                <li>نقل بياناتك إلى خدمة أخرى</li>
+                <li>سحب موافقتك في أي وقت</li>
+            </ul>
+            <div class="highlight">
+                <p>لممارسة أي من هذه الحقوق، يرجى التواصل معنا عبر التطبيق أو البريد الإلكتروني.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>الاحتفاظ بالبيانات</h2>
+            <p>نحتفظ ببياناتك طالما كان حسابك نشطاً أو حسب الحاجة لتقديم خدماتنا.</p>
+            <p><strong style="color:#DDA0DD">عند حذف حسابك:</strong></p>
+            <ul>
+                <li>يتم حذف بياناتك الشخصية خلال 30 يوماً</li>
+                <li>قد نحتفظ ببعض البيانات المجهولة للتحليلات</li>
+                <li>نحتفظ بسجلات المعاملات المالية حسب القانون</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>التحديثات على السياسة</h2>
+            <p>قد نقوم بتحديث سياسة الخصوصية من وقت لآخر. سنخطرك بأي تغييرات جوهرية عبر:</p>
+            <ul>
+                <li>إشعار داخل التطبيق</li>
+                <li>بريد إلكتروني على عنوانك المسجل</li>
+            </ul>
+        </div>
+
+        <div class="contact-box">
+            <h3>تواصلي معنا</h3>
+            <p>البريد الإلكتروني: <a href="mailto:privacy@vitafit.online">privacy@vitafit.online</a></p>
+            <p>الهاتف: +966 50 000 0000</p>
+            <p>المملكة العربية السعودية</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="logo.jpeg" alt="VitaFit">
+                <p>تطبيق اللياقة البدنية الأول المصمم خصيصاً للنساء العربيات.</p>
+            </div>
+            <div class="footer-section">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="/#features">المميزات</a></li>
+                    <li><a href="/#about">عن التطبيق</a></li>
+                    <li><a href="/contact">اتصلي بنا</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>الدعم</h4>
+                <ul>
+                    <li><a href="/contact">مركز المساعدة</a></li>
+                    <li><a href="/delete-account">حذف الحساب</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>القانونية</h4>
+                <ul>
+                    <li><a href="/privacy-policy">سياسة الخصوصية</a></li>
+                    <li><a href="/terms">الشروط والأحكام</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 VitaFit. جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+</body>
+</html>

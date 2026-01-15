@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المستخدمين - لوحة التحكم</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .navbar h1 { font-size: 24px; }
+        .navbar a { color: white; text-decoration: none; margin-left: 20px; }
+        .navbar a:hover { text-decoration: underline; }
+
+        .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px; margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white; padding: 20px; border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .stat-card h3 { color: #666; font-size: 13px; margin-bottom: 8px; }
+        .stat-card .number { font-size: 28px; font-weight: bold; color: #667eea; }
+
+        .filters {
+            background: white; padding: 20px; border-radius: 12px;
+            margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center;
+        }
+        .filters input, .filters select {
+            padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;
+        }
+        .filters input[type="text"] { width: 250px; }
+
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-info { background: #17a2b8; color: white; }
+
+        .section {
+            background: white; border-radius: 15px; padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        table th {
+            background: #f8f9fa; padding: 14px 12px; text-align: right;
+            font-weight: 600; color: #333; border-bottom: 2px solid #dee2e6;
+        }
+        table td { padding: 14px 12px; border-bottom: 1px solid #eee; }
+        table tr:hover { background: #f8f9fa; }
+
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-avatar {
+            width: 45px; height: 45px; border-radius: 50%; background: #667eea;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 18px;
+        }
+        .user-details .name { font-weight: 600; color: #333; }
+        .user-details .email { font-size: 13px; color: #666; }
+
+        .badge {
+            display: inline-block; padding: 4px 10px; border-radius: 12px;
+            font-size: 11px; font-weight: 600;
+        }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        .badge-info { background: #d1ecf1; color: #0c5460; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-primary { background: #cce5ff; color: #004085; }
+
+        .actions { display: flex; gap: 5px; }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white; border-radius: 15px; width: 90%; max-width: 500px;
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal-header {
+            padding: 20px; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+        .modal-body { padding: 20px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
+        }
+
+        .detail-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .detail-item label { color: #666; }
+        .detail-item span { font-weight: 600; }
+
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .alert-success { background: #d4edda; color: #155724; }
+        .alert-danger { background: #f8d7da; color: #721c24; }
+
+        .pagination { display: flex; justify-content: center; gap: 5px; margin-top: 20px; }
+        .pagination button {
+            padding: 8px 15px; border: 1px solid #ddd; background: white;
+            border-radius: 5px; cursor: pointer;
+        }
+        .pagination button.active { background: #667eea; color: white; }
+        .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .empty-state { text-align: center; padding: 60px; color: #999; }
+        .empty-state .icon { font-size: 64px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>إدارة المستخدمين</h1>
+        <div>
+            <a href="dashboard">الرئيسية</a>
+            <a href="products">المنتجات</a>
+            <a href="orders">الطلبات</a>
+            <a href="#" onclick="logout()">تسجيل الخروج</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="alertBox"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>إجمالي المستخدمين</h3>
+                <div class="number" id="totalUsers">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>المستخدمين النشطين</h3>
+                <div class="number" id="activeUsers">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>المدربين</h3>
+                <div class="number" id="trainersCount">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>المشرفين</h3>
+                <div class="number" id="adminsCount">0</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder="بحث بالاسم أو البريد..." onkeyup="filterUsers()">
+            <select id="roleFilter" onchange="filterUsers()">
+                <option value="">جميع الأدوار</option>
+                <option value="user">مستخدم</option>
+                <option value="trainee">متدرب</option>
+                <option value="trainer">مدرب</option>
+                <option value="admin">مشرف</option>
+            </select>
+            <select id="statusFilter" onchange="filterUsers()">
+                <option value="">جميع الحالات</option>
+                <option value="active">نشط</option>
+                <option value="inactive">غير نشط</option>
+            </select>
+            <button class="btn btn-primary" onclick="openAddModal()">+ إضافة مستخدم</button>
+        </div>
+
+        <div class="section">
+            <div id="usersContainer">جاري التحميل...</div>
+            <div id="pagination" class="pagination"></div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">إضافة مستخدم</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm" onsubmit="saveUser(event)">
+                    <input type="hidden" id="userId">
+                    <div class="form-group">
+                        <label>الاسم</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group" id="passwordGroup">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="password">
+                        <small style="color: #666;">اتركها فارغة للإبقاء على القديمة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="text" id="phone">
+                    </div>
+                    <div class="form-group">
+                        <label>الدور</label>
+                        <select id="role">
+                            <option value="user">مستخدم</option>
+                            <option value="trainee">متدرب</option>
+                            <option value="trainer">مدرب</option>
+                            <option value="admin">مشرف</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button type="button" class="btn" style="background: #eee;" onclick="closeModal()">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View User Modal -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>تفاصيل المستخدم</h3>
+                <button class="modal-close" onclick="closeViewModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="userDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+        let token = localStorage.getItem('adminToken');
+        let allUsers = [];
+        let currentPage = 1;
+        const itemsPerPage = 15;
+
+        if (!token) window.location.href = 'index';
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            window.location.href = 'index';
+        }
+
+        function showAlert(message, type = 'success') {
+            document.getElementById('alertBox').innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => document.getElementById('alertBox').innerHTML = '', 3000);
+        }
+
+        async function fetchAPI(endpoint, options = {}) {
+            const response = await fetch(`${API_URL}/api${endpoint}`, {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...(options.headers || {})
+                }
+            });
+            return await response.json();
+        }
+
+        async function loadUsers() {
+            try {
+                const data = await fetchAPI('/admin/users');
+                if (data.success) {
+                    allUsers = data.data;
+                    updateStats();
+                    displayUsers(allUsers);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalUsers').textContent = allUsers.length;
+            document.getElementById('activeUsers').textContent = allUsers.filter(u => u.is_active).length;
+            document.getElementById('trainersCount').textContent = allUsers.filter(u => u.role === 'trainer').length;
+            document.getElementById('adminsCount').textContent = allUsers.filter(u => u.role === 'admin' || u.role === 'super_admin').length;
+        }
+
+        function filterUsers() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const role = document.getElementById('roleFilter').value;
+            const status = document.getElementById('statusFilter').value;
+
+            const filtered = allUsers.filter(user => {
+                const matchesSearch = !search ||
+                    user.name?.toLowerCase().includes(search) ||
+                    user.email?.toLowerCase().includes(search);
+                const matchesRole = !role || user.role === role;
+                const matchesStatus = !status ||
+                    (status === 'active' && user.is_active) ||
+                    (status === 'inactive' && !user.is_active);
+                return matchesSearch && matchesRole && matchesStatus;
+            });
+
+            currentPage = 1;
+            displayUsers(filtered);
+        }
+
+        function displayUsers(users) {
+            const container = document.getElementById('usersContainer');
+
+            if (users.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>لا يوجد مستخدمين</p></div>';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedUsers = users.slice(startIndex, startIndex + itemsPerPage);
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المستخدم</th>
+                            <th>الهاتف</th>
+                            <th>الدور</th>
+                            <th>الحالة</th>
+                            <th>تاريخ التسجيل</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${paginatedUsers.map(user => `
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">${user.name?.charAt(0) || '?'}</div>
+                                        <div class="user-details">
+                                            <div class="name">${user.name || '-'}</div>
+                                            <div class="email">${user.email}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>${user.phone || '-'}</td>
+                                <td>${getRoleBadge(user.role)}</td>
+                                <td>${user.is_active ? '<span class="badge badge-success">نشط</span>' : '<span class="badge badge-danger">غير نشط</span>'}</td>
+                                <td>${new Date(user.created_at).toLocaleDateString('ar')}</td>
+                                <td>
+                                    <div class="actions">
+                                        <button class="btn btn-sm btn-info" onclick="viewUser(${user.id})">عرض</button>
+                                        <button class="btn btn-sm btn-warning" onclick="editUser(${user.id})">تعديل</button>
+                                        <button class="btn btn-sm ${user.is_active ? 'btn-danger' : 'btn-success'}" onclick="toggleStatus(${user.id})">${user.is_active ? 'تعطيل' : 'تفعيل'}</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            const totalPages = Math.ceil(users.length / itemsPerPage);
+            let paginationHTML = '';
+            if (totalPages > 1) {
+                paginationHTML += `<button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>السابق</button>`;
+                for (let i = 1; i <= Math.min(totalPages, 10); i++) {
+                    paginationHTML += `<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+                }
+                paginationHTML += `<button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>التالي</button>`;
+            }
+            document.getElementById('pagination').innerHTML = paginationHTML;
+        }
+
+        function getRoleBadge(role) {
+            const roles = {
+                'user': { class: 'badge-info', text: 'مستخدم' },
+                'trainee': { class: 'badge-primary', text: 'متدرب' },
+                'trainer': { class: 'badge-warning', text: 'مدرب' },
+                'admin': { class: 'badge-danger', text: 'مشرف' },
+                'super_admin': { class: 'badge-danger', text: 'مشرف أعلى' }
+            };
+            const r = roles[role] || { class: 'badge-info', text: role };
+            return `<span class="badge ${r.class}">${r.text}</span>`;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            filterUsers();
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'إضافة مستخدم جديد';
+            document.getElementById('userForm').reset();
+            document.getElementById('userId').value = '';
+            document.getElementById('password').required = true;
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        function editUser(id) {
+            const user = allUsers.find(u => u.id === id);
+            if (!user) return;
+
+            document.getElementById('modalTitle').textContent = 'تعديل المستخدم';
+            document.getElementById('userId').value = user.id;
+            document.getElementById('name').value = user.name || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('role').value = user.role || 'user';
+            document.getElementById('password').required = false;
+            document.getElementById('password').value = '';
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('userModal').classList.remove('active');
+        }
+
+        function viewUser(id) {
+            const user = allUsers.find(u => u.id === id);
+            if (!user) return;
+
+            document.getElementById('userDetails').innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div class="user-avatar" style="width: 80px; height: 80px; font-size: 32px; margin: 0 auto;">
+                        ${user.name?.charAt(0) || '?'}
+                    </div>
+                    <h3 style="margin-top: 15px;">${user.name || '-'}</h3>
+                    <p style="color: #666;">${user.email}</p>
+                </div>
+                <div class="detail-item"><label>الهاتف</label><span>${user.phone || '-'}</span></div>
+                <div class="detail-item"><label>الدور</label><span>${getRoleBadge(user.role)}</span></div>
+                <div class="detail-item"><label>الحالة</label><span>${user.is_active ? '<span class="badge badge-success">نشط</span>' : '<span class="badge badge-danger">غير نشط</span>'}</span></div>
+                <div class="detail-item"><label>تاريخ التسجيل</label><span>${new Date(user.created_at).toLocaleDateString('ar')}</span></div>
+                <div class="detail-item"><label>التحقق من البريد</label><span>${user.email_verified ? '<span class="badge badge-success">تم التحقق</span>' : '<span class="badge badge-danger">لم يتم</span>'}</span></div>
+            `;
+            document.getElementById('viewModal').classList.add('active');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.remove('active');
+        }
+
+        async function saveUser(event) {
+            event.preventDefault();
+
+            const userId = document.getElementById('userId').value;
+            const userData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                role: document.getElementById('role').value
+            };
+
+            const password = document.getElementById('password').value;
+            if (password) userData.password = password;
+
+            try {
+                const url = userId ? `/admin/users/${userId}` : '/admin/users';
+                const method = userId ? 'PUT' : 'POST';
+
+                const data = await fetchAPI(url, {
+                    method,
+                    body: JSON.stringify(userData)
+                });
+
+                if (data.success) {
+                    showAlert(userId ? 'تم تحديث المستخدم بنجاح' : 'تم إضافة المستخدم بنجاح');
+                    closeModal();
+                    loadUsers();
+                } else {
+                    showAlert(data.message || 'حدث خطأ', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في حفظ المستخدم', 'danger');
+            }
+        }
+
+        async function toggleStatus(id) {
+            try {
+                const data = await fetchAPI(`/admin/users/${id}/toggle-status`, { method: 'PUT' });
+                if (data.success) {
+                    showAlert('تم تحديث الحالة بنجاح');
+                    loadUsers();
+                } else {
+                    showAlert(data.message || 'حدث خطأ', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في تحديث الحالة', 'danger');
+            }
+        }
+
+        loadUsers();
+    </script>
+</body>
+</html>

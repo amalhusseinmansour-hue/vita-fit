@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المدربين - لوحة التحكم</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .navbar h1 { font-size: 24px; }
+        .navbar a { color: white; text-decoration: none; margin-left: 20px; }
+
+        .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; }
+
+        .header-actions {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; flex-wrap: wrap; gap: 15px;
+        }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white; padding: 20px; border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .stat-card h3 { color: #666; font-size: 13px; margin-bottom: 8px; }
+        .stat-card .number { font-size: 28px; font-weight: bold; color: #667eea; }
+
+        .section {
+            background: white; border-radius: 15px; padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .trainers-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .trainer-card {
+            background: #f8f9fa; border-radius: 15px; overflow: hidden;
+            transition: all 0.3s;
+        }
+        .trainer-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+
+        .trainer-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px; text-align: center; color: white;
+        }
+        .trainer-avatar {
+            width: 80px; height: 80px; border-radius: 50%; background: white;
+            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: bold; color: #667eea;
+        }
+        .trainer-name { font-size: 20px; font-weight: bold; }
+        .trainer-specialty { opacity: 0.9; font-size: 14px; margin-top: 5px; }
+
+        .trainer-body { padding: 20px; }
+        .trainer-info { margin-bottom: 15px; }
+        .trainer-info-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .trainer-info-item label { color: #666; }
+        .trainer-info-item span { font-weight: 600; }
+
+        .trainer-actions { display: flex; gap: 10px; }
+        .trainer-actions button { flex: 1; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-sm { padding: 8px 15px; font-size: 13px; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-info { background: #17a2b8; color: white; }
+
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 15px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+        .modal-body { padding: 20px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .alert-success { background: #d4edda; color: #155724; }
+        .alert-danger { background: #f8d7da; color: #721c24; }
+
+        .filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filters input, .filters select { padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; }
+
+        .empty-state { text-align: center; padding: 60px; color: #999; }
+        .empty-state .icon { font-size: 64px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>إدارة المدربين</h1>
+        <div>
+            <a href="dashboard">الرئيسية</a>
+            <a href="products">المنتجات</a>
+            <a href="orders">الطلبات</a>
+            <a href="#" onclick="logout()">تسجيل الخروج</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="alertBox"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>إجمالي المدربين</h3>
+                <div class="number" id="totalTrainers">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>المدربين النشطين</h3>
+                <div class="number" id="activeTrainers">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>إجمالي المتدربين</h3>
+                <div class="number" id="totalTrainees">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>الجلسات هذا الشهر</h3>
+                <div class="number" id="monthlySessions">0</div>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="بحث عن مدرب..." onkeyup="filterTrainers()">
+                <select id="specialtyFilter" onchange="filterTrainers()">
+                    <option value="">جميع التخصصات</option>
+                    <option value="fitness">لياقة بدنية</option>
+                    <option value="yoga">يوجا</option>
+                    <option value="nutrition">تغذية</option>
+                    <option value="bodybuilding">كمال أجسام</option>
+                    <option value="cardio">كارديو</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="openModal()">+ إضافة مدرب</button>
+        </div>
+
+        <div class="section">
+            <div id="trainersContainer" class="trainers-grid"></div>
+        </div>
+    </div>
+
+    <!-- Trainer Modal -->
+    <div id="trainerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">إضافة مدرب</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="trainerForm" onsubmit="saveTrainer(event)">
+                    <input type="hidden" id="trainerId">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الاسم</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>البريد الإلكتروني</label>
+                            <input type="email" id="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>رقم الهاتف</label>
+                            <input type="text" id="phone">
+                        </div>
+                        <div class="form-group">
+                            <label>التخصص</label>
+                            <select id="specialty">
+                                <option value="fitness">لياقة بدنية</option>
+                                <option value="yoga">يوجا</option>
+                                <option value="nutrition">تغذية</option>
+                                <option value="bodybuilding">كمال أجسام</option>
+                                <option value="cardio">كارديو</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>سنوات الخبرة</label>
+                            <input type="number" id="experience" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>سعر الجلسة (ر.س)</label>
+                            <input type="number" id="hourlyRate" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الشهادات</label>
+                        <input type="text" id="certifications" placeholder="مثال: CPT, CSCS">
+                    </div>
+
+                    <div class="form-group">
+                        <label>نبذة عن المدرب</label>
+                        <textarea id="bio" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group" id="passwordGroup">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="password">
+                        <small style="color: #666;">اتركها فارغة للإبقاء على القديمة</small>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button type="button" class="btn" style="background: #eee;" onclick="closeModal()">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+        let token = localStorage.getItem('adminToken');
+        let trainers = [];
+
+        if (!token) window.location.href = 'index';
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            window.location.href = 'index';
+        }
+
+        function showAlert(message, type = 'success') {
+            document.getElementById('alertBox').innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => document.getElementById('alertBox').innerHTML = '', 3000);
+        }
+
+        async function fetchAPI(endpoint, options = {}) {
+            const response = await fetch(`${API_URL}/api${endpoint}`, {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            return await response.json();
+        }
+
+        async function loadTrainers() {
+            try {
+                const data = await fetchAPI('/trainers');
+                if (data.success) {
+                    trainers = data.data || [];
+                    updateStats();
+                    displayTrainers(trainers);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalTrainers').textContent = trainers.length;
+            document.getElementById('activeTrainers').textContent = trainers.filter(t => t.is_active !== false).length;
+            document.getElementById('totalTrainees').textContent = trainers.reduce((sum, t) => sum + (t.trainees_count || 0), 0);
+            document.getElementById('monthlySessions').textContent = trainers.reduce((sum, t) => sum + (t.sessions_count || 0), 0);
+        }
+
+        function filterTrainers() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const specialty = document.getElementById('specialtyFilter').value;
+
+            const filtered = trainers.filter(trainer => {
+                const matchesSearch = !search ||
+                    trainer.user?.name?.toLowerCase().includes(search) ||
+                    trainer.name?.toLowerCase().includes(search);
+                const matchesSpecialty = !specialty || trainer.specialty === specialty;
+                return matchesSearch && matchesSpecialty;
+            });
+
+            displayTrainers(filtered);
+        }
+
+        function displayTrainers(trainersList) {
+            const container = document.getElementById('trainersContainer');
+
+            if (trainersList.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="icon">🏋️</div>
+                        <p>لا يوجد مدربين</p>
+                        <button class="btn btn-primary" onclick="openModal()" style="margin-top: 15px;">إضافة مدرب</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = trainersList.map(trainer => `
+                <div class="trainer-card">
+                    <div class="trainer-header">
+                        <div class="trainer-avatar">${(trainer.user?.name || trainer.name || '?').charAt(0)}</div>
+                        <div class="trainer-name">${trainer.user?.name || trainer.name || '-'}</div>
+                        <div class="trainer-specialty">${getSpecialtyName(trainer.specialty)}</div>
+                    </div>
+                    <div class="trainer-body">
+                        <div class="trainer-info">
+                            <div class="trainer-info-item">
+                                <label>البريد</label>
+                                <span>${trainer.user?.email || trainer.email || '-'}</span>
+                            </div>
+                            <div class="trainer-info-item">
+                                <label>الهاتف</label>
+                                <span>${trainer.user?.phone || trainer.phone || '-'}</span>
+                            </div>
+                            <div class="trainer-info-item">
+                                <label>سنوات الخبرة</label>
+                                <span>${trainer.experience_years || 0} سنة</span>
+                            </div>
+                            <div class="trainer-info-item">
+                                <label>سعر الجلسة</label>
+                                <span>${trainer.hourly_rate || 0} ر.س</span>
+                            </div>
+                            <div class="trainer-info-item">
+                                <label>الحالة</label>
+                                <span>${trainer.is_active !== false ? '<span class="badge badge-success">نشط</span>' : '<span class="badge badge-danger">غير نشط</span>'}</span>
+                            </div>
+                        </div>
+                        <div class="trainer-actions">
+                            <button class="btn btn-sm btn-warning" onclick="editTrainer(${trainer.id})">تعديل</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteTrainer(${trainer.id})">حذف</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getSpecialtyName(specialty) {
+            const specialties = {
+                'fitness': 'لياقة بدنية',
+                'yoga': 'يوجا',
+                'nutrition': 'تغذية',
+                'bodybuilding': 'كمال أجسام',
+                'cardio': 'كارديو'
+            };
+            return specialties[specialty] || specialty || '-';
+        }
+
+        function openModal() {
+            document.getElementById('modalTitle').textContent = 'إضافة مدرب جديد';
+            document.getElementById('trainerForm').reset();
+            document.getElementById('trainerId').value = '';
+            document.getElementById('password').required = true;
+            document.getElementById('trainerModal').classList.add('active');
+        }
+
+        function editTrainer(id) {
+            const trainer = trainers.find(t => t.id === id);
+            if (!trainer) return;
+
+            document.getElementById('modalTitle').textContent = 'تعديل المدرب';
+            document.getElementById('trainerId').value = trainer.id;
+            document.getElementById('name').value = trainer.user?.name || trainer.name || '';
+            document.getElementById('email').value = trainer.user?.email || trainer.email || '';
+            document.getElementById('phone').value = trainer.user?.phone || trainer.phone || '';
+            document.getElementById('specialty').value = trainer.specialty || 'fitness';
+            document.getElementById('experience').value = trainer.experience_years || '';
+            document.getElementById('hourlyRate').value = trainer.hourly_rate || '';
+            document.getElementById('certifications').value = trainer.certifications || '';
+            document.getElementById('bio').value = trainer.bio || '';
+            document.getElementById('password').required = false;
+            document.getElementById('password').value = '';
+            document.getElementById('trainerModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('trainerModal').classList.remove('active');
+        }
+
+        async function saveTrainer(event) {
+            event.preventDefault();
+
+            const trainerId = document.getElementById('trainerId').value;
+            const trainerData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                specialty: document.getElementById('specialty').value,
+                experience_years: document.getElementById('experience').value,
+                hourly_rate: document.getElementById('hourlyRate').value,
+                certifications: document.getElementById('certifications').value,
+                bio: document.getElementById('bio').value
+            };
+
+            const password = document.getElementById('password').value;
+            if (password) trainerData.password = password;
+
+            try {
+                const url = trainerId ? `/admin/trainers/${trainerId}` : '/admin/trainers';
+                const method = trainerId ? 'PUT' : 'POST';
+
+                const data = await fetchAPI(url, {
+                    method,
+                    body: JSON.stringify(trainerData)
+                });
+
+                if (data.success) {
+                    showAlert(trainerId ? 'تم تحديث المدرب' : 'تم إضافة المدرب');
+                    closeModal();
+                    loadTrainers();
+                } else {
+                    showAlert(data.message || 'حدث خطأ', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في حفظ المدرب', 'danger');
+            }
+        }
+
+        async function deleteTrainer(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا المدرب؟')) return;
+
+            try {
+                const data = await fetchAPI(`/admin/trainers/${id}`, { method: 'DELETE' });
+                if (data.success) {
+                    showAlert('تم حذف المدرب');
+                    loadTrainers();
+                } else {
+                    showAlert(data.message || 'حدث خطأ', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في حذف المدرب', 'danger');
+            }
+        }
+
+        loadTrainers();
+    </script>
+</body>
+</html>

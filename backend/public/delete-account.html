@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حذف الحساب - VitaFit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .logo-header img {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+        }
+
+        .logo-header span {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FF69B4;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: rgba(220,53,69,0.15);
+            border: 1px solid rgba(220,53,69,0.3);
+            border-radius: 20px;
+        }
+
+        .page-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #dc3545;
+        }
+
+        .page-header .update-date {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(220,53,69,0.15);
+            border: 2px solid rgba(220,53,69,0.5);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .warning-box h2 {
+            color: #dc3545;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .warning-box p {
+            color: #ff6b6b;
+        }
+
+        /* Sections */
+        .section {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .section:hover {
+            border-color: rgba(255,105,180,0.3);
+        }
+
+        .section h2 {
+            color: #FF69B4;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,105,180,0.2);
+        }
+
+        .section h3 {
+            color: #DDA0DD;
+            font-size: 1.1rem;
+            margin: 20px 0 10px;
+        }
+
+        .section p {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+        }
+
+        .section ul {
+            padding-right: 25px;
+        }
+
+        .section li {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 10px;
+        }
+
+        .section a {
+            color: #FF69B4;
+        }
+
+        /* Data List */
+        .data-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .data-item {
+            background: rgba(220,53,69,0.1);
+            border: 1px solid rgba(220,53,69,0.3);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .data-item span {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .data-item p {
+            color: #ff6b6b;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-right: 35px;
+            margin: 25px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 10px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #FF69B4, #dc3545);
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -31px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            background: #FF69B4;
+            border-radius: 50%;
+            border: 3px solid #1a1a2e;
+        }
+
+        .timeline-item h4 {
+            color: #DDA0DD;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .timeline-item p {
+            margin: 0;
+        }
+
+        /* Steps List */
+        .steps-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps-list li {
+            position: relative;
+            padding-right: 55px;
+            margin-bottom: 20px;
+        }
+
+        .steps-list li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #FF69B4 0%, #DDA0DD 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Highlight & Info Boxes */
+        .highlight {
+            background: rgba(255,105,180,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-right: 4px solid #FF69B4;
+            margin: 20px 0;
+        }
+
+        .highlight p {
+            color: #fff;
+            margin: 0;
+        }
+
+        .info-box {
+            background: rgba(23,162,184,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-right: 4px solid #17a2b8;
+            margin: 20px 0;
+        }
+
+        .info-box p {
+            color: #17a2b8;
+            margin: 0;
+        }
+
+        /* Contact Box */
+        .contact-box {
+            background: linear-gradient(135deg, #FF69B4 0%, #DDA0DD 100%);
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .contact-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-box p {
+            margin-bottom: 8px;
+        }
+
+        .contact-box a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0,0,0,0.3);
+            padding: 60px 20px 30px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .footer-brand img {
+            width: 60px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+        }
+
+        .footer-section h4 {
+            color: #FF69B4;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section ul li a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #FF69B4;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            .data-list {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo-header">
+                <img src="logo.jpeg" alt="VitaFit">
+                <span>VitaFit</span>
+            </a>
+            <nav class="nav-links">
+                <a href="/#features">المميزات</a>
+                <a href="/#about">عن التطبيق</a>
+                <a href="/contact">تواصلي معنا</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <img src="logo.jpeg" alt="VitaFit">
+            <h1>حذف الحساب</h1>
+            <p class="update-date">آخر تحديث: ديسمبر 2024</p>
+        </div>
+
+        <div class="warning-box">
+            <h2>⚠️ تحذير هام</h2>
+            <p>حذف الحساب إجراء نهائي ولا يمكن التراجع عنه. يرجى قراءة هذه الصفحة بعناية قبل المتابعة.</p>
+        </div>
+
+        <div class="section">
+            <h2>ما الذي سيتم حذفه؟</h2>
+            <p>عند حذف حسابك، سيتم حذف جميع البيانات التالية بشكل نهائي:</p>
+
+            <div class="data-list">
+                <div class="data-item">
+                    <span>👤</span>
+                    <p>معلوماتك الشخصية</p>
+                </div>
+                <div class="data-item">
+                    <span>💪</span>
+                    <p>سجل التمارين والتقدم</p>
+                </div>
+                <div class="data-item">
+                    <span>🥗</span>
+                    <p>الخطط الغذائية المحفوظة</p>
+                </div>
+                <div class="data-item">
+                    <span>📹</span>
+                    <p>سجل الجلسات الأونلاين</p>
+                </div>
+                <div class="data-item">
+                    <span>🛍️</span>
+                    <p>سجل الطلبات</p>
+                </div>
+                <div class="data-item">
+                    <span>💳</span>
+                    <p>الاشتراكات النشطة</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>الجدول الزمني للحذف</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>فوراً</h4>
+                    <p>يتم تعليق حسابك ولن تتمكني من تسجيل الدخول</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>خلال 7 أيام</h4>
+                    <p>فترة السماح - يمكنك إلغاء طلب الحذف بالتواصل معنا</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>خلال 30 يوماً</h4>
+                    <p>يتم حذف جميع بياناتك الشخصية بشكل نهائي من أنظمتنا</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>البيانات المحتفظ بها</h4>
+                    <p>بعض البيانات المجهولة للتحليلات وسجلات المعاملات المالية (للأغراض القانونية)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>كيفية حذف حسابك</h2>
+            <p>يمكنك حذف حسابك من خلال إحدى الطرق التالية:</p>
+
+            <h3>الطريقة الأولى: من التطبيق (موصى بها)</h3>
+            <ul class="steps-list">
+                <li>افتحي تطبيق VitaFit وسجلي الدخول</li>
+                <li>اذهبي إلى "المزيد" > "الخصوصية والأمان"</li>
+                <li>اضغطي على "حذف الحساب"</li>
+                <li>أدخلي كلمة المرور للتأكيد</li>
+                <li>اضغطي على "حذف حسابي نهائياً"</li>
+            </ul>
+
+            <h3>الطريقة الثانية: عبر البريد الإلكتروني</h3>
+            <ul class="steps-list">
+                <li>أرسلي بريداً إلكترونياً إلى <a href="mailto:delete@vitafit.online">delete@vitafit.online</a></li>
+                <li>استخدمي نفس البريد المسجل في حسابك</li>
+                <li>اكتبي "طلب حذف حساب" في العنوان</li>
+                <li>سنرسل لك رابط تأكيد خلال 24 ساعة</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>ماذا عن الاشتراكات النشطة؟</h2>
+            <div class="info-box">
+                <p>إذا كان لديك اشتراك نشط، يرجى ملاحظة:</p>
+            </div>
+            <ul>
+                <li>سيتم إلغاء الاشتراك فوراً عند حذف الحساب</li>
+                <li>لن يتم استرداد المبلغ المتبقي من الاشتراك</li>
+                <li>ننصح بإلغاء الاشتراك أولاً إذا كنت تريدين استخدام المدة المتبقية</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>هل يمكنني إلغاء طلب الحذف؟</h2>
+            <div class="highlight">
+                <p><strong>نعم، خلال 7 أيام فقط من تقديم الطلب.</strong></p>
+            </div>
+            <p>للإلغاء، تواصلي معنا عبر:</p>
+            <ul>
+                <li>البريد الإلكتروني: <a href="mailto:support@vitafit.online">support@vitafit.online</a></li>
+                <li>الهاتف: +966 50 000 0000</li>
+            </ul>
+            <p>بعد انتهاء فترة الـ 7 أيام، لا يمكن استعادة الحساب أو البيانات.</p>
+        </div>
+
+        <div class="section">
+            <h2>هل يمكنني إنشاء حساب جديد؟</h2>
+            <ul>
+                <li>لا يمكنك استخدام نفس البريد الإلكتروني للتسجيل خلال 30 يوماً من الحذف</li>
+                <li>يمكنك التسجيل ببريد إلكتروني مختلف في أي وقت</li>
+                <li>لن يتم نقل أي بيانات من الحساب المحذوف إلى الحساب الجديد</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>البيانات التي نحتفظ بها</h2>
+            <p>حتى بعد حذف حسابك، قد نحتفظ ببعض البيانات للأسباب التالية:</p>
+            <ul>
+                <li><strong>المتطلبات القانونية:</strong> سجلات المعاملات المالية (حسب القوانين المحلية)</li>
+                <li><strong>منع الاحتيال:</strong> معلومات مجهولة لحماية المستخدمين الآخرين</li>
+                <li><strong>التحليلات:</strong> بيانات مجهولة لتحسين خدماتنا</li>
+            </ul>
+            <div class="info-box">
+                <p>هذه البيانات لا يمكن ربطها بهويتك الشخصية.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>أسئلة شائعة</h2>
+
+            <h3>هل يمكنني تحميل بياناتي قبل الحذف؟</h3>
+            <p>نعم، يمكنك طلب نسخة من بياناتك من "الخصوصية والأمان" > "تحميل بياناتي" قبل حذف حسابك.</p>
+
+            <h3>ماذا يحدث لتقييماتي ومراجعاتي؟</h3>
+            <p>سيتم حذف جميع تقييماتك ومراجعاتك مع حسابك.</p>
+
+            <h3>هل سأستمر في تلقي الرسائل؟</h3>
+            <p>لا، سيتم إلغاء اشتراكك من جميع القوائم البريدية فوراً.</p>
+        </div>
+
+        <div class="contact-box">
+            <h3>هل تحتاجين مساعدة؟</h3>
+            <p>إذا كان لديك أي استفسارات حول حذف حسابك، تواصلي معنا:</p>
+            <p>البريد الإلكتروني: <a href="mailto:support@vitafit.online">support@vitafit.online</a></p>
+            <p>الهاتف: +966 50 000 0000</p>
+            <p style="margin-top:15px; font-size:0.9em; opacity:0.9;">فريق الدعم متاح على مدار الساعة</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="logo.jpeg" alt="VitaFit">
+                <p>تطبيق اللياقة البدنية الأول المصمم خصيصاً للنساء العربيات.</p>
+            </div>
+            <div class="footer-section">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="/#features">المميزات</a></li>
+                    <li><a href="/#about">عن التطبيق</a></li>
+                    <li><a href="/contact">اتصلي بنا</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>الدعم</h4>
+                <ul>
+                    <li><a href="/contact">مركز المساعدة</a></li>
+                    <li><a href="/delete-account">حذف الحساب</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>القانونية</h4>
+                <ul>
+                    <li><a href="/privacy-policy">سياسة الخصوصية</a></li>
+                    <li><a href="/terms">الشروط والأحكام</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 VitaFit. جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+</body>
+</html>

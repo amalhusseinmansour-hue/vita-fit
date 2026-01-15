@@ -1,0 +1,27 @@
+/* Arabic Localization for iOS Privacy Permissions */
+
+/* App Name */
+"CFBundleDisplayName" = "VitaFit";
+"CFBundleName" = "VitaFit";
+
+/* Photo Library Permission */
+"NSPhotoLibraryUsageDescription" = "يحتاج VitaFit للوصول إلى مكتبة الصور لاختيار صورة الملف الشخصي وصور التقدم.";
+
+/* Camera Permission */
+"NSCameraUsageDescription" = "يحتاج VitaFit للوصول إلى الكاميرا لالتقاط صور التقدم والملف الشخصي.";
+
+/* Notifications Permission */
+"NSUserNotificationsUsageDescription" = "يرسل VitaFit إشعارات لتذكيرك بالتمارين ورسائل المدربة وتحديثات الاشتراك.";
+
+/* App Tracking Transparency (iOS 14+) */
+"NSUserTrackingUsageDescription" = "يستخدم VitaFit التتبع لتقديم توصيات لياقة مخصصة وتحسين تجربتك. بياناتك تساعدنا في تخصيص خطط التمرين والتغذية لك.";
+
+/* Location Permission */
+"NSLocationWhenInUseUsageDescription" = "يستخدم VitaFit موقعك للعثور على الصالات الرياضية ومراكز اللياقة القريبة منك.";
+
+/* Health Data Permissions */
+"NSHealthShareUsageDescription" = "يقرأ VitaFit بيانات صحتك لتتبع تقدمك في اللياقة وتقديم توصيات مخصصة.";
+"NSHealthUpdateUsageDescription" = "يكتب VitaFit بيانات التمارين في تطبيق الصحة للحفاظ على سجلات لياقتك متزامنة.";
+
+/* Face ID Permission */
+"NSFaceIDUsageDescription" = "يستخدم VitaFit Face ID لتسجيل دخول سريع وآمن لحماية حسابك.";

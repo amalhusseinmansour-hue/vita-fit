@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأسئلة الشائعة - VitaFit</title>
+    <meta name="description" content="الأسئلة الشائعة حول تطبيق VitaFit للياقة البدنية للنساء">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        header {
+            padding: 20px 0;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+        }
+        .logo-header img { width: 45px; height: 45px; border-radius: 12px; }
+        .logo-header span { font-size: 1.5rem; font-weight: 700; }
+        .back-btn {
+            color: #FF69B4;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover { text-decoration: underline; }
+        .page-header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #FF69B4;
+        }
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .faq-section { padding: 40px 20px 80px; }
+        .faq-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .faq-item:hover { border-color: rgba(255,105,180,0.5); }
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: #FF69B4;
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0.9;
+            line-height: 1.9;
+        }
+        .faq-item.active .faq-answer {
+            padding: 0 25px 20px;
+            max-height: 500px;
+        }
+        .faq-category {
+            font-size: 1.3rem;
+            color: #DDA0DD;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .contact-box {
+            background: linear-gradient(135deg, rgba(255,105,180,0.2) 0%, rgba(221,160,221,0.2) 100%);
+            border: 1px solid rgba(255,105,180,0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .contact-box h3 {
+            color: #FF69B4;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        .contact-box p { margin-bottom: 20px; }
+        .contact-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #FF69B4 0%, #DDA0DD 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,105,180,0.4);
+        }
+        footer {
+            background: rgba(0,0,0,0.3);
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+        }
+        .footer-links a:hover { color: #FF69B4; }
+        .copyright { opacity: 0.7; font-size: 0.9rem; }
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.8rem; }
+            .faq-question { font-size: 1rem; padding: 15px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo-header">
+                <img src="logo.jpeg" alt="VitaFit">
+                <span>VitaFit</span>
+            </a>
+            <a href="/" class="back-btn">الرئيسية ←</a>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>الأسئلة الشائعة</h1>
+        <p>إجابات على أكثر الأسئلة شيوعاً حول تطبيق VitaFit</p>
+    </section>
+
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="faq-category">عن التطبيق</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">ما هو تطبيق VitaFit؟</div>
+                <div class="faq-answer">VitaFit هو تطبيق متكامل للياقة البدنية مصمم خصيصاً للنساء العربيات. يوفر التطبيق برامج تمارين متنوعة، خطط غذائية مخصصة، جلسات تدريب أونلاين مع مدربات محترفات، ومتجر للمنتجات الرياضية والمكملات الغذائية.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">هل التطبيق مجاني؟</div>
+                <div class="faq-answer">يمكنك تحميل التطبيق مجاناً والوصول إلى محتوى أساسي. للحصول على جميع المميزات مثل الجلسات الخاصة مع المدربات والخطط المخصصة، يمكنك الاشتراك في إحدى الباقات المتاحة.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">هل التطبيق متاح على iOS و Android؟</div>
+                <div class="faq-answer">نعم، تطبيق VitaFit متاح على كلا النظامين. يمكنك تحميله من App Store لأجهزة iPhone أو من Google Play لأجهزة Android.</div>
+            </div>
+
+            <h2 class="faq-category">التمارين والبرامج</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">هل التمارين مناسبة للمبتدئات؟</div>
+                <div class="faq-answer">بالتأكيد! لدينا برامج لجميع المستويات من المبتدئات إلى المتقدمات. عند التسجيل، ستختارين مستواك وأهدافك وسيتم تخصيص البرنامج المناسب لك.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">كم مدة التمرين اليومي؟</div>
+                <div class="faq-answer">تتراوح مدة التمارين من 15 إلى 60 دقيقة حسب البرنامج المختار ومستوى لياقتك. يمكنك اختيار التمارين القصيرة في أيام الانشغال والتمارين الأطول عندما يكون لديك وقت أكثر.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">هل أحتاج معدات رياضية؟</div>
+                <div class="faq-answer">لدينا تمارين متنوعة - بعضها لا يحتاج أي معدات ويمكن ممارستها في المنزل، وبعضها يحتاج معدات بسيطة مثل الدمبلز أو المقاومة. يمكنك فلترة التمارين حسب المعدات المتاحة لديك.</div>
+            </div>
+
+            <h2 class="faq-category">المدربات والجلسات</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">كيف يمكنني حجز جلسة مع مدربة؟</div>
+                <div class="faq-answer">يمكنك استعراض المدربات المتاحات من قسم "المدربات" في التطبيق، اختيار المدربة المناسبة حسب تخصصها وتقييماتها، ثم حجز موعد من جدولها المتاح.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">هل الجلسات مباشرة أم مسجلة؟</div>
+                <div class="faq-answer">نوفر كلا النوعين! يمكنك حضور جلسات مباشرة (Live) مع المدربة للتفاعل المباشر، أو مشاهدة جلسات مسجلة في أي وقت يناسبك.</div>
+            </div>
+
+            <h2 class="faq-category">الحساب والخصوصية</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">كيف يمكنني تغيير كلمة المرور؟</div>
+                <div class="faq-answer">اذهبي إلى الإعدادات > الحساب > تغيير كلمة المرور. ستحتاجين إدخال كلمة المرور الحالية ثم الجديدة.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">كيف يمكنني حذف حسابي؟</div>
+                <div class="faq-answer">يمكنك حذف حسابك من الإعدادات > الحساب > حذف الحساب، أو من خلال <a href="/delete-account" style="color: #FF69B4;">صفحة حذف الحساب</a>. يرجى ملاحظة أن هذا الإجراء غير قابل للتراجع.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">هل بياناتي آمنة؟</div>
+                <div class="faq-answer">نعم، نحن نأخذ خصوصيتك على محمل الجد. جميع بياناتك مشفرة ومحمية. يمكنك قراءة المزيد في <a href="/privacy-policy" style="color: #FF69B4;">سياسة الخصوصية</a>.</div>
+            </div>
+
+            <div class="contact-box">
+                <h3>لم تجدي إجابة سؤالك؟</h3>
+                <p>فريق الدعم جاهز لمساعدتك على مدار الساعة</p>
+                <a href="/contact" class="contact-btn">تواصلي معنا</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="/">الرئيسية</a>
+            <a href="/faq">الأسئلة الشائعة</a>
+            <a href="/contact">اتصلي بنا</a>
+            <a href="/privacy-policy">سياسة الخصوصية</a>
+            <a href="/terms">الشروط والأحكام</a>
+        </div>
+        <p class="copyright">© 2024 VitaFit. جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

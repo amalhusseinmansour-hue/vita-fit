@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الاشتراكات - لوحة التحكم</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .navbar h1 { font-size: 24px; }
+        .navbar a { color: white; text-decoration: none; margin-left: 20px; }
+
+        .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white; padding: 20px; border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .stat-card h3 { color: #666; font-size: 13px; margin-bottom: 8px; }
+        .stat-card .number { font-size: 28px; font-weight: bold; color: #667eea; }
+
+        .tabs {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+        .tab {
+            padding: 12px 24px; background: white; border: none; border-radius: 8px;
+            cursor: pointer; font-weight: 600; transition: all 0.3s;
+        }
+        .tab.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+
+        .section {
+            background: white; border-radius: 15px; padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 20px;
+        }
+        .section h2 { color: #333; margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+
+        .plans-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+        }
+        .plan-card {
+            border: 2px solid #eee; border-radius: 15px; padding: 25px;
+            transition: all 0.3s; position: relative;
+        }
+        .plan-card:hover { border-color: #667eea; box-shadow: 0 5px 20px rgba(102,126,234,0.2); }
+        .plan-card.featured { border-color: #667eea; }
+        .plan-card .plan-name { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 10px; }
+        .plan-card .plan-price { font-size: 32px; font-weight: bold; color: #667eea; margin-bottom: 5px; }
+        .plan-card .plan-duration { color: #666; font-size: 14px; margin-bottom: 15px; }
+        .plan-card .plan-features { list-style: none; margin-bottom: 20px; }
+        .plan-card .plan-features li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; color: #555; }
+        .plan-card .plan-features li:before { content: '✓'; color: #28a745; margin-left: 8px; }
+        .plan-actions { display: flex; gap: 10px; }
+
+        table { width: 100%; border-collapse: collapse; }
+        table th { background: #f8f9fa; padding: 12px; text-align: right; font-weight: 600; }
+        table td { padding: 12px; border-bottom: 1px solid #eee; }
+        table tr:hover { background: #f8f9fa; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-warning { background: #ffc107; color: #333; }
+
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 15px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+        .modal-body { padding: 20px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
+        }
+
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .alert-success { background: #d4edda; color: #155724; }
+        .alert-danger { background: #f8d7da; color: #721c24; }
+
+        .filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filters input, .filters select { padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; }
+
+        .empty-state { text-align: center; padding: 40px; color: #999; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>إدارة الاشتراكات</h1>
+        <div>
+            <a href="dashboard">الرئيسية</a>
+            <a href="products">المنتجات</a>
+            <a href="orders">الطلبات</a>
+            <a href="#" onclick="logout()">تسجيل الخروج</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="alertBox"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>إجمالي الاشتراكات</h3>
+                <div class="number" id="totalSubs">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>الاشتراكات النشطة</h3>
+                <div class="number" id="activeSubs">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>الخطط المتاحة</h3>
+                <div class="number" id="totalPlans">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>الإيرادات الشهرية</h3>
+                <div class="number" id="monthlyRevenue">0</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('plans')">خطط الاشتراك</button>
+            <button class="tab" onclick="showTab('subscriptions')">اشتراكات المستخدمين</button>
+        </div>
+
+        <!-- Plans Section -->
+        <div id="plansSection" class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="border: none; margin: 0; padding: 0;">خطط الاشتراك</h2>
+                <button class="btn btn-primary" onclick="openPlanModal()">+ إضافة خطة</button>
+            </div>
+            <div id="plansContainer" class="plans-grid"></div>
+        </div>
+
+        <!-- Subscriptions Section -->
+        <div id="subscriptionsSection" class="section" style="display: none;">
+            <h2>اشتراكات المستخدمين</h2>
+            <div class="filters">
+                <input type="text" id="searchSub" placeholder="بحث..." onkeyup="filterSubscriptions()">
+                <select id="statusFilter" onchange="filterSubscriptions()">
+                    <option value="">جميع الحالات</option>
+                    <option value="active">نشط</option>
+                    <option value="expired">منتهي</option>
+                    <option value="cancelled">ملغي</option>
+                </select>
+            </div>
+            <div id="subscriptionsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Plan Modal -->
+    <div id="planModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="planModalTitle">إضافة خطة</h3>
+                <button class="modal-close" onclick="closePlanModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="planForm" onsubmit="savePlan(event)">
+                    <input type="hidden" id="planId">
+                    <div class="form-group">
+                        <label>اسم الخطة (إنجليزي)</label>
+                        <input type="text" id="planName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم الخطة (عربي)</label>
+                        <input type="text" id="planNameAr" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الوصف</label>
+                        <textarea id="planDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>السعر (ر.س)</label>
+                        <input type="number" id="planPrice" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المدة (بالأيام)</label>
+                        <input type="number" id="planDuration" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المميزات (سطر لكل ميزة)</label>
+                        <textarea id="planFeatures" rows="4" placeholder="ميزة 1&#10;ميزة 2&#10;ميزة 3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="planFeatured"> خطة مميزة</label>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button type="button" class="btn" style="background: #eee;" onclick="closePlanModal()">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+        let token = localStorage.getItem('adminToken');
+        let plans = [];
+        let subscriptions = [];
+
+        if (!token) window.location.href = 'index';
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            window.location.href = 'index';
+        }
+
+        function showAlert(message, type = 'success') {
+            document.getElementById('alertBox').innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => document.getElementById('alertBox').innerHTML = '', 3000);
+        }
+
+        async function fetchAPI(endpoint, options = {}) {
+            const response = await fetch(`${API_URL}/api${endpoint}`, {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            return await response.json();
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('plansSection').style.display = tab === 'plans' ? 'block' : 'none';
+            document.getElementById('subscriptionsSection').style.display = tab === 'subscriptions' ? 'block' : 'none';
+        }
+
+        async function loadPlans() {
+            try {
+                const data = await fetchAPI('/subscriptions/plans');
+                if (data.success) {
+                    plans = data.data || [];
+                    document.getElementById('totalPlans').textContent = plans.length;
+                    displayPlans();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayPlans() {
+            const container = document.getElementById('plansContainer');
+
+            if (plans.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>لا توجد خطط اشتراك</p><button class="btn btn-primary" onclick="openPlanModal()">إضافة خطة</button></div>';
+                return;
+            }
+
+            container.innerHTML = plans.map(plan => `
+                <div class="plan-card ${plan.is_featured ? 'featured' : ''}">
+                    ${plan.is_featured ? '<span class="badge badge-warning" style="position: absolute; top: 15px; left: 15px;">مميز</span>' : ''}
+                    <div class="plan-name">${plan.name_ar || plan.name}</div>
+                    <div class="plan-price">${plan.price} ر.س</div>
+                    <div class="plan-duration">${plan.duration_days} يوم</div>
+                    <ul class="plan-features">
+                        ${(plan.features || '').split('\n').filter(f => f.trim()).map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                    <div class="plan-actions">
+                        <button class="btn btn-sm btn-warning" onclick="editPlan(${plan.id})">تعديل</button>
+                        <button class="btn btn-sm btn-danger" onclick="deletePlan(${plan.id})">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadSubscriptions() {
+            try {
+                const data = await fetchAPI('/admin/subscriptions');
+                if (data.success) {
+                    subscriptions = data.data || [];
+                    document.getElementById('totalSubs').textContent = subscriptions.length;
+                    document.getElementById('activeSubs').textContent = subscriptions.filter(s => s.status === 'active').length;
+
+                    const monthlyRevenue = subscriptions
+                        .filter(s => s.status === 'active')
+                        .reduce((sum, s) => sum + parseFloat(s.price || 0), 0);
+                    document.getElementById('monthlyRevenue').textContent = monthlyRevenue.toFixed(0);
+
+                    displaySubscriptions(subscriptions);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function filterSubscriptions() {
+            const search = document.getElementById('searchSub').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value;
+
+            const filtered = subscriptions.filter(sub => {
+                const matchesSearch = !search || sub.user?.name?.toLowerCase().includes(search);
+                const matchesStatus = !status || sub.status === status;
+                return matchesSearch && matchesStatus;
+            });
+
+            displaySubscriptions(filtered);
+        }
+
+        function displaySubscriptions(subs) {
+            const container = document.getElementById('subscriptionsContainer');
+
+            if (subs.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>لا توجد اشتراكات</p></div>';
+                return;
+            }
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المستخدم</th>
+                            <th>الخطة</th>
+                            <th>السعر</th>
+                            <th>تاريخ البدء</th>
+                            <th>تاريخ الانتهاء</th>
+                            <th>الحالة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${subs.map(sub => `
+                            <tr>
+                                <td>${sub.user?.name || '-'}</td>
+                                <td>${sub.plan?.name_ar || sub.plan?.name || '-'}</td>
+                                <td>${sub.price} ر.س</td>
+                                <td>${new Date(sub.start_date).toLocaleDateString('ar')}</td>
+                                <td>${new Date(sub.end_date).toLocaleDateString('ar')}</td>
+                                <td>${getStatusBadge(sub.status)}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger" onclick="cancelSubscription(${sub.id})">إلغاء</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function getStatusBadge(status) {
+            const map = {
+                'active': { class: 'badge-success', text: 'نشط' },
+                'expired': { class: 'badge-warning', text: 'منتهي' },
+                'cancelled': { class: 'badge-danger', text: 'ملغي' }
+            };
+            const s = map[status] || { class: 'badge-warning', text: status };
+            return `<span class="badge ${s.class}">${s.text}</span>`;
+        }
+
+        function openPlanModal() {
+            document.getElementById('planModalTitle').textContent = 'إضافة خطة جديدة';
+            document.getElementById('planForm').reset();
+            document.getElementById('planId').value = '';
+            document.getElementById('planModal').classList.add('active');
+        }
+
+        function editPlan(id) {
+            const plan = plans.find(p => p.id === id);
+            if (!plan) return;
+
+            document.getElementById('planModalTitle').textContent = 'تعديل الخطة';
+            document.getElementById('planId').value = plan.id;
+            document.getElementById('planName').value = plan.name || '';
+            document.getElementById('planNameAr').value = plan.name_ar || '';
+            document.getElementById('planDescription').value = plan.description || '';
+            document.getElementById('planPrice').value = plan.price || '';
+            document.getElementById('planDuration').value = plan.duration_days || '';
+            document.getElementById('planFeatures').value = plan.features || '';
+            document.getElementById('planFeatured').checked = plan.is_featured;
+            document.getElementById('planModal').classList.add('active');
+        }
+
+        function closePlanModal() {
+            document.getElementById('planModal').classList.remove('active');
+        }
+
+        async function savePlan(event) {
+            event.preventDefault();
+
+            const planId = document.getElementById('planId').value;
+            const planData = {
+                name: document.getElementById('planName').value,
+                name_ar: document.getElementById('planNameAr').value,
+                description: document.getElementById('planDescription').value,
+                price: document.getElementById('planPrice').value,
+                duration_days: document.getElementById('planDuration').value,
+                features: document.getElementById('planFeatures').value,
+                is_featured: document.getElementById('planFeatured').checked
+            };
+
+            try {
+                const url = planId ? `/admin/plans/${planId}` : '/admin/plans';
+                const method = planId ? 'PUT' : 'POST';
+
+                const data = await fetchAPI(url, {
+                    method,
+                    body: JSON.stringify(planData)
+                });
+
+                if (data.success) {
+                    showAlert(planId ? 'تم تحديث الخطة' : 'تم إضافة الخطة');
+                    closePlanModal();
+                    loadPlans();
+                } else {
+                    showAlert(data.message || 'حدث خطأ', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في حفظ الخطة', 'danger');
+            }
+        }
+
+        async function deletePlan(id) {
+            if (!confirm('هل أنت متأكد من حذف هذه الخطة؟')) return;
+
+            try {
+                const data = await fetchAPI(`/admin/plans/${id}`, { method: 'DELETE' });
+                if (data.success) {
+                    showAlert('تم حذف الخطة');
+                    loadPlans();
+                } else {
+                    showAlert(data.message || 'حدث خطأ', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في حذف الخطة', 'danger');
+            }
+        }
+
+        async function cancelSubscription(id) {
+            if (!confirm('هل أنت متأكد من إلغاء هذا الاشتراك؟')) return;
+
+            try {
+                const data = await fetchAPI(`/admin/subscriptions/${id}`, { method: 'DELETE' });
+                if (data.success) {
+                    showAlert('تم إلغاء الاشتراك');
+                    loadSubscriptions();
+                } else {
+                    showAlert(data.message || 'حدث خطأ', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في إلغاء الاشتراك', 'danger');
+            }
+        }
+
+        loadPlans();
+        loadSubscriptions();
+    </script>
+</body>
+</html>

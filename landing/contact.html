@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="تواصلي مع فريق VITA FIT - نحن هنا لمساعدتك">
+    <title>تواصلي معنا | VITA FIT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/jpeg" href="logo.jpeg">
+    <style>
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        .contact-info {
+            padding: 2rem 0;
+        }
+        .contact-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .contact-info > p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        .contact-method {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .contact-method:hover {
+            border-color: var(--primary);
+            transform: translateX(-5px);
+        }
+        .contact-method .icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .contact-method h4 {
+            margin-bottom: 0.25rem;
+        }
+        .contact-method p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .contact-method a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .contact-form {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+        }
+        .contact-form h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .social-contact {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+        .social-contact h4 {
+            margin-bottom: 1rem;
+        }
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        .social-icons a {
+            width: 50px;
+            height: 50px;
+            background: var(--surface);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .social-icons a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        .success-message {
+            display: none;
+            background: var(--success);
+            color: var(--background);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="logo.jpeg" alt="VITA FIT Logo">
+                <span class="logo-text">VITA FIT</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="features.html">المميزات</a></li>
+                <li><a href="trainers.html">المدربات</a></li>
+                <li><a href="download.html">التحميل</a></li>
+            </ul>
+            <a href="download.html" class="download-btn">حملي التطبيق</a>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>تواصلي <span>معنا</span></h1>
+        <p>نحن هنا لمساعدتك! لا تترددي في التواصل معنا لأي استفسار</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <h2>كيف يمكننا مساعدتك؟</h2>
+                    <p>فريقنا جاهز للإجابة على جميع استفساراتك ومساعدتك في رحلتك نحو اللياقة</p>
+
+                    <div class="contact-method">
+                        <div class="icon">📧</div>
+                        <div>
+                            <h4>البريد الإلكتروني</h4>
+                            <p>للاستفسارات العامة والدعم</p>
+                            <a href="mailto:support@vitafit.online">support@vitafit.online</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-method">
+                        <div class="icon">💬</div>
+                        <div>
+                            <h4>واتساب</h4>
+                            <p>للرد السريع على استفساراتك</p>
+                            <a href="https://wa.me/966500000000">+966 50 000 0000</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-method">
+                        <div class="icon">⏰</div>
+                        <div>
+                            <h4>ساعات العمل</h4>
+                            <p>الأحد - الخميس: 9 صباحاً - 9 مساءً</p>
+                            <p>الجمعة - السبت: 10 صباحاً - 6 مساءً</p>
+                        </div>
+                    </div>
+
+                    <div class="social-contact">
+                        <h4>تابعينا على وسائل التواصل</h4>
+                        <div class="social-icons">
+                            <a href="#" title="Instagram">📸</a>
+                            <a href="#" title="Twitter">🐦</a>
+                            <a href="#" title="Facebook">📘</a>
+                            <a href="#" title="TikTok">🎵</a>
+                            <a href="#" title="YouTube">🎬</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <h3>أرسلي رسالة</h3>
+                    <div class="success-message" id="successMessage">
+                        ✓ تم إرسال رسالتك بنجاح! سنرد عليك قريباً
+                    </div>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" id="name" name="name" placeholder="أدخلي اسمك" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">البريد الإلكتروني</label>
+                            <input type="email" id="email" name="email" placeholder="example@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">الموضوع</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">اختاري الموضوع</option>
+                                <option value="general">استفسار عام</option>
+                                <option value="technical">مشكلة تقنية</option>
+                                <option value="subscription">الاشتراكات والدفع</option>
+                                <option value="trainer">الانضمام كمدربة</option>
+                                <option value="partnership">شراكات تجارية</option>
+                                <option value="other">أخرى</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">الرسالة</label>
+                            <textarea id="message" name="message" placeholder="اكتبي رسالتك هنا..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                            <span>📨</span>
+                            إرسال الرسالة
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map or Location -->
+    <section class="section section-alt">
+        <div class="container" style="text-align: center;">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem;">موقعنا</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">المملكة العربية السعودية - الرياض</p>
+            <div style="background: var(--card); border-radius: 24px; height: 300px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📍</div>
+                    <p style="color: var(--text-secondary);">الرياض، المملكة العربية السعودية</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="logo.jpeg" alt="VITA FIT" style="height: 40px;">
+                        <span class="logo-text">VITA FIT</span>
+                    </a>
+                    <p>تطبيق اللياقة البدنية الأول للنساء في المنطقة.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="features.html">المميزات</a></li>
+                        <li><a href="trainers.html">المدربات</a></li>
+                        <li><a href="download.html">التحميل</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>الدعم</h4>
+                    <ul>
+                        <li><a href="faq.html">الأسئلة الشائعة</a></li>
+                        <li><a href="contact.html">تواصلي معنا</a></li>
+                        <li><a href="privacy.html">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>تابعينا</h4>
+                    <div class="social-links">
+                        <a href="#">📸</a>
+                        <a href="#">🐦</a>
+                        <a href="#">📘</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 VITA FIT. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('successMessage').style.display = 'block';
+            this.reset();
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

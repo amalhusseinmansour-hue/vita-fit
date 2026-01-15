@@ -1,0 +1,27 @@
+/* English Localization for iOS Privacy Permissions */
+
+/* App Name */
+"CFBundleDisplayName" = "VitaFit";
+"CFBundleName" = "VitaFit";
+
+/* Photo Library Permission */
+"NSPhotoLibraryUsageDescription" = "VitaFit needs access to your photo library to select and upload your profile picture and progress photos.";
+
+/* Camera Permission */
+"NSCameraUsageDescription" = "VitaFit needs camera access to take progress photos and profile pictures.";
+
+/* Notifications Permission */
+"NSUserNotificationsUsageDescription" = "VitaFit sends notifications for workout reminders, trainer messages, and subscription updates.";
+
+/* App Tracking Transparency (iOS 14+) */
+"NSUserTrackingUsageDescription" = "VitaFit uses tracking to provide personalized fitness recommendations and improve your experience. Your data helps us customize workout and nutrition plans for you.";
+
+/* Location Permission */
+"NSLocationWhenInUseUsageDescription" = "VitaFit uses your location to find nearby gyms and fitness centers.";
+
+/* Health Data Permissions */
+"NSHealthShareUsageDescription" = "VitaFit reads your health data to track your fitness progress and provide personalized recommendations.";
+"NSHealthUpdateUsageDescription" = "VitaFit writes workout data to Health to keep your fitness records synchronized.";
+
+/* Face ID Permission */
+"NSFaceIDUsageDescription" = "VitaFit uses Face ID for quick and secure login to protect your account.";
