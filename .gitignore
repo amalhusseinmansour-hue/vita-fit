@@ -81,5 +81,4 @@ laravel-backend/.env
 laravel-backend/storage/*.key
 laravel-backend/vendor/
 
-# Note: GoogleService-Info.plist and codemagic.yaml are needed for builds
-# Add them to secrets in Codemagic if you want to hide them
+# Note: GoogleService-Info.plist is needed for Firebase
