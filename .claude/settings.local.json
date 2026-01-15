@@ -400,7 +400,13 @@
       "Bash(\"C:\\\\Program Files\\\\PuTTY\\\\plink.exe\" -P 65002 -pw \"Alenwanapp33510421@\" u126213189@46.202.90.197 \"pwd && ls -la\")",
       "Bash(\"C:\\\\Program Files\\\\PuTTY\\\\plink.exe\" -P 65002 -pw \"Alenwanapp33510421@\" -batch u126213189@46.202.90.197 \"pwd && ls -la\")",
       "Bash(\"C:\\\\Program Files\\\\PuTTY\\\\plink.exe\" -P 65002 -pw \"Alenwanapp33510421@\" u126213189@46.202.90.197 \"exit\")",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(gh auth:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
