@@ -44,19 +44,19 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCKHjPDVUv1TojwWt69q_VLcVDFmxYrRd8',
-    appId: '1:301863850229:android:4f27a2bdd8134fd62935bc',
-    messagingSenderId: '301863850229',
-    projectId: 'vitafit-471a8',
-    storageBucket: 'vitafit-471a8.firebasestorage.app',
+    apiKey: 'AIzaSyCtJcHMUI1REpb55B_b16P77xASteF4wyQ',
+    appId: '1:70941510996:android:9fec91b069b63d7fff0cc1',
+    messagingSenderId: '70941510996',
+    projectId: 'vitafit-d580c',
+    storageBucket: 'vitafit-d580c.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBP0AluEDvJY2gPwxi8ovF3Ta-ihirinhM',
-    appId: '1:301863850229:ios:1b8f17fc8bd5e1cb2935bc',
-    messagingSenderId: '301863850229',
-    projectId: 'vitafit-471a8',
-    storageBucket: 'vitafit-471a8.firebasestorage.app',
+    apiKey: 'AIzaSyA-TUZBgdvGj90g_nL7EnaxLMZCtupRxYA',
+    appId: '1:70941510996:ios:c5d0f1f848c6beb6ff0cc1',
+    messagingSenderId: '70941510996',
+    projectId: 'vitafit-d580c',
+    storageBucket: 'vitafit-d580c.firebasestorage.app',
     iosBundleId: 'com.vitafitapp.fitness',
   );
 }
