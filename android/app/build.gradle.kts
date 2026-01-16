@@ -18,7 +18,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.vitafit.app"
+    namespace = "com.vitafitapp.fitness"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -44,7 +44,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.vitafit.app"
+        applicationId = "com.vitafitapp.fitness"
         minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = flutter.versionCode

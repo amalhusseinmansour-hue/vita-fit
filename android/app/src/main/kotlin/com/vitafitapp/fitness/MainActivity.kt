@@ -1,4 +1,4 @@
-package com.vitafit.app
+package com.vitafitapp.fitness
 
 import io.flutter.embedding.android.FlutterActivity
 

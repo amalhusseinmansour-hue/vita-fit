@@ -44,11 +44,11 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAYoFJ7YtrxCMYbjJvG3LP29Lv0XRmHLpM',
-    appId: '1:100672549900:android:dce5fd1ad1b14fbf4baa29',
-    messagingSenderId: '100672549900',
-    projectId: 'vitafit-794a6',
-    storageBucket: 'vitafit-794a6.firebasestorage.app',
+    apiKey: 'AIzaSyCKHjPDVUv1TojwWt69q_VLcVDFmxYrRd8',
+    appId: '1:301863850229:android:4f27a2bdd8134fd62935bc',
+    messagingSenderId: '301863850229',
+    projectId: 'vitafit-471a8',
+    storageBucket: 'vitafit-471a8.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
