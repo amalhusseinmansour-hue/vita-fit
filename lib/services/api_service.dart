@@ -498,7 +498,7 @@ class ApiService {
         },
         body: json.encode({
           'email': email,
-          'code': code,
+          'otp': code,
         }),
       ).timeout(ApiConfig.timeout);
 

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
+import 'email_verification_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -58,33 +59,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
         if (!mounted) return;
 
         if (result['success'] == true) {
-          // Token and user are inside result['data']
-          final responseData = result['data'];
-          final token = responseData?['token'];
-          final userData = responseData?['user'];
+          // Check if email verification is required
+          final requiresVerification = result['requires_verification'] == true ||
+              result['data']?['requires_verification'] == true;
+          final email = result['email'] ?? result['data']?['email'] ?? _emailController.text.trim();
 
-          if (token != null) {
-            await ApiService.saveToken(token);
+          if (requiresVerification) {
+            // Navigate to email verification screen
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('تم إرسال رمز التحقق إلى بريدك الإلكتروني'),
+                backgroundColor: Colors.green,
+              ),
+            );
+
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EmailVerificationScreen(
+                  email: email,
+                  name: _nameController.text.trim(),
+                ),
+              ),
+            );
+          } else {
+            // Token and user are inside result['data']
+            final responseData = result['data'];
+            final token = responseData?['token'];
+            final userData = responseData?['user'];
+
+            if (token != null) {
+              await ApiService.saveToken(token);
+            }
+
+            // Save user data
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('userId', userData?['id']?.toString() ?? '');
+            await prefs.setString('userName', userData?['name'] ?? '');
+            await prefs.setString('userEmail', userData?['email'] ?? '');
+            await prefs.setString('userRole', userData?['role'] ?? 'user');
+            await prefs.setBool('isLoggedIn', true);
+
+            // Show success message
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('تم إنشاء الحساب بنجاح!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+
+            // Navigate to home
+            Navigator.pushReplacementNamed(context, '/home');
           }
-
-          // Save user data
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('userId', userData?['id']?.toString() ?? '');
-          await prefs.setString('userName', userData?['name'] ?? '');
-          await prefs.setString('userEmail', userData?['email'] ?? '');
-          await prefs.setString('userRole', userData?['role'] ?? 'user');
-          await prefs.setBool('isLoggedIn', true);
-
-          // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم إنشاء الحساب بنجاح!'),
-              backgroundColor: Colors.green,
-            ),
-          );
-
-          // Navigate to home
-          Navigator.pushReplacementNamed(context, '/home');
         } else {
           // Show error dialog for better visibility
           _showErrorDialog(result['message'] ?? 'فشل إنشاء الحساب');
