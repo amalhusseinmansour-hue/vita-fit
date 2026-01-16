@@ -11,11 +11,5 @@
 	<!-- Push Notifications -->
 	<key>aps-environment</key>
 	<string>production</string>
-
-	<!-- Associated Domains for Universal Links (optional) -->
-	<key>com.apple.developer.associated-domains</key>
-	<array>
-		<string>applinks:vitafit.online</string>
-	</array>
 </dict>
 </plist>
