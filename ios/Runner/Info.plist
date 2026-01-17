@@ -73,10 +73,6 @@
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>VitaFit sends notifications for workout reminders, trainer messages, and subscription updates.</string>
 
-	<!-- App Tracking Transparency (iOS 14+) -->
-	<key>NSUserTrackingUsageDescription</key>
-	<string>VitaFit uses tracking to provide personalized fitness recommendations and improve your experience. Your data helps us customize workout and nutrition plans for you.</string>
-
 	<!-- Location (if needed for gym finder) -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>VitaFit uses your location to find nearby gyms and fitness centers.</string>
