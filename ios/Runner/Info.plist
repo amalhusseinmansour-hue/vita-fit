@@ -58,10 +58,6 @@
 		<true/>
 	</dict>
 
-	<!-- Export Compliance -->
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-
 	<!-- ========== Privacy Descriptions (Required for App Store) ========== -->
 
 	<!-- Photo Library - For profile picture selection -->
