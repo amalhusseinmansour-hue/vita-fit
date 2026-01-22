@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../config/api_config.dart';
 
@@ -28,11 +29,13 @@ class ChatService {
       final response = await http.get(
         Uri.parse('$_baseUrl/conversations/$userId'),
         headers: {'Content-Type': 'application/json'},
-      );
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return List<Map<String, dynamic>>.from(data['conversations']);
+        final conversations = data['conversations'];
+        if (conversations == null) return [];
+        return List<Map<String, dynamic>>.from(conversations);
       }
 
       // Return empty list if API fails
@@ -52,11 +55,13 @@ class ChatService {
       final response = await http.get(
         Uri.parse('$_baseUrl/conversations/$conversationId/messages?limit=$limit&offset=$offset'),
         headers: {'Content-Type': 'application/json'},
-      );
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return List<Map<String, dynamic>>.from(data['messages']);
+        final messages = data['messages'];
+        if (messages == null) return [];
+        return List<Map<String, dynamic>>.from(messages);
       }
 
       return [];
@@ -91,7 +96,7 @@ class ChatService {
         Uri.parse('$_baseUrl/messages'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(message),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
@@ -149,9 +154,9 @@ class ChatService {
         Uri.parse('$_baseUrl/conversations/$conversationId/read'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'user_id': userId}),
-      );
+      ).timeout(const Duration(seconds: 30));
     } catch (e) {
-      print('Error marking as read: $e');
+      debugPrint('Error marking as read: $e');
     }
   }
 
@@ -169,7 +174,7 @@ class ChatService {
           'trainee_id': traineeId,
           'type': 'direct',
         }),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 201) {
         return jsonDecode(response.body);

@@ -20,7 +20,7 @@ class PaymentService {
       final apiKey = settings['apiKey'] ?? '';
 
       if (apiKey.isEmpty) {
-        print('PayMob API Key is not configured');
+        debugPrint('PayMob API Key is not configured');
         return null;
       }
 
@@ -28,16 +28,16 @@ class PaymentService {
         Uri.parse('$_paymobBaseUrl/auth/tokens'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'api_key': apiKey}),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
         return data['token'];
       }
-      print('PayMob Auth Error: ${response.body}');
+      debugPrint('PayMob Auth Error: ${response.statusCode}');
       return null;
     } catch (e) {
-      print('PayMob Auth Error: $e');
+      debugPrint('PayMob Auth Error: $e');
       return null;
     }
   }
@@ -59,16 +59,16 @@ class PaymentService {
           'currency': currency,
           'items': [],
         }),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
         return data['id'];
       }
-      print('PayMob Order Error: ${response.body}');
+      debugPrint('PayMob Order Error: ${response.statusCode}');
       return null;
     } catch (e) {
-      print('PayMob Order Error: $e');
+      debugPrint('PayMob Order Error: $e');
       return null;
     }
   }
@@ -97,16 +97,16 @@ class PaymentService {
           'currency': currency,
           'integration_id': integrationId,
         }),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
         return data['token'];
       }
-      print('PayMob Payment Key Error: ${response.body}');
+      debugPrint('PayMob Payment Key Error: ${response.statusCode}');
       return null;
     } catch (e) {
-      print('PayMob Payment Key Error: $e');
+      debugPrint('PayMob Payment Key Error: $e');
       return null;
     }
   }
@@ -144,7 +144,9 @@ class PaymentService {
       }
 
       // Step 3: Get Payment Key
-      final nameParts = customerName.split(' ');
+      final nameParts = customerName.trim().split(' ').where((s) => s.isNotEmpty).toList();
+      final firstName = nameParts.isNotEmpty ? nameParts.first : 'Customer';
+      final lastName = nameParts.length > 1 ? nameParts.last : firstName;
       final paymentKey = await getPaymentKey(
         authToken: authToken,
         orderId: orderId,
@@ -154,7 +156,7 @@ class PaymentService {
           'apartment': 'NA',
           'email': customerEmail,
           'floor': 'NA',
-          'first_name': nameParts.first,
+          'first_name': firstName,
           'street': 'NA',
           'building': 'NA',
           'phone_number': customerPhone,
@@ -162,7 +164,7 @@ class PaymentService {
           'postal_code': 'NA',
           'city': 'NA',
           'country': countryCode,
-          'last_name': nameParts.length > 1 ? nameParts.last : nameParts.first,
+          'last_name': lastName,
           'state': 'NA',
         },
       );
@@ -205,7 +207,7 @@ class PaymentService {
 
       return await pay.userCanPay(PayProvider.google_pay);
     } catch (e) {
-      print('Google Pay availability check error: $e');
+      debugPrint('Google Pay availability check error: $e');
       return false;
     }
   }
@@ -303,7 +305,7 @@ class PaymentService {
 
       return await pay.userCanPay(PayProvider.apple_pay);
     } catch (e) {
-      print('Apple Pay availability check error: $e');
+      debugPrint('Apple Pay availability check error: $e');
       return false;
     }
   }
@@ -471,7 +473,7 @@ class PaymentService {
 
       if (hmacSecret.isEmpty) {
         // لا يوجد HMAC secret، نعتمد على النتيجة المباشرة
-        print('⚠️ Warning: HMAC secret not configured');
+        debugPrint('Warning: HMAC secret not configured');
         return callbackData['success'] == true ||
                callbackData['obj']?['success'] == true;
       }
@@ -479,7 +481,7 @@ class PaymentService {
       // التحقق من HMAC signature
       final receivedHmac = callbackData['hmac'] ?? '';
       if (receivedHmac.isEmpty) {
-        print('❌ No HMAC received in callback');
+        debugPrint('No HMAC received in callback');
         return false;
       }
 
@@ -487,17 +489,15 @@ class PaymentService {
       final calculatedHmac = _calculatePaymobHmac(callbackData, hmacSecret);
 
       if (calculatedHmac != receivedHmac) {
-        print('❌ HMAC verification failed');
-        print('Expected: $calculatedHmac');
-        print('Received: $receivedHmac');
+        debugPrint('HMAC verification failed');
         return false;
       }
 
-      print('✅ HMAC verification successful');
+      debugPrint('HMAC verification successful');
       return callbackData['success'] == true ||
              callbackData['obj']?['success'] == true;
     } catch (e) {
-      print('Payment verification error: $e');
+      debugPrint('Payment verification error: $e');
       return false;
     }
   }
