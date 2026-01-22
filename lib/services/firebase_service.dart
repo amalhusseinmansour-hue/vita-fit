@@ -91,6 +91,11 @@ class FirebaseService {
 
   /// Log error to Crashlytics
   static Future<void> logError(dynamic error, StackTrace? stack, {String? reason}) async {
+    // Don't try to log if Firebase isn't initialized
+    if (!_initialized) {
+      debugPrint('Firebase not initialized, skipping error log: $error');
+      return;
+    }
     try {
       await FirebaseCrashlytics.instance.recordError(
         error,

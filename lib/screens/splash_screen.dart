@@ -57,30 +57,42 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(seconds: 3));
 
     // Request App Tracking Transparency permission (iOS 14+)
-    if (Platform.isIOS) {
-      await AppTrackingService.requestTrackingPermission();
+    try {
+      if (Platform.isIOS) {
+        await AppTrackingService.requestTrackingPermission();
+      }
+    } catch (e) {
+      debugPrint('Error requesting tracking permission: $e');
     }
 
     if (mounted) {
-      // Check if user is already logged in
-      final isLoggedIn = await ApiService.isLoggedIn();
+      try {
+        // Check if user is already logged in
+        final isLoggedIn = await ApiService.isLoggedIn();
 
-      if (isLoggedIn) {
-        // User is logged in, go directly to home
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        // Check if user has seen onboarding
-        final prefs = await SharedPreferences.getInstance();
-        final hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
-
-        if (hasSeenOnboarding) {
-          Navigator.pushReplacementNamed(context, '/login');
+        if (isLoggedIn) {
+          // User is logged in, go directly to home
+          Navigator.pushReplacementNamed(context, '/home');
         } else {
-          await prefs.setBool('hasSeenOnboarding', true);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const OnboardingScreen()),
-          );
+          // Check if user has seen onboarding
+          final prefs = await SharedPreferences.getInstance();
+          final hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
+
+          if (hasSeenOnboarding) {
+            Navigator.pushReplacementNamed(context, '/login');
+          } else {
+            await prefs.setBool('hasSeenOnboarding', true);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+            );
+          }
+        }
+      } catch (e) {
+        debugPrint('Error during navigation: $e');
+        // Fallback to login screen on error
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/login');
         }
       }
     }

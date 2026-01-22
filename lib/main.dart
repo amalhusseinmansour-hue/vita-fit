@@ -44,8 +44,12 @@ void main() async {
 
     runApp(const FitHerApp());
   }, (error, stack) {
-    // Log uncaught errors to Crashlytics
-    FirebaseService.logError(error, stack, reason: 'Uncaught error in main zone');
+    // Log uncaught errors to Crashlytics (safely)
+    try {
+      FirebaseService.logError(error, stack, reason: 'Uncaught error in main zone');
+    } catch (e) {
+      debugPrint('Failed to log error: $e');
+    }
   });
 }
 
