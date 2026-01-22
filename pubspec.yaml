@@ -1,7 +1,7 @@
 name: gym
 description: "VitaFit - Fitness App"
 publish_to: 'none'
-version: 1.0.7+26
+version: 1.0.7+27
 
 environment:
   sdk: ^3.9.2
@@ -9,7 +9,34 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.8
+
+  # State Management
+  provider: ^6.1.1
+
+  # UI & Animations
+  flutter_animate: ^4.5.0
+  shimmer: ^3.0.0
+
+  # Utilities
+  intl: ^0.20.2
+
+  # API & Storage
+  http: ^1.1.0
+  shared_preferences: ^2.2.2
+  dio: ^5.4.0
+
+  # SQLite Database
+  sqflite: ^2.3.0
+  path: ^1.8.3
+
+  # Crypto
+  crypto: ^3.0.3
+
+  # URL Launcher
+  url_launcher: ^6.2.4
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +45,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/fonts/
+    - assets/legal/
+
+  fonts:
+    - family: NotoKufiArabic
+      fonts:
+        - asset: assets/fonts/NotoKufiArabic-Regular.ttf
