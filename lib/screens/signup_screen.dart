@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
 import 'email_verification_screen.dart';
@@ -93,12 +93,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             }
 
             // Save user data
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setString('userId', userData?['id']?.toString() ?? '');
-            await prefs.setString('userName', userData?['name'] ?? '');
-            await prefs.setString('userEmail', userData?['email'] ?? '');
-            await prefs.setString('userRole', userData?['role'] ?? 'user');
-            await prefs.setBool('isLoggedIn', true);
+            await HiveStorageService.setString('userId', userData?['id']?.toString() ?? '');
+            await HiveStorageService.setString('userName', userData?['name'] ?? '');
+            await HiveStorageService.setString('userEmail', userData?['email'] ?? '');
+            await HiveStorageService.setString('userRole', userData?['role'] ?? 'user');
+            await HiveStorageService.setBool('isLoggedIn', true);
 
             // Show success message
             ScaffoldMessenger.of(context).showSnackBar(

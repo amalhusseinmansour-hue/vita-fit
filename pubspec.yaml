@@ -1,7 +1,8 @@
 name: gym
-description: "VitaFit - Fitness App"
+description: "Gym - تطبيق إدارة النادي الرياضي"
 publish_to: 'none'
-version: 1.0.7+34
+
+version: 1.0.7+35
 
 environment:
   sdk: ^3.9.2
@@ -11,34 +12,65 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+
   cupertino_icons: ^1.0.8
 
-  # State Management (pure Dart)
+  # State Management
   provider: ^6.1.1
 
-  # UI & Animations (pure Dart)
+  # Navigation
+  go_router: ^14.0.2
+
+  # UI & Animations
   flutter_animate: ^4.5.0
   shimmer: ^3.0.0
 
-  # Utilities (pure Dart)
+  # Utilities
   intl: ^0.20.2
+
+  # API & Storage
   http: ^1.1.0
   dio: ^5.4.0
-  crypto: ^3.0.3
-  path: ^1.8.3
 
-  # Database
-  sqflite: ^2.3.0
-
-  # Storage - using Hive instead of shared_preferences (iPad fix)
+  # Local Storage - Using Hive (iPad compatible)
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   path_provider: ^2.1.2
+
+  # SQLite Database
+  sqflite: ^2.3.0
+  path: ^1.8.3
+
+  # Crypto for HMAC
+  crypto: ^3.0.3
+
+  # Firebase
+  firebase_core: ^3.8.1
+  firebase_messaging: ^15.1.6
+  firebase_analytics: ^11.3.6
+  firebase_crashlytics: ^4.1.6
+
+  # Local Notifications
+  flutter_local_notifications: ^18.0.1
+
+  # URL Launcher
+  url_launcher: ^6.2.4
+
+  # Payment
+  pay: ^2.0.0
+  webview_flutter: ^4.4.2
+
+  # Apple Sign In (Required for App Store)
+  sign_in_with_apple: ^6.1.4
+
+  # App Tracking Transparency (Required for iOS 14+)
+  app_tracking_transparency: ^2.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -52,3 +84,12 @@ flutter:
     - family: NotoKufiArabic
       fonts:
         - asset: assets/fonts/NotoKufiArabic-Regular.ttf
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logo.jpeg"
+  adaptive_icon_background: "#F5F5F5"
+  adaptive_icon_foreground: "assets/icons/logo.jpeg"
+  min_sdk_android: 21
+  remove_alpha_ios: true

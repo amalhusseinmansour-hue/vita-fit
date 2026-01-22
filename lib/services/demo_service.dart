@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'hive_storage_service.dart';
 import 'email_service.dart';
 
 /// Demo Service - يوفر بيانات فعلية للعرض
@@ -76,8 +76,7 @@ class DemoService {
     if (_isInitialized) return;
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final savedUsers = prefs.getString(_registeredUsersKey);
+      final savedUsers = HiveStorageService.getString(_registeredUsersKey);
 
       if (savedUsers != null) {
         final Map<String, dynamic> decoded = jsonDecode(savedUsers);
@@ -98,7 +97,6 @@ class DemoService {
   // حفظ المستخدمين المسجلين
   static Future<void> _saveRegisteredUsers() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
       // فقط حفظ المستخدمين الجدد (غير الافتراضيين)
       final Map<String, dynamic> newUsers = {};
       demoUsers.forEach((email, data) {
@@ -106,7 +104,7 @@ class DemoService {
           newUsers[email] = data;
         }
       });
-      await prefs.setString(_registeredUsersKey, jsonEncode(newUsers));
+      await HiveStorageService.setString(_registeredUsersKey, jsonEncode(newUsers));
     } catch (e) {
       print('⚠️ خطأ في حفظ المستخدمين: $e');
     }

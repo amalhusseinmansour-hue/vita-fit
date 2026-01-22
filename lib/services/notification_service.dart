@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'hive_storage_service.dart';
 import 'api_service.dart';
 
 // Handle background messages
@@ -191,9 +191,8 @@ class NotificationService {
       if (token != null) {
         debugPrint('FCM Token: $token');
 
-        // Save token locally
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('fcmToken', token);
+        // Save token locally using Hive
+        await HiveStorageService.setString('fcmToken', token);
 
         // Send token to server
         await _updateFCMToken(token);
@@ -205,9 +204,8 @@ class NotificationService {
 
   static Future<void> _updateFCMToken(String token) async {
     try {
-      // Check if user is logged in
-      final prefs = await SharedPreferences.getInstance();
-      final authToken = prefs.getString('authToken');
+      // Check if user is logged in using Hive
+      final authToken = HiveStorageService.getString('authToken');
 
       if (authToken != null && authToken.isNotEmpty) {
         // Send token to server

@@ -1,103 +1,109 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'constants/app_theme.dart';
+import 'screens/splash_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/signup_screen.dart';
+import 'screens/role_router_screen.dart';
+import 'providers/cart_provider.dart';
+import 'providers/favorites_provider.dart';
+import 'providers/language_provider.dart';
+import 'services/firebase_service.dart';
+import 'services/local_storage_service.dart';
+import 'services/hive_storage_service.dart';
+import 'localization/app_localizations.dart';
 
-// Minimal main for debugging iPad crash
-void main() {
-  // Catch any errors during startup
-  runZonedGuarded(() {
+void main() async {
+  // Wrap the entire app in a zone to catch errors
+  runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    runApp(const MinimalApp());
+
+    // Set preferred orientations
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    // Initialize Hive Storage (iPad compatible - replaces SharedPreferences)
+    try {
+      await HiveStorageService.init();
+    } catch (e) {
+      debugPrint('Error initializing Hive: $e');
+    }
+
+    // Initialize Local Storage for offline support
+    try {
+      await LocalStorageService.init();
+    } catch (e) {
+      debugPrint('Error initializing LocalStorage: $e');
+    }
+
+    // Initialize Firebase (includes Crashlytics, Analytics, and Notifications)
+    try {
+      await FirebaseService.initialize();
+    } catch (e) {
+      debugPrint('Error initializing Firebase: $e');
+    }
+
+    runApp(const FitHerApp());
   }, (error, stack) {
-    debugPrint('CRASH ERROR: $error');
-    debugPrint('STACK: $stack');
+    // Log uncaught errors to Crashlytics (safely)
+    try {
+      FirebaseService.logError(error, stack, reason: 'Uncaught error in main zone');
+    } catch (e) {
+      debugPrint('Failed to log error: $e');
+    }
   });
 }
 
-class MinimalApp extends StatelessWidget {
-  const MinimalApp({super.key});
+class FitHerApp extends StatelessWidget {
+  const FitHerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'VitaFit',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      home: const MinimalSplash(),
-    );
-  }
-}
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+      ],
+      child: Consumer<LanguageProvider>(
+        builder: (context, languageProvider, child) {
+          return MaterialApp(
+            title: 'VitaFit',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.darkTheme,
+            home: const SplashScreen(),
 
-class MinimalSplash extends StatefulWidget {
-  const MinimalSplash({super.key});
+            // Routes
+            routes: {
+              '/login': (context) => const LoginScreen(),
+              '/signup': (context) => const SignUpScreen(),
+              '/home': (context) => const RoleRouterScreen(),
+            },
 
-  @override
-  State<MinimalSplash> createState() => _MinimalSplashState();
-}
+            // Localization support
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: languageProvider.locale,
 
-class _MinimalSplashState extends State<MinimalSplash> {
-  String _status = 'Starting...';
-
-  @override
-  void initState() {
-    super.initState();
-    _initialize();
-  }
-
-  Future<void> _initialize() async {
-    try {
-      setState(() => _status = 'App started successfully!');
-
-      // Wait 3 seconds then show success
-      await Future.delayed(const Duration(seconds: 3));
-
-      if (mounted) {
-        setState(() => _status = 'Ready! iPad test passed.');
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() => _status = 'Error: $e');
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF1A0E2E),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.favorite,
-              size: 80,
-              color: Colors.pinkAccent,
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'VitaFit',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              _status,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white70,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
-            const CircularProgressIndicator(
-              color: Colors.pinkAccent,
-            ),
-          ],
-        ),
+            // Builder for text direction
+            builder: (context, child) {
+              return Directionality(
+                textDirection: languageProvider.textDirection,
+                child: child!,
+              );
+            },
+          );
+        },
       ),
     );
   }

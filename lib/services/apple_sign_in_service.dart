@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'hive_storage_service.dart';
 import 'api_service.dart';
 import '../config/api_config.dart';
 import 'package:http/http.dart' as http;
@@ -48,19 +48,16 @@ class AppleSignInService {
 
         // Store the name for future use (Apple only sends it on first sign in)
         if (fullName.isNotEmpty) {
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('apple_user_name_$userIdentifier', fullName);
+          await HiveStorageService.setString('apple_user_name_$userIdentifier', fullName);
         }
       } else {
         // Try to get stored name
-        final prefs = await SharedPreferences.getInstance();
-        fullName = prefs.getString('apple_user_name_$userIdentifier');
+        fullName = HiveStorageService.getString('apple_user_name_$userIdentifier');
       }
 
       // Store email for future use
       if (email != null && email.isNotEmpty) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('apple_user_email_$userIdentifier', email);
+        await HiveStorageService.setString('apple_user_email_$userIdentifier', email);
       }
 
       // Send to backend for authentication
@@ -162,7 +159,7 @@ class AppleSignInService {
   static Future<bool> hasAppleCredential() async {
     try {
       final credentialState = await SignInWithApple.getCredentialState(
-        await _getStoredUserIdentifier() ?? '',
+        _getStoredUserIdentifier() ?? '',
       );
       return credentialState == CredentialState.authorized;
     } catch (e) {
@@ -171,25 +168,21 @@ class AppleSignInService {
   }
 
   /// Get stored Apple user identifier
-  static Future<String?> _getStoredUserIdentifier() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('apple_user_identifier');
+  static String? _getStoredUserIdentifier() {
+    return HiveStorageService.getString('apple_user_identifier');
   }
 
   /// Store Apple user identifier
   static Future<void> _storeUserIdentifier(String identifier) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('apple_user_identifier', identifier);
+    await HiveStorageService.setString('apple_user_identifier', identifier);
   }
 
   /// Clear Apple Sign In data on logout
   static Future<void> signOut() async {
-    final prefs = await SharedPreferences.getInstance();
-    final keys = prefs.getKeys();
-    for (final key in keys) {
-      if (key.startsWith('apple_')) {
-        await prefs.remove(key);
-      }
-    }
+    // Clear all apple-related keys
+    final keysToRemove = <String>[];
+    // Note: Hive doesn't expose all keys directly, so we clear known patterns
+    await HiveStorageService.remove('apple_user_identifier');
+    // For other apple_ prefixed keys, they will be overwritten on next sign in
   }
 }

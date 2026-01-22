@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -43,7 +45,67 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>ITSAppUsesNonExemptEncryption</key>
+
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSAllowsArbitraryLoadsForMedia</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+	</dict>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>VitaFit needs access to your photo library to select and upload your profile picture and progress photos.</string>
+
+	<key>NSCameraUsageDescription</key>
+	<string>VitaFit needs camera access to take progress photos and profile pictures.</string>
+
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>VitaFit sends notifications for workout reminders, trainer messages, and subscription updates.</string>
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>VitaFit uses your location to find nearby gyms and fitness centers.</string>
+
+	<key>NSHealthShareUsageDescription</key>
+	<string>VitaFit reads your health data to track your fitness progress and provide personalized recommendations.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>VitaFit writes workout data to Health to keep your fitness records synchronized.</string>
+
+	<key>NSFaceIDUsageDescription</key>
+	<string>VitaFit uses Face ID for quick and secure login to protect your account.</string>
+
+	<key>NSUserTrackingUsageDescription</key>
+	<string>VitaFit would like permission to track your activity to provide personalized fitness recommendations.</string>
+
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+
+	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
+
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>vitafit</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.vitafitapp.fitness</string>
+		</dict>
+	</array>
+
+	<key>MinimumOSVersion</key>
+	<string>13.0</string>
+
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 </dict>
 </plist>

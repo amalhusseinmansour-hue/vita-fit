@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
 import 'login_screen.dart';
@@ -139,8 +139,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
       if (result['success'] == true) {
         // Clear all local data
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.clear();
+        await HiveStorageService.clear();
 
         // Show success message and navigate to login
         showDialog(

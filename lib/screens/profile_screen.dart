@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
 
@@ -73,10 +73,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (result['success'] == true) {
         // Save updated data to local storage
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('userName', _nameController.text.trim());
+        await HiveStorageService.setString('userName', _nameController.text.trim());
         if (_phoneController.text.trim().isNotEmpty) {
-          await prefs.setString('userPhone', _phoneController.text.trim());
+          await HiveStorageService.setString('userPhone', _phoneController.text.trim());
         }
 
         // Also update the full user data in ApiService

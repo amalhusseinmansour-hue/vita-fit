@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
 import '../services/firebase_service.dart';
@@ -46,10 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _loadSavedCredentials() async {
-    final prefs = await SharedPreferences.getInstance();
-    final savedEmail = prefs.getString('saved_email');
-    final savedPassword = prefs.getString('saved_password');
-    final rememberMe = prefs.getBool('remember_me') ?? false;
+    final savedEmail = HiveStorageService.getString('saved_email');
+    final savedPassword = HiveStorageService.getString('saved_password');
+    final rememberMe = HiveStorageService.getBool('remember_me') ?? false;
 
     if (rememberMe && savedEmail != null && savedPassword != null) {
       setState(() {
@@ -61,15 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _saveCredentials() async {
-    final prefs = await SharedPreferences.getInstance();
     if (_rememberMe) {
-      await prefs.setString('saved_email', _emailController.text.trim());
-      await prefs.setString('saved_password', _passwordController.text);
-      await prefs.setBool('remember_me', true);
+      await HiveStorageService.setString('saved_email', _emailController.text.trim());
+      await HiveStorageService.setString('saved_password', _passwordController.text);
+      await HiveStorageService.setBool('remember_me', true);
     } else {
-      await prefs.remove('saved_email');
-      await prefs.remove('saved_password');
-      await prefs.setBool('remember_me', false);
+      await HiveStorageService.remove('saved_email');
+      await HiveStorageService.remove('saved_password');
+      await HiveStorageService.setBool('remember_me', false);
     }
   }
 
@@ -115,28 +113,27 @@ class _LoginScreenState extends State<LoginScreen> {
             await ApiService.saveUserData(userData);
           }
 
-          // Save user data to SharedPreferences for quick access
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('userId', userData?['id']?.toString() ?? '');
-          await prefs.setString('userName', userData?['name'] ?? '');
-          await prefs.setString('userEmail', userData?['email'] ?? '');
-          await prefs.setString('userPhone', userData?['phone'] ?? '');
-          await prefs.setString('userAvatar', userData?['avatar'] ?? '');
-          await prefs.setString('userRole', userRole);
-          await prefs.setBool('isLoggedIn', true);
+          // Save user data to Hive for quick access
+          await HiveStorageService.setString('userId', userData?['id']?.toString() ?? '');
+          await HiveStorageService.setString('userName', userData?['name'] ?? '');
+          await HiveStorageService.setString('userEmail', userData?['email'] ?? '');
+          await HiveStorageService.setString('userPhone', userData?['phone'] ?? '');
+          await HiveStorageService.setString('userAvatar', userData?['avatar'] ?? '');
+          await HiveStorageService.setString('userRole', userRole);
+          await HiveStorageService.setBool('isLoggedIn', true);
 
           // Save additional user data
           if (userData?['height'] != null) {
-            await prefs.setDouble('userHeight', (userData['height'] as num).toDouble());
+            await HiveStorageService.setDouble('userHeight', (userData['height'] as num).toDouble());
           }
           if (userData?['weight'] != null) {
-            await prefs.setDouble('userWeight', (userData['weight'] as num).toDouble());
+            await HiveStorageService.setDouble('userWeight', (userData['weight'] as num).toDouble());
           }
           if (userData?['goal'] != null) {
-            await prefs.setString('userGoal', userData['goal']);
+            await HiveStorageService.setString('userGoal', userData['goal']);
           }
           if (userData?['activity_level'] != null) {
-            await prefs.setString('userActivityLevel', userData['activity_level']);
+            await HiveStorageService.setString('userActivityLevel', userData['activity_level']);
           }
 
           // Track successful login
@@ -185,12 +182,11 @@ class _LoginScreenState extends State<LoginScreen> {
         final userData = result['user'];
 
         // Save user data
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('userId', userData?['id']?.toString() ?? '');
-        await prefs.setString('userName', userData?['name'] ?? '');
-        await prefs.setString('userEmail', userData?['email'] ?? '');
-        await prefs.setString('userRole', userData?['role'] ?? 'trainee');
-        await prefs.setBool('isLoggedIn', true);
+        await HiveStorageService.setString('userId', userData?['id']?.toString() ?? '');
+        await HiveStorageService.setString('userName', userData?['name'] ?? '');
+        await HiveStorageService.setString('userEmail', userData?['email'] ?? '');
+        await HiveStorageService.setString('userRole', userData?['role'] ?? 'trainee');
+        await HiveStorageService.setBool('isLoggedIn', true);
 
         // Track successful login
         FirebaseService.logLogin('apple');

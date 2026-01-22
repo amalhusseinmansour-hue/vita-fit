@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'hive_storage_service.dart';
 import '../config/api_config.dart';
 import 'demo_service.dart';
 import 'local_storage_service.dart';
@@ -14,59 +14,50 @@ class ApiService {
 
   // Get stored token
   static Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
+    return HiveStorageService.getString('token');
   }
 
   // Save token
   static Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', token);
+    await HiveStorageService.setString('token', token);
   }
 
   // Remove token
   static Future<void> removeToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    await prefs.remove('refresh_token');
-    await prefs.remove('user_type');
-    await prefs.remove('user_data');
+    await HiveStorageService.remove('token');
+    await HiveStorageService.remove('refresh_token');
+    await HiveStorageService.remove('user_type');
+    await HiveStorageService.remove('user_data');
   }
 
   // Save refresh token
   static Future<void> saveRefreshToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('refresh_token', token);
+    await HiveStorageService.setString('refresh_token', token);
   }
 
   // Get refresh token
   static Future<String?> getRefreshToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('refresh_token');
+    return HiveStorageService.getString('refresh_token');
   }
 
   // Save user type
   static Future<void> saveUserType(String userType) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_type', userType);
+    await HiveStorageService.setString('user_type', userType);
   }
 
   // Get user type
   static Future<String?> getUserType() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('user_type');
+    return HiveStorageService.getString('user_type');
   }
 
   // Save user data
   static Future<void> saveUserData(Map<String, dynamic> userData) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_data', json.encode(userData));
+    await HiveStorageService.setString('user_data', json.encode(userData));
   }
 
   // Get user data
   static Future<Map<String, dynamic>?> getUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final data = prefs.getString('user_data');
+    final data = HiveStorageService.getString('user_data');
     if (data != null) {
       return json.decode(data);
     }

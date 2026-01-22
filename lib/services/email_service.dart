@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'hive_storage_service.dart';
 
 /// خدمة إرسال البريد الإلكتروني عبر SMTP
 class EmailService {
@@ -28,27 +28,25 @@ class EmailService {
     required String fromEmail,
     required String encryption,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keySmtpHost, host);
-    await prefs.setString(_keySmtpPort, port);
-    await prefs.setString(_keySmtpUsername, username);
-    await prefs.setString(_keySmtpPassword, password);
-    await prefs.setString(_keySmtpFromName, fromName);
-    await prefs.setString(_keySmtpFromEmail, fromEmail);
-    await prefs.setString(_keySmtpEncryption, encryption);
+    await HiveStorageService.setString(_keySmtpHost, host);
+    await HiveStorageService.setString(_keySmtpPort, port);
+    await HiveStorageService.setString(_keySmtpUsername, username);
+    await HiveStorageService.setString(_keySmtpPassword, password);
+    await HiveStorageService.setString(_keySmtpFromName, fromName);
+    await HiveStorageService.setString(_keySmtpFromEmail, fromEmail);
+    await HiveStorageService.setString(_keySmtpEncryption, encryption);
   }
 
   /// استرجاع إعدادات SMTP
-  static Future<Map<String, String>> getSmtpSettings() async {
-    final prefs = await SharedPreferences.getInstance();
+  static Map<String, String> getSmtpSettings() {
     return {
-      'host': prefs.getString(_keySmtpHost) ?? 'smtp.gmail.com',
-      'port': prefs.getString(_keySmtpPort) ?? '587',
-      'username': prefs.getString(_keySmtpUsername) ?? '',
-      'password': prefs.getString(_keySmtpPassword) ?? '',
-      'fromName': prefs.getString(_keySmtpFromName) ?? 'VitaFit',
-      'fromEmail': prefs.getString(_keySmtpFromEmail) ?? '',
-      'encryption': prefs.getString(_keySmtpEncryption) ?? 'tls',
+      'host': HiveStorageService.getString(_keySmtpHost) ?? 'smtp.gmail.com',
+      'port': HiveStorageService.getString(_keySmtpPort) ?? '587',
+      'username': HiveStorageService.getString(_keySmtpUsername) ?? '',
+      'password': HiveStorageService.getString(_keySmtpPassword) ?? '',
+      'fromName': HiveStorageService.getString(_keySmtpFromName) ?? 'VitaFit',
+      'fromEmail': HiveStorageService.getString(_keySmtpFromEmail) ?? '',
+      'encryption': HiveStorageService.getString(_keySmtpEncryption) ?? 'tls',
     };
   }
 

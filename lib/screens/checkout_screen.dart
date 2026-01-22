@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 import '../constants/app_theme.dart';
 import '../providers/cart_provider.dart';
 import '../services/api_service.dart';
@@ -50,8 +50,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final phone = prefs.getString('userPhone') ?? '';
+    final phone = HiveStorageService.getString('userPhone') ?? '';
     if (phone.isNotEmpty) {
       _phoneController.text = phone;
     }

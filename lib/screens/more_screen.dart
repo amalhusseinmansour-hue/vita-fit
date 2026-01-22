@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 import 'package:provider/provider.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
@@ -51,8 +51,7 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userType = prefs.getString('userType') ?? 'trainee';
+    final userType = HiveStorageService.getString('userType') ?? 'trainee';
 
     // Try to get from user data first
     final userData = await ApiService.getUserData();
@@ -63,30 +62,29 @@ class _MoreScreenState extends State<MoreScreen> {
         _userType = userData['type'] ?? userType;
       });
     } else {
-      // Fallback to individual SharedPreferences
+      // Fallback to individual Hive storage
       setState(() {
-        _userName = prefs.getString('userName') ?? '';
-        _userEmail = prefs.getString('userEmail') ?? '';
+        _userName = HiveStorageService.getString('userName') ?? '';
+        _userEmail = HiveStorageService.getString('userEmail') ?? '';
         _userType = userType;
       });
     }
   }
 
   Future<void> _loadStats() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userType = prefs.getString('userType') ?? 'trainee';
+    final userType = HiveStorageService.getString('userType') ?? 'trainee';
 
     if (userType == 'trainer') {
       await _loadTrainerStats();
     } else {
-      await _loadTraineeStats(prefs);
+      await _loadTraineeStats();
     }
   }
 
-  Future<void> _loadTraineeStats(SharedPreferences prefs) async {
+  Future<void> _loadTraineeStats() async {
     // Load stats from local storage
-    final startWeight = double.tryParse(prefs.getString('smartplan_current_weight') ?? '') ?? 0;
-    final currentWeight = double.tryParse(prefs.getString('current_weight') ?? prefs.getString('smartplan_current_weight') ?? '') ?? 0;
+    final startWeight = double.tryParse(HiveStorageService.getString('smartplan_current_weight') ?? '') ?? 0;
+    final currentWeight = double.tryParse(HiveStorageService.getString('current_weight') ?? HiveStorageService.getString('smartplan_current_weight') ?? '') ?? 0;
 
     // Calculate weight loss
     double weightLoss = 0;
@@ -95,8 +93,8 @@ class _MoreScreenState extends State<MoreScreen> {
     }
 
     // Load consecutive days and completed sessions
-    final consecutiveDays = prefs.getInt('consecutive_days') ?? 0;
-    final completedSessions = prefs.getInt('completed_sessions') ?? 0;
+    final consecutiveDays = HiveStorageService.getInt('consecutive_days') ?? 0;
+    final completedSessions = HiveStorageService.getInt('completed_sessions') ?? 0;
 
     setState(() {
       _consecutiveDays = consecutiveDays;
@@ -114,8 +112,8 @@ class _MoreScreenState extends State<MoreScreen> {
           _weightLoss = (result['weight_loss'] ?? _weightLoss).toDouble();
         });
         // Save to local
-        await prefs.setInt('consecutive_days', _consecutiveDays);
-        await prefs.setInt('completed_sessions', _completedSessions);
+        await HiveStorageService.setInt('consecutive_days', _consecutiveDays);
+        await HiveStorageService.setInt('completed_sessions', _completedSessions);
       }
     } catch (e) {
       debugPrint('Error loading stats: $e');
@@ -729,8 +727,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                 await ApiService.logout();
 
                                 // حذف جميع البيانات المحفوظة
-                                final prefs = await SharedPreferences.getInstance();
-                                await prefs.clear();
+                                await HiveStorageService.clear();
 
                                 if (context.mounted) {
                                   // الانتقال إلى شاشة تسجيل الدخول

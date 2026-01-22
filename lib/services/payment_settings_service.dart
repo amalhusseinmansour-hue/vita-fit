@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'hive_storage_service.dart';
 import 'package:http/http.dart' as http;
 import 'api_service.dart';
 
@@ -60,8 +60,7 @@ class PaymentSettingsService {
           await _updateLocalSettingsFromServer(serverSettings);
 
           // حفظ وقت آخر مزامنة
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setInt(_keyLastSync, DateTime.now().millisecondsSinceEpoch);
+          await HiveStorageService.setInt(_keyLastSync, DateTime.now().millisecondsSinceEpoch);
         }
       }
     } catch (e) {
@@ -118,10 +117,9 @@ class PaymentSettingsService {
   }
 
   /// التحقق من الحاجة للمزامنة (كل ساعة)
-  static Future<bool> needsSync() async {
+  static bool needsSync() {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final lastSync = prefs.getInt(_keyLastSync) ?? 0;
+      final lastSync = HiveStorageService.getInt(_keyLastSync) ?? 0;
       final now = DateTime.now().millisecondsSinceEpoch;
       // مزامنة كل ساعة
       return (now - lastSync) > 3600000;
@@ -133,16 +131,14 @@ class PaymentSettingsService {
   // Get all payment settings
   static Future<Map<String, dynamic>> getPaymentSettings({bool forceSync = false}) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-
       // التحقق من الحاجة للمزامنة (فقط إذا لم يتم استدعاء الدالة من داخل المزامنة)
-      if (forceSync || await needsSync()) {
+      if (forceSync || needsSync()) {
         // تجنب المزامنة المتكررة
-        await prefs.setInt(_keyLastSync, DateTime.now().millisecondsSinceEpoch);
+        await HiveStorageService.setInt(_keyLastSync, DateTime.now().millisecondsSinceEpoch);
         await syncSettingsFromServer();
       }
 
-      final settingsJson = prefs.getString(_keyPaymentSettings);
+      final settingsJson = HiveStorageService.getString(_keyPaymentSettings);
       if (settingsJson != null) {
         return Map<String, dynamic>.from(jsonDecode(settingsJson));
       }
@@ -156,8 +152,7 @@ class PaymentSettingsService {
   // Save all payment settings
   static Future<bool> savePaymentSettings(Map<String, dynamic> settings) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_keyPaymentSettings, jsonEncode(settings));
+      await HiveStorageService.setString(_keyPaymentSettings, jsonEncode(settings));
       return true;
     } catch (e) {
       print('Error saving payment settings: $e');

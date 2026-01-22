@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 import 'dart:convert';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
@@ -47,9 +47,8 @@ class _TrainerHomeScreenState extends State<TrainerHomeScreen> {
         return sessionDate == todayStr;
       }).toList();
 
-      // تحميل بيانات المدربة من SharedPreferences أولاً
-      final prefs = await SharedPreferences.getInstance();
-      final userDataStr = prefs.getString('user_data');
+      // تحميل بيانات المدربة من Hive أولاً
+      final userDataStr = HiveStorageService.getString('user_data');
       String trainerName = 'المدربة';
       String trainerId = 'trainer_1';
 
@@ -57,7 +56,7 @@ class _TrainerHomeScreenState extends State<TrainerHomeScreen> {
         final userData = json.decode(userDataStr);
         trainerName = userData['name']?.toString() ?? 'المدربة';
         trainerId = userData['id']?.toString() ?? userData['trainer_id']?.toString() ?? 'trainer_1';
-        debugPrint('Loaded trainer from SharedPreferences: $trainerName');
+        debugPrint('Loaded trainer from Hive: $trainerName');
       } else {
         // تحميل من API إذا لم تكن البيانات محفوظة
         final profile = await ApiService.getProfile();

@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'hive_storage_service.dart';
 import '../firebase_options.dart';
 import 'api_service.dart';
 
@@ -269,12 +269,11 @@ class FirebaseService {
     try {
       final token = await _messagingInstance.getToken();
       if (token != null) {
-        // Save token locally
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('fcm_token', token);
+        // Save token locally using Hive
+        await HiveStorageService.setString('fcm_token', token);
 
         // Send token to server if user is logged in
-        final authToken = prefs.getString('token');
+        final authToken = HiveStorageService.getString('token');
         if (authToken != null) {
           await _sendTokenToServer(token);
         }
@@ -282,12 +281,12 @@ class FirebaseService {
 
       // Listen for token refresh
       _messagingInstance.onTokenRefresh.listen((newToken) async {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('fcm_token', newToken);
+        await HiveStorageService.setString('fcm_token', newToken);
         await _sendTokenToServer(newToken);
       });
     } catch (e) {
       // Handle error
+      debugPrint('Error saving FCM token: $e');
     }
   }
 

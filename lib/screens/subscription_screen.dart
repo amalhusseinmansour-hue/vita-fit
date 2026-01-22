@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
 
@@ -27,8 +27,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      _userName = prefs.getString('userName') ?? 'المستخدم';
+      _userName = HiveStorageService.getString('userName') ?? 'المستخدم';
 
       // Load current subscription
       final subscription = await ApiService.getMySubscription();

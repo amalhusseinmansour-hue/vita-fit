@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
 import '../services/app_tracking_service.dart';
+import '../services/hive_storage_service.dart';
 import 'onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -70,15 +70,15 @@ class _SplashScreenState extends State<SplashScreen>
       if (isLoggedIn) {
         Navigator.pushReplacementNamed(context, '/home');
       } else {
-        final prefs = await SharedPreferences.getInstance();
-        final hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
+        // Check if user has seen onboarding using Hive
+        final hasSeenOnboarding = HiveStorageService.getBool('hasSeenOnboarding') ?? false;
 
         if (!mounted) return;
 
         if (hasSeenOnboarding) {
           Navigator.pushReplacementNamed(context, '/login');
         } else {
-          await prefs.setBool('hasSeenOnboarding', true);
+          await HiveStorageService.setBool('hasSeenOnboarding', true);
           if (!mounted) return;
           Navigator.pushReplacement(
             context,
@@ -194,6 +194,7 @@ class _SplashScreenState extends State<SplashScreen>
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
+                            fontFamily: 'NotoKufiArabic',
                           ),
                         ),
                       ),
@@ -219,6 +220,7 @@ class _SplashScreenState extends State<SplashScreen>
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
+                          fontFamily: 'NotoKufiArabic',
                         ),
                       ),
                     ],

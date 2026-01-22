@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/hive_storage_service.dart';
 
 class SmartPlanScreen extends StatefulWidget {
   const SmartPlanScreen({super.key});
@@ -126,56 +126,54 @@ class _SmartPlanScreenState extends State<SmartPlanScreen> {
 
   Future<void> _loadExistingData() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-
       // Load from local storage first
       setState(() {
-        final name = prefs.getString('smartplan_name');
+        final name = HiveStorageService.getString('smartplan_name');
         if (name != null && name.isNotEmpty) _nameController.text = name;
 
-        final age = prefs.getString('smartplan_age');
+        final age = HiveStorageService.getString('smartplan_age');
         if (age != null && age.isNotEmpty) _ageController.text = age;
 
-        final height = prefs.getString('smartplan_height');
+        final height = HiveStorageService.getString('smartplan_height');
         if (height != null && height.isNotEmpty) _heightController.text = height;
 
-        final currentWeight = prefs.getString('smartplan_current_weight');
+        final currentWeight = HiveStorageService.getString('smartplan_current_weight');
         if (currentWeight != null && currentWeight.isNotEmpty) _currentWeightController.text = currentWeight;
 
-        final targetWeight = prefs.getString('smartplan_target_weight');
+        final targetWeight = HiveStorageService.getString('smartplan_target_weight');
         if (targetWeight != null && targetWeight.isNotEmpty) _targetWeightController.text = targetWeight;
 
-        final healthCondition = prefs.getString('smartplan_health_condition');
+        final healthCondition = HiveStorageService.getString('smartplan_health_condition');
         if (healthCondition != null) _healthConditionController.text = healthCondition;
 
-        final previousInjuries = prefs.getString('smartplan_previous_injuries');
+        final previousInjuries = HiveStorageService.getString('smartplan_previous_injuries');
         if (previousInjuries != null) _previousInjuriesController.text = previousInjuries;
 
-        final surgeries = prefs.getString('smartplan_surgeries');
+        final surgeries = HiveStorageService.getString('smartplan_surgeries');
         if (surgeries != null) _surgeriesController.text = surgeries;
 
-        final medications = prefs.getString('smartplan_medications');
+        final medications = HiveStorageService.getString('smartplan_medications');
         if (medications != null) _medicationsController.text = medications;
 
-        final allergies = prefs.getString('smartplan_allergies');
+        final allergies = HiveStorageService.getString('smartplan_allergies');
         if (allergies != null) _allergiesController.text = allergies;
 
-        final waist = prefs.getString('smartplan_waist');
+        final waist = HiveStorageService.getString('smartplan_waist');
         if (waist != null && waist.isNotEmpty) _waistController.text = waist;
 
-        final hips = prefs.getString('smartplan_hips');
+        final hips = HiveStorageService.getString('smartplan_hips');
         if (hips != null && hips.isNotEmpty) _hipsController.text = hips;
 
-        final chest = prefs.getString('smartplan_chest');
+        final chest = HiveStorageService.getString('smartplan_chest');
         if (chest != null && chest.isNotEmpty) _chestController.text = chest;
 
-        final arm = prefs.getString('smartplan_arm');
+        final arm = HiveStorageService.getString('smartplan_arm');
         if (arm != null && arm.isNotEmpty) _armController.text = arm;
 
-        final thigh = prefs.getString('smartplan_thigh');
+        final thigh = HiveStorageService.getString('smartplan_thigh');
         if (thigh != null && thigh.isNotEmpty) _thighController.text = thigh;
 
-        final activityLevel = prefs.getString('smartplan_activity_level');
+        final activityLevel = HiveStorageService.getString('smartplan_activity_level');
         if (activityLevel != null) {
           _selectedActivityLevel = activityLevel;
           final level = _activityLevels.firstWhere(
@@ -185,21 +183,21 @@ class _SmartPlanScreenState extends State<SmartPlanScreen> {
           _activityMultiplier = level['multiplier'] as double;
         }
 
-        final trainingType = prefs.getString('smartplan_training_type');
+        final trainingType = HiveStorageService.getString('smartplan_training_type');
         debugPrint('Loaded training type: $trainingType');
         if (trainingType != null && trainingType.isNotEmpty) _selectedTrainingType = trainingType;
 
-        final subscriptionType = prefs.getString('smartplan_subscription_type');
+        final subscriptionType = HiveStorageService.getString('smartplan_subscription_type');
         debugPrint('Loaded subscription type: $subscriptionType');
         if (subscriptionType != null && subscriptionType.isNotEmpty) _selectedSubscriptionType = subscriptionType;
 
-        final trainerId = prefs.getString('smartplan_trainer_id');
+        final trainerId = HiveStorageService.getString('smartplan_trainer_id');
         debugPrint('Loaded trainer id: $trainerId');
         if (trainerId != null && trainerId.isNotEmpty) _selectedTrainer = trainerId;
 
         // Load trainer lock status
-        _trainerLocked = prefs.getBool('smartplan_trainer_locked') ?? false;
-        _trainerRequestStatus = prefs.getString('smartplan_trainer_request_status');
+        _trainerLocked = HiveStorageService.getBool('smartplan_trainer_locked') ?? false;
+        _trainerRequestStatus = HiveStorageService.getString('smartplan_trainer_request_status');
         debugPrint('Trainer locked: $_trainerLocked, Request status: $_trainerRequestStatus');
 
         _calculateBMI();
@@ -301,40 +299,40 @@ class _SmartPlanScreenState extends State<SmartPlanScreen> {
 
     try {
       // Save locally first
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('smartplan_name', _nameController.text);
-      await prefs.setString('smartplan_age', _ageController.text);
-      await prefs.setString('smartplan_height', _heightController.text);
-      await prefs.setString('smartplan_current_weight', _currentWeightController.text);
-      await prefs.setString('smartplan_target_weight', _targetWeightController.text);
-      await prefs.setString('smartplan_health_condition', _healthConditionController.text);
-      await prefs.setString('smartplan_previous_injuries', _previousInjuriesController.text);
-      await prefs.setString('smartplan_surgeries', _surgeriesController.text);
-      await prefs.setString('smartplan_medications', _medicationsController.text);
-      await prefs.setString('smartplan_allergies', _allergiesController.text);
-      await prefs.setString('smartplan_waist', _waistController.text);
-      await prefs.setString('smartplan_hips', _hipsController.text);
-      await prefs.setString('smartplan_chest', _chestController.text);
-      await prefs.setString('smartplan_arm', _armController.text);
-      await prefs.setString('smartplan_thigh', _thighController.text);
+      // Using HiveStorageService
+      await HiveStorageService.setString('smartplan_name', _nameController.text);
+      await HiveStorageService.setString('smartplan_age', _ageController.text);
+      await HiveStorageService.setString('smartplan_height', _heightController.text);
+      await HiveStorageService.setString('smartplan_current_weight', _currentWeightController.text);
+      await HiveStorageService.setString('smartplan_target_weight', _targetWeightController.text);
+      await HiveStorageService.setString('smartplan_health_condition', _healthConditionController.text);
+      await HiveStorageService.setString('smartplan_previous_injuries', _previousInjuriesController.text);
+      await HiveStorageService.setString('smartplan_surgeries', _surgeriesController.text);
+      await HiveStorageService.setString('smartplan_medications', _medicationsController.text);
+      await HiveStorageService.setString('smartplan_allergies', _allergiesController.text);
+      await HiveStorageService.setString('smartplan_waist', _waistController.text);
+      await HiveStorageService.setString('smartplan_hips', _hipsController.text);
+      await HiveStorageService.setString('smartplan_chest', _chestController.text);
+      await HiveStorageService.setString('smartplan_arm', _armController.text);
+      await HiveStorageService.setString('smartplan_thigh', _thighController.text);
       if (_selectedActivityLevel != null) {
-        await prefs.setString('smartplan_activity_level', _selectedActivityLevel!);
+        await HiveStorageService.setString('smartplan_activity_level', _selectedActivityLevel!);
       }
       if (_selectedTrainingType != null) {
-        await prefs.setString('smartplan_training_type', _selectedTrainingType!);
+        await HiveStorageService.setString('smartplan_training_type', _selectedTrainingType!);
         debugPrint('Saved training type: $_selectedTrainingType');
       }
       if (_selectedSubscriptionType != null) {
-        await prefs.setString('smartplan_subscription_type', _selectedSubscriptionType!);
+        await HiveStorageService.setString('smartplan_subscription_type', _selectedSubscriptionType!);
         debugPrint('Saved subscription type: $_selectedSubscriptionType');
       }
       if (_selectedTrainer != null) {
-        await prefs.setString('smartplan_trainer_id', _selectedTrainer!);
+        await HiveStorageService.setString('smartplan_trainer_id', _selectedTrainer!);
         debugPrint('Saved trainer id: $_selectedTrainer');
 
         // Lock trainer selection after first save
         if (!_trainerLocked) {
-          await prefs.setBool('smartplan_trainer_locked', true);
+          await HiveStorageService.setBool('smartplan_trainer_locked', true);
           _trainerLocked = true;
           debugPrint('Trainer selection locked');
         }
@@ -726,8 +724,8 @@ class _SmartPlanScreenState extends State<SmartPlanScreen> {
 
   Future<void> _sendTrainerRequest(String trainerId) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('smartplan_trainer_request_status', 'pending');
+      // Using HiveStorageService
+      await HiveStorageService.setString('smartplan_trainer_request_status', 'pending');
       _trainerRequestStatus = 'pending';
 
       // Send request to server

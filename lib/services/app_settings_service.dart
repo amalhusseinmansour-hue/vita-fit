@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'hive_storage_service.dart';
 
 /// خدمة إعدادات التطبيق العامة
 class AppSettingsService {
@@ -134,73 +134,66 @@ class AppSettingsService {
     String? dateFormat,
     String? timeFormat,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    if (language != null) await prefs.setString(_keyLanguage, language);
-    if (country != null) await prefs.setString(_keyCountry, country);
-    if (currency != null) await prefs.setString(_keyCurrency, currency);
-    if (currencySymbol != null) await prefs.setString(_keyCurrencySymbol, currencySymbol);
-    if (appName != null) await prefs.setString(_keyAppName, appName);
-    if (phoneCode != null) await prefs.setString(_keyPhoneCode, phoneCode);
-    if (dateFormat != null) await prefs.setString(_keyDateFormat, dateFormat);
-    if (timeFormat != null) await prefs.setString(_keyTimeFormat, timeFormat);
+    if (language != null) await HiveStorageService.setString(_keyLanguage, language);
+    if (country != null) await HiveStorageService.setString(_keyCountry, country);
+    if (currency != null) await HiveStorageService.setString(_keyCurrency, currency);
+    if (currencySymbol != null) await HiveStorageService.setString(_keyCurrencySymbol, currencySymbol);
+    if (appName != null) await HiveStorageService.setString(_keyAppName, appName);
+    if (phoneCode != null) await HiveStorageService.setString(_keyPhoneCode, phoneCode);
+    if (dateFormat != null) await HiveStorageService.setString(_keyDateFormat, dateFormat);
+    if (timeFormat != null) await HiveStorageService.setString(_keyTimeFormat, timeFormat);
   }
 
   /// استرجاع جميع الإعدادات
-  static Future<Map<String, dynamic>> getSettings() async {
-    final prefs = await SharedPreferences.getInstance();
+  static Map<String, dynamic> getSettings() {
     return {
-      'language': prefs.getString(_keyLanguage) ?? 'ar',
-      'country': prefs.getString(_keyCountry) ?? 'AE',
-      'currency': prefs.getString(_keyCurrency) ?? 'AED',
-      'currencySymbol': prefs.getString(_keyCurrencySymbol) ?? 'د.إ',
-      'appName': prefs.getString(_keyAppName) ?? 'VitaFit',
-      'phoneCode': prefs.getString(_keyPhoneCode) ?? '+971',
-      'dateFormat': prefs.getString(_keyDateFormat) ?? 'dd/MM/yyyy',
-      'timeFormat': prefs.getString(_keyTimeFormat) ?? 'HH:mm',
+      'language': HiveStorageService.getString(_keyLanguage) ?? 'ar',
+      'country': HiveStorageService.getString(_keyCountry) ?? 'AE',
+      'currency': HiveStorageService.getString(_keyCurrency) ?? 'AED',
+      'currencySymbol': HiveStorageService.getString(_keyCurrencySymbol) ?? 'د.إ',
+      'appName': HiveStorageService.getString(_keyAppName) ?? 'VitaFit',
+      'phoneCode': HiveStorageService.getString(_keyPhoneCode) ?? '+971',
+      'dateFormat': HiveStorageService.getString(_keyDateFormat) ?? 'dd/MM/yyyy',
+      'timeFormat': HiveStorageService.getString(_keyTimeFormat) ?? 'HH:mm',
     };
   }
 
   /// الحصول على اللغة الحالية
-  static Future<String> getCurrentLanguage() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyLanguage) ?? 'ar';
+  static String getCurrentLanguage() {
+    return HiveStorageService.getString(_keyLanguage) ?? 'ar';
   }
 
   /// الحصول على الدولة الحالية
-  static Future<String> getCurrentCountry() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyCountry) ?? 'AE';
+  static String getCurrentCountry() {
+    return HiveStorageService.getString(_keyCountry) ?? 'AE';
   }
 
   /// الحصول على العملة الحالية
-  static Future<String> getCurrentCurrency() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyCurrency) ?? 'AED';
+  static String getCurrentCurrency() {
+    return HiveStorageService.getString(_keyCurrency) ?? 'AED';
   }
 
   /// الحصول على رمز العملة
-  static Future<String> getCurrencySymbol() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyCurrencySymbol) ?? 'د.إ';
+  static String getCurrencySymbol() {
+    return HiveStorageService.getString(_keyCurrencySymbol) ?? 'د.إ';
   }
 
   /// هل اللغة من اليمين لليسار؟
-  static Future<bool> isRTL() async {
-    final language = await getCurrentLanguage();
+  static bool isRTL() {
+    final language = getCurrentLanguage();
     return language == 'ar';
   }
 
   /// الحصول على اتجاه النص
-  static Future<TextDirection> getTextDirection() async {
-    final isRtl = await isRTL();
+  static TextDirection getTextDirection() {
+    final isRtl = isRTL();
     return isRtl ? TextDirection.rtl : TextDirection.ltr;
   }
 
   /// الحصول على Locale
-  static Future<Locale> getLocale() async {
-    final language = await getCurrentLanguage();
-    final country = await getCurrentCountry();
+  static Locale getLocale() {
+    final language = getCurrentLanguage();
+    final country = getCurrentCountry();
     return Locale(language, country);
   }
 
@@ -223,9 +216,9 @@ class AppSettingsService {
   }
 
   /// تنسيق المبلغ بالعملة
-  static Future<String> formatCurrency(double amount) async {
-    final symbol = await getCurrencySymbol();
-    final language = await getCurrentLanguage();
+  static String formatCurrency(double amount) {
+    final symbol = getCurrencySymbol();
+    final language = getCurrentLanguage();
 
     if (language == 'ar') {
       return '${amount.toStringAsFixed(2)} $symbol';
