@@ -1,7 +1,7 @@
 name: gym
 description: "VitaFit - Fitness App"
 publish_to: 'none'
-version: 1.0.7+33
+version: 1.0.7+34
 
 environment:
   sdk: ^3.9.2
@@ -30,8 +30,10 @@ dependencies:
   # Database
   sqflite: ^2.3.0
 
-  # Storage - using latest version
-  shared_preferences: ^2.5.0
+  # Storage - using Hive instead of shared_preferences (iPad fix)
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.2
 
 dev_dependencies:
   flutter_test:
