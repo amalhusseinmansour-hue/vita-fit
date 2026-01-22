@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../services/api_service.dart';
 import '../constants/app_theme.dart';
 import 'trainer_main_screen.dart';
-import '../main.dart';
+import 'home_screen.dart';
 import 'login_screen.dart';
 
 class RoleRouterScreen extends StatefulWidget {
@@ -71,7 +71,7 @@ class _RoleRouterScreenState extends State<RoleRouterScreen> {
         return const TrainerMainScreen();
       case 'trainee':
       default:
-        return MainScreen();
+        return const HomeScreen();
     }
   }
 }
