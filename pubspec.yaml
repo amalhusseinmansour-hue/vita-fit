@@ -1,7 +1,7 @@
 name: gym
 description: "VitaFit - Fitness App"
 publish_to: 'none'
-version: 1.0.7+31
+version: 1.0.7+32
 
 environment:
   sdk: ^3.9.2
@@ -27,8 +27,8 @@ dependencies:
   crypto: ^3.0.3
   path: ^1.8.3
 
-  # Storage (testing)
-  shared_preferences: ^2.2.2
+  # Testing sqflite instead
+  sqflite: ^2.3.0
 
 dev_dependencies:
   flutter_test:
