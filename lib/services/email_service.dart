@@ -1,10 +1,9 @@
 import 'dart:math';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'hive_storage_service.dart';
 
-/// خدمة إرسال البريد الإلكتروني عبر SMTP
+/// خدمة إرسال البريد الإلكتروني
+/// ملاحظة: تم إزالة SMTP لأنه لا يعمل على iOS
+/// يتم عرض رمز OTP مباشرة للمستخدم
 class EmailService {
   // مفاتيح التخزين
   static const String _keySmtpHost = 'smtp_host';
@@ -18,7 +17,7 @@ class EmailService {
   // تخزين OTP مؤقتاً للتحقق
   static final Map<String, _OtpData> _otpStorage = {};
 
-  /// حفظ إعدادات SMTP
+  /// حفظ إعدادات SMTP (للاستخدام المستقبلي)
   static Future<void> saveSmtpSettings({
     required String host,
     required String port,
@@ -63,6 +62,7 @@ class EmailService {
   }
 
   /// إرسال رمز OTP إلى البريد الإلكتروني
+  /// ملاحظة: حالياً يتم عرض الرمز مباشرة (SMTP غير متاح على iOS)
   static Future<Map<String, dynamic>> sendOtpEmail({
     required String email,
     required String userName,
@@ -77,37 +77,12 @@ class EmailService {
         expiresAt: DateTime.now().add(const Duration(minutes: 10)),
       );
 
-      // التحقق من تكوين SMTP
-      final isConfigured = isSmtpConfigured();
-
-      // للويب أو إذا لم يتم تكوين SMTP: نعرض الرمز
-      if (kIsWeb || !isConfigured) {
-        return {
-          'success': true,
-          'message': 'تم إرسال رمز التحقق',
-          'otp_for_testing': otp,
-        };
-      }
-
-      // للموبايل والديسكتوب: إرسال عبر SMTP
-      final success = await _sendViaSmtp(
-        toEmail: email,
-        userName: userName,
-        otp: otp,
-      );
-
-      if (success) {
-        return {
-          'success': true,
-          'message': 'تم إرسال رمز التحقق إلى بريدك الإلكتروني',
-        };
-      } else {
-        return {
-          'success': true,
-          'message': 'تم إرسال رمز التحقق',
-          'otp_for_testing': otp,
-        };
-      }
+      // عرض الرمز مباشرة للمستخدم
+      return {
+        'success': true,
+        'message': 'تم إرسال رمز التحقق',
+        'otp_for_testing': otp,
+      };
     } catch (e) {
       // في حالة الخطأ، نعيد الرمز للاختبار
       final otp = _otpStorage[email.toLowerCase()]?.otp ?? generateOtp();
@@ -124,143 +99,12 @@ class EmailService {
   }
 
   /// إرسال بريد اختبار
+  /// ملاحظة: SMTP غير متاح على iOS حالياً
   static Future<Map<String, dynamic>> sendTestEmail(String toEmail) async {
-    try {
-      final isConfigured = isSmtpConfigured();
-      if (!isConfigured) {
-        return {
-          'success': false,
-          'message': 'الرجاء إعداد بيانات SMTP أولاً',
-        };
-      }
-
-      if (kIsWeb) {
-        return {
-          'success': false,
-          'message': 'إرسال البريد غير متاح على الويب، جرب على الموبايل',
-        };
-      }
-
-      final settings = getSmtpSettings();
-      final smtpServer = _getSmtpServer(settings);
-
-      final message = Message()
-        ..from = Address(settings['fromEmail']!, settings['fromName']!)
-        ..recipients.add(toEmail)
-        ..subject = 'رسالة اختبار - VitaFit'
-        ..html = '''
-<!DOCTYPE html>
-<html dir="rtl" lang="ar">
-<head><meta charset="UTF-8"></head>
-<body style="font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px;">
-  <div style="max-width: 500px; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; text-align: center;">
-    <h1 style="color: #FF69B4;">VitaFit</h1>
-    <p style="font-size: 18px;">تم إعداد البريد الإلكتروني بنجاح!</p>
-    <p style="color: #666;">هذه رسالة اختبار للتأكد من عمل إعدادات SMTP.</p>
-    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-    <p style="color: #999; font-size: 12px;">© 2024 VitaFit</p>
-  </div>
-</body>
-</html>
-''';
-
-      await send(message, smtpServer);
-      return {
-        'success': true,
-        'message': 'تم إرسال رسالة الاختبار بنجاح',
-      };
-    } catch (e) {
-      return {
-        'success': false,
-        'message': 'فشل الإرسال: ${e.toString()}',
-      };
-    }
-  }
-
-  /// إرسال البريد عبر SMTP
-  static Future<bool> _sendViaSmtp({
-    required String toEmail,
-    required String userName,
-    required String otp,
-  }) async {
-    try {
-      final settings = getSmtpSettings();
-      final smtpServer = _getSmtpServer(settings);
-
-      final message = Message()
-        ..from = Address(settings['fromEmail']!, settings['fromName']!)
-        ..recipients.add(toEmail)
-        ..subject = 'رمز التحقق - VitaFit'
-        ..html = '''
-<!DOCTYPE html>
-<html dir="rtl" lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 20px; }
-    .container { max-width: 500px; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-    .logo { text-align: center; margin-bottom: 30px; }
-    .logo h1 { color: #FF69B4; font-size: 32px; margin: 0; }
-    .content { text-align: center; }
-    .greeting { font-size: 18px; color: #333; margin-bottom: 20px; }
-    .otp-box { background: linear-gradient(135deg, #FF69B4, #DDA0DD); padding: 20px 40px; border-radius: 12px; display: inline-block; margin: 20px 0; }
-    .otp-code { font-size: 36px; font-weight: bold; color: white; letter-spacing: 8px; margin: 0; }
-    .expiry { color: #666; font-size: 14px; margin-top: 20px; }
-    .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="logo">
-      <h1>VitaFit</h1>
-    </div>
-    <div class="content">
-      <p class="greeting">مرحباً $userName،</p>
-      <p>رمز التحقق الخاص بك هو:</p>
-      <div class="otp-box">
-        <p class="otp-code">$otp</p>
-      </div>
-      <p class="expiry">الرمز صالح لمدة 10 دقائق</p>
-    </div>
-    <div class="footer">
-      <p>هذه رسالة آلية، الرجاء عدم الرد عليها</p>
-      <p>© 2024 VitaFit. جميع الحقوق محفوظة</p>
-    </div>
-  </div>
-</body>
-</html>
-''';
-
-      await send(message, smtpServer);
-      return true;
-    } catch (e) {
-      print('SMTP Error: $e');
-      return false;
-    }
-  }
-
-  /// إنشاء خادم SMTP بناءً على الإعدادات
-  static SmtpServer _getSmtpServer(Map<String, String> settings) {
-    final host = settings['host']!;
-    final port = int.tryParse(settings['port']!) ?? 587;
-    final username = settings['username']!;
-    final password = settings['password']!;
-    final encryption = settings['encryption']!;
-
-    // Gmail SMTP
-    if (host.contains('gmail')) {
-      return gmail(username, password);
-    }
-
-    // Custom SMTP
-    return SmtpServer(
-      host,
-      port: port,
-      username: username,
-      password: password,
-      ssl: encryption == 'ssl',
-      allowInsecure: encryption == 'none',
-    );
+    return {
+      'success': false,
+      'message': 'إرسال البريد عبر SMTP غير متاح حالياً على هذه المنصة',
+    };
   }
 
   /// التحقق من صحة OTP
