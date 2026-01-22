@@ -51,8 +51,8 @@ class EmailService {
   }
 
   /// التحقق من تكوين SMTP
-  static Future<bool> isSmtpConfigured() async {
-    final settings = await getSmtpSettings();
+  static bool isSmtpConfigured() {
+    final settings = getSmtpSettings();
     return settings['username']!.isNotEmpty && settings['password']!.isNotEmpty;
   }
 
@@ -78,7 +78,7 @@ class EmailService {
       );
 
       // التحقق من تكوين SMTP
-      final isConfigured = await isSmtpConfigured();
+      final isConfigured = isSmtpConfigured();
 
       // للويب أو إذا لم يتم تكوين SMTP: نعرض الرمز
       if (kIsWeb || !isConfigured) {
@@ -126,7 +126,7 @@ class EmailService {
   /// إرسال بريد اختبار
   static Future<Map<String, dynamic>> sendTestEmail(String toEmail) async {
     try {
-      final isConfigured = await isSmtpConfigured();
+      final isConfigured = isSmtpConfigured();
       if (!isConfigured) {
         return {
           'success': false,
@@ -141,7 +141,7 @@ class EmailService {
         };
       }
 
-      final settings = await getSmtpSettings();
+      final settings = getSmtpSettings();
       final smtpServer = _getSmtpServer(settings);
 
       final message = Message()
@@ -184,7 +184,7 @@ class EmailService {
     required String otp,
   }) async {
     try {
-      final settings = await getSmtpSettings();
+      final settings = getSmtpSettings();
       final smtpServer = _getSmtpServer(settings);
 
       final message = Message()

@@ -30,7 +30,7 @@ class LanguageProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final settings = await AppSettingsService.getSettings();
+    final settings = AppSettingsService.getSettings();
 
     _locale = Locale(settings['language'], settings['country']);
     _country = settings['country'];
