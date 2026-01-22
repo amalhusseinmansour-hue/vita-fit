@@ -86,6 +86,10 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>VitaFit uses Face ID for quick and secure login to protect your account.</string>
 
+	<!-- App Tracking Transparency (Required for iOS 14+) -->
+	<key>NSUserTrackingUsageDescription</key>
+	<string>VitaFit would like permission to track your activity across apps and websites to provide personalized fitness recommendations and ads.</string>
+
 	<!-- ========== Push Notifications ========== -->
 	<key>UIBackgroundModes</key>
 	<array>

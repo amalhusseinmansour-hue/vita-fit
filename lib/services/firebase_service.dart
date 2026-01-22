@@ -11,12 +11,28 @@ import 'api_service.dart';
 
 /// Firebase Service for handling Push Notifications, Analytics, and Crashlytics
 class FirebaseService {
-  static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  static final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
-  static final FlutterLocalNotificationsPlugin _localNotifications =
-      FlutterLocalNotificationsPlugin();
+  // Lazy initialization - only access after Firebase.initializeApp() is called
+  static FirebaseMessaging? _messaging;
+  static FirebaseAnalytics? _analytics;
+  static FlutterLocalNotificationsPlugin? _localNotifications;
 
   static bool _initialized = false;
+
+  // Getters for lazy initialization
+  static FirebaseMessaging get _messagingInstance {
+    _messaging ??= FirebaseMessaging.instance;
+    return _messaging!;
+  }
+
+  static FirebaseAnalytics get _analyticsInstance {
+    _analytics ??= FirebaseAnalytics.instance;
+    return _analytics!;
+  }
+
+  static FlutterLocalNotificationsPlugin get _localNotificationsInstance {
+    _localNotifications ??= FlutterLocalNotificationsPlugin();
+    return _localNotifications!;
+  }
 
   /// Initialize Firebase services
   static Future<void> initialize() async {
@@ -116,7 +132,7 @@ class FirebaseService {
 
   /// Request notification permissions
   static Future<void> _requestPermissions() async {
-    final settings = await _messaging.requestPermission(
+    final settings = await _messagingInstance.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -145,7 +161,7 @@ class FirebaseService {
       iOS: iosSettings,
     );
 
-    await _localNotifications.initialize(
+    await _localNotificationsInstance.initialize(
       initSettings,
       onDidReceiveNotificationResponse: _onNotificationTapped,
     );
@@ -158,7 +174,7 @@ class FirebaseService {
       importance: Importance.high,
     );
 
-    await _localNotifications
+    await _localNotificationsInstance
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
@@ -234,7 +250,7 @@ class FirebaseService {
       iOS: iosDetails,
     );
 
-    await _localNotifications.show(
+    await _localNotificationsInstance.show(
       DateTime.now().millisecondsSinceEpoch.remainder(100000),
       title,
       body,
@@ -246,7 +262,7 @@ class FirebaseService {
   /// Get and save FCM token
   static Future<void> _saveFcmToken() async {
     try {
-      final token = await _messaging.getToken();
+      final token = await _messagingInstance.getToken();
       if (token != null) {
         // Save token locally
         final prefs = await SharedPreferences.getInstance();
@@ -260,7 +276,7 @@ class FirebaseService {
       }
 
       // Listen for token refresh
-      _messaging.onTokenRefresh.listen((newToken) async {
+      _messagingInstance.onTokenRefresh.listen((newToken) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('fcm_token', newToken);
         await _sendTokenToServer(newToken);
@@ -283,7 +299,7 @@ class FirebaseService {
   /// Get current FCM token
   static Future<String?> getFcmToken() async {
     try {
-      return await _messaging.getToken();
+      return await _messagingInstance.getToken();
     } catch (e) {
       return null;
     }
@@ -294,7 +310,7 @@ class FirebaseService {
   /// Log screen view
   static Future<void> logScreenView(String screenName) async {
     try {
-      await _analytics.logScreenView(screenName: screenName);
+      await _analyticsInstance.logScreenView(screenName: screenName);
     } catch (e) {
       // Analytics not available
     }
@@ -303,7 +319,7 @@ class FirebaseService {
   /// Log event
   static Future<void> logEvent(String name, {Map<String, dynamic>? parameters}) async {
     try {
-      await _analytics.logEvent(
+      await _analyticsInstance.logEvent(
         name: name,
         parameters: parameters?.map((key, value) => MapEntry(key, value.toString())),
       );
@@ -315,7 +331,7 @@ class FirebaseService {
   /// Log login
   static Future<void> logLogin(String method) async {
     try {
-      await _analytics.logLogin(loginMethod: method);
+      await _analyticsInstance.logLogin(loginMethod: method);
     } catch (e) {
       // Analytics not available
     }
@@ -324,7 +340,7 @@ class FirebaseService {
   /// Log sign up
   static Future<void> logSignUp(String method) async {
     try {
-      await _analytics.logSignUp(signUpMethod: method);
+      await _analyticsInstance.logSignUp(signUpMethod: method);
     } catch (e) {
       // Analytics not available
     }
@@ -337,7 +353,7 @@ class FirebaseService {
     String? transactionId,
   }) async {
     try {
-      await _analytics.logPurchase(
+      await _analyticsInstance.logPurchase(
         currency: currency,
         value: value,
         transactionId: transactionId,
@@ -350,7 +366,7 @@ class FirebaseService {
   /// Set user ID
   static Future<void> setUserId(String userId) async {
     try {
-      await _analytics.setUserId(id: userId);
+      await _analyticsInstance.setUserId(id: userId);
     } catch (e) {
       // Analytics not available
     }
@@ -359,7 +375,7 @@ class FirebaseService {
   /// Set user property
   static Future<void> setUserProperty(String name, String value) async {
     try {
-      await _analytics.setUserProperty(name: name, value: value);
+      await _analyticsInstance.setUserProperty(name: name, value: value);
     } catch (e) {
       // Analytics not available
     }
