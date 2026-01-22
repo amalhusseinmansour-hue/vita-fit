@@ -2,9 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- App does not use non-exempt encryption -->
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -46,82 +43,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-
-	<!-- App Transport Security - Allow HTTPS -->
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-		<key>NSAllowsArbitraryLoadsForMedia</key>
-		<true/>
-		<key>NSAllowsArbitraryLoadsInWebContent</key>
-		<true/>
-	</dict>
-
-	<!-- ========== Privacy Descriptions (Required for App Store) ========== -->
-
-	<!-- Photo Library - For profile picture selection -->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>VitaFit needs access to your photo library to select and upload your profile picture and progress photos.</string>
-
-	<!-- Camera - For taking progress photos -->
-	<key>NSCameraUsageDescription</key>
-	<string>VitaFit needs camera access to take progress photos and profile pictures.</string>
-
-	<!-- Notifications - For workout reminders and updates -->
-	<key>NSUserNotificationsUsageDescription</key>
-	<string>VitaFit sends notifications for workout reminders, trainer messages, and subscription updates.</string>
-
-	<!-- Location (if needed for gym finder) -->
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>VitaFit uses your location to find nearby gyms and fitness centers.</string>
-
-	<!-- Health Data (for fitness tracking integration) -->
-	<key>NSHealthShareUsageDescription</key>
-	<string>VitaFit reads your health data to track your fitness progress and provide personalized recommendations.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>VitaFit writes workout data to Health to keep your fitness records synchronized.</string>
-
-	<!-- Face ID (for secure login) -->
-	<key>NSFaceIDUsageDescription</key>
-	<string>VitaFit uses Face ID for quick and secure login to protect your account.</string>
-
-	<!-- App Tracking Transparency (Required for iOS 14+) -->
-	<key>NSUserTrackingUsageDescription</key>
-	<string>VitaFit would like permission to track your activity across apps and websites to provide personalized fitness recommendations and ads.</string>
-
-	<!-- ========== Push Notifications ========== -->
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
-	</array>
-
-	<!-- ========== Firebase Configuration ========== -->
-	<key>FirebaseAppDelegateProxyEnabled</key>
+	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-
-	<!-- ========== URL Schemes for Deep Linking ========== -->
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>vitafit</string>
-			</array>
-			<key>CFBundleURLName</key>
-			<string>com.vitafitapp.fitness</string>
-		</dict>
-	</array>
-
-	<!-- ========== Minimum iOS Version ========== -->
-	<key>MinimumOSVersion</key>
-	<string>13.0</string>
-
-	<!-- ========== Status Bar ========== -->
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
 </dict>
 </plist>
