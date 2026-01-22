@@ -14,6 +14,8 @@ import 'providers/language_provider.dart';
 import 'services/firebase_service.dart';
 import 'services/local_storage_service.dart';
 import 'services/hive_storage_service.dart';
+import 'services/connectivity_service.dart';
+import 'services/toast_service.dart';
 import 'localization/app_localizations.dart';
 
 void main() async {
@@ -48,6 +50,13 @@ void main() async {
       debugPrint('Error initializing Firebase: $e');
     }
 
+    // Initialize Connectivity Service
+    try {
+      await ConnectivityService.init();
+    } catch (e) {
+      debugPrint('Error initializing Connectivity: $e');
+    }
+
     runApp(const FitHerApp());
   }, (error, stack) {
     // Log uncaught errors to Crashlytics (safely)
@@ -59,8 +68,23 @@ void main() async {
   });
 }
 
-class FitHerApp extends StatelessWidget {
+class FitHerApp extends StatefulWidget {
   const FitHerApp({super.key});
+
+  @override
+  State<FitHerApp> createState() => _FitHerAppState();
+}
+
+class _FitHerAppState extends State<FitHerApp> {
+  final GlobalKey<ScaffoldMessengerState> _messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    super.initState();
+    // تهيئة خدمة الرسائل
+    ToastService.init(_messengerKey);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +100,7 @@ class FitHerApp extends StatelessWidget {
             title: 'VitaFit',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.darkTheme,
+            scaffoldMessengerKey: _messengerKey,
             home: const SplashScreen(),
 
             // Routes

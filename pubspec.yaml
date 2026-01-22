@@ -2,7 +2,7 @@ name: gym
 description: "Gym - تطبيق إدارة النادي الرياضي"
 publish_to: 'none'
 
-version: 1.0.7+35
+version: 1.0.8+36
 
 environment:
   sdk: ^3.9.2
@@ -36,6 +36,12 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   path_provider: ^2.1.2
+
+  # Secure Storage for sensitive data (tokens, credentials)
+  flutter_secure_storage: ^9.2.2
+
+  # Network Connectivity
+  connectivity_plus: ^6.1.0
 
   # SQLite Database
   sqflite: ^2.3.0
