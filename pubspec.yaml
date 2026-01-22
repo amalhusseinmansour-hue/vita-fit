@@ -1,7 +1,7 @@
 name: gym
 description: "VitaFit - Fitness App"
 publish_to: 'none'
-version: 1.0.7+27
+version: 1.0.7+28
 
 environment:
   sdk: ^3.9.2
@@ -13,30 +13,19 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
 
-  # State Management
+  # State Management (pure Dart)
   provider: ^6.1.1
 
-  # UI & Animations
+  # UI & Animations (pure Dart)
   flutter_animate: ^4.5.0
   shimmer: ^3.0.0
 
-  # Utilities
+  # Utilities (pure Dart)
   intl: ^0.20.2
-
-  # API & Storage
   http: ^1.1.0
-  shared_preferences: ^2.2.2
   dio: ^5.4.0
-
-  # SQLite Database
-  sqflite: ^2.3.0
-  path: ^1.8.3
-
-  # Crypto
   crypto: ^3.0.3
-
-  # URL Launcher
-  url_launcher: ^6.2.4
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
