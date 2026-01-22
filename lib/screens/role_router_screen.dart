@@ -71,7 +71,7 @@ class _RoleRouterScreenState extends State<RoleRouterScreen> {
         return const TrainerMainScreen();
       case 'trainee':
       default:
-        return const MainScreen();
+        return MainScreen();
     }
   }
 }
