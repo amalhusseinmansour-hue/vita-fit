@@ -34,6 +34,12 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # Firebase pods (explicitly added for stability)
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Crashlytics'
 end
 
 post_install do |installer|
@@ -41,16 +47,16 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
 
     target.build_configurations.each do |config|
-      # Required for App Store submission
+      # Required for App Store submission - iOS 13.0 minimum
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
 
-      # Enable bitcode if needed (usually disabled for Flutter)
+      # Disable bitcode (not needed for Flutter)
       config.build_settings['ENABLE_BITCODE'] = 'NO'
 
       # Xcode 14+ code signing settings
       config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO' if config.name == 'Debug'
 
-      # Fix for Xcode 15+ and iOS 17
+      # Fix for permission handling
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
         '$(inherited)',
         'PERMISSION_CAMERA=1',
@@ -60,12 +66,15 @@ post_install do |installer|
         'PERMISSION_APP_TRACKING_TRANSPARENCY=1',
       ]
 
-      # Suppress warnings
+      # Suppress warnings for cleaner builds
       config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
       config.build_settings['SWIFT_SUPPRESS_WARNINGS'] = 'YES'
 
-      # Ensure correct architectures
-      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      # Fix for Xcode 15+ linker issues
+      xcconfig_path = config.base_configuration_reference.real_path
+      xcconfig = File.read(xcconfig_path)
+      xcconfig_mod = xcconfig.gsub(/DT_TOOLCHAIN_DIR/, "TOOLCHAIN_DIR")
+      File.open(xcconfig_path, "w") { |file| file << xcconfig_mod }
     end
   end
 end

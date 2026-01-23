@@ -90,6 +90,19 @@
 # SharedPreferences
 -keep class androidx.datastore.** { *; }
 
+# Hive Database
+-keep class io.hive.** { *; }
+-keep class com.hive.** { *; }
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# Flutter Local Notifications
+-keep class com.dexterous.** { *; }
+
+# Connectivity Plus
+-keep class dev.fluttercommunity.plus.** { *; }
+
 # Google Play Core (for deferred components)
 -dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication
 -dontwarn com.google.android.play.core.splitinstall.**

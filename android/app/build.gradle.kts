@@ -45,10 +45,11 @@ android {
 
     defaultConfig {
         applicationId = "com.vitafit.app"
-        minSdk = flutter.minSdkVersion
+        minSdk = 21
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled = true
     }
 
     signingConfigs {
@@ -88,4 +89,5 @@ flutter {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    implementation("androidx.multidex:multidex:2.0.1")
 }

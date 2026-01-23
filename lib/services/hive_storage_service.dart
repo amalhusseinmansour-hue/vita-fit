@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Hive Storage Service - Replacement for SharedPreferences
@@ -15,99 +16,158 @@ class HiveStorageService {
       await Hive.initFlutter();
       _box = await Hive.openBox(_boxName);
       _initialized = true;
+      debugPrint('Hive initialized successfully');
     } catch (e) {
-      print('Hive initialization error: $e');
+      debugPrint('Hive initialization error: $e');
+      // Try to recover by deleting corrupted box and reinitializing
+      try {
+        await Hive.deleteBoxFromDisk(_boxName);
+        await Hive.initFlutter();
+        _box = await Hive.openBox(_boxName);
+        _initialized = true;
+        debugPrint('Hive recovered after deleting corrupted box');
+      } catch (e2) {
+        debugPrint('Hive recovery failed: $e2');
+        _initialized = false;
+      }
     }
   }
 
-  /// Get the storage box
-  static Box get box {
-    if (_box == null) {
-      throw Exception('HiveStorageService not initialized. Call init() first.');
-    }
-    return _box!;
-  }
+  /// Get the storage box (returns null if not initialized)
+  static Box? get box => _box;
 
   /// Check if initialized
-  static bool get isInitialized => _initialized;
+  static bool get isInitialized => _initialized && _box != null;
 
   // ============ String Operations ============
 
   static Future<void> setString(String key, String value) async {
-    await box.put(key, value);
+    if (_box == null) {
+      debugPrint('HiveStorageService: Cannot set string, not initialized');
+      return;
+    }
+    await _box!.put(key, value);
   }
 
   static String? getString(String key) {
-    return box.get(key) as String?;
+    if (_box == null) {
+      debugPrint('HiveStorageService: Cannot get string, not initialized');
+      return null;
+    }
+    try {
+      return _box!.get(key) as String?;
+    } catch (e) {
+      debugPrint('HiveStorageService getString error: $e');
+      return null;
+    }
   }
 
   // ============ Int Operations ============
 
   static Future<void> setInt(String key, int value) async {
-    await box.put(key, value);
+    if (_box == null) return;
+    await _box!.put(key, value);
   }
 
   static int? getInt(String key) {
-    return box.get(key) as int?;
+    if (_box == null) return null;
+    try {
+      return _box!.get(key) as int?;
+    } catch (e) {
+      debugPrint('HiveStorageService getInt error: $e');
+      return null;
+    }
   }
 
   // ============ Double Operations ============
 
   static Future<void> setDouble(String key, double value) async {
-    await box.put(key, value);
+    if (_box == null) return;
+    await _box!.put(key, value);
   }
 
   static double? getDouble(String key) {
-    return box.get(key) as double?;
+    if (_box == null) return null;
+    try {
+      return _box!.get(key) as double?;
+    } catch (e) {
+      debugPrint('HiveStorageService getDouble error: $e');
+      return null;
+    }
   }
 
   // ============ Bool Operations ============
 
   static Future<void> setBool(String key, bool value) async {
-    await box.put(key, value);
+    if (_box == null) return;
+    await _box!.put(key, value);
   }
 
   static bool? getBool(String key) {
-    return box.get(key) as bool?;
+    if (_box == null) return null;
+    try {
+      return _box!.get(key) as bool?;
+    } catch (e) {
+      debugPrint('HiveStorageService getBool error: $e');
+      return null;
+    }
   }
 
   // ============ List Operations ============
 
   static Future<void> setStringList(String key, List<String> value) async {
-    await box.put(key, value);
+    if (_box == null) return;
+    await _box!.put(key, value);
   }
 
   static List<String>? getStringList(String key) {
-    final value = box.get(key);
-    if (value == null) return null;
-    return (value as List).cast<String>();
+    if (_box == null) return null;
+    try {
+      final value = _box!.get(key);
+      if (value == null) return null;
+      return (value as List).cast<String>();
+    } catch (e) {
+      debugPrint('HiveStorageService getStringList error: $e');
+      return null;
+    }
   }
 
   // ============ Generic Operations ============
 
   static Future<void> setValue(String key, dynamic value) async {
-    await box.put(key, value);
+    if (_box == null) return;
+    await _box!.put(key, value);
   }
 
   static dynamic getValue(String key) {
-    return box.get(key);
+    if (_box == null) return null;
+    try {
+      return _box!.get(key);
+    } catch (e) {
+      debugPrint('HiveStorageService getValue error: $e');
+      return null;
+    }
   }
 
   // ============ Utility Operations ============
 
   static Future<void> remove(String key) async {
-    await box.delete(key);
+    if (_box == null) return;
+    await _box!.delete(key);
   }
 
   static Future<void> clear() async {
-    await box.clear();
+    if (_box == null) return;
+    await _box!.clear();
   }
 
   static bool containsKey(String key) {
-    return box.containsKey(key);
+    if (_box == null) return false;
+    return _box!.containsKey(key);
   }
 
   static List<String> get keys {
-    return box.keys.cast<String>().toList();
+    if (_box == null) return [];
+    return _box!.keys.cast<String>().toList();
   }
 }
