@@ -18,36 +18,36 @@ import 'services/connectivity_service.dart';
 import 'services/toast_service.dart';
 import 'localization/app_localizations.dart';
 
-void main() {
-  runZonedGuarded<void>(() async {
+void main() async {
+  // Wrap everything in try-catch to prevent any crash
+  try {
     WidgetsFlutterBinding.ensureInitialized();
+  } catch (e) {
+    debugPrint('Flutter binding error: $e');
+  }
 
-    // Set orientations (non-critical)
-    try {
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-    } catch (e) {
-      debugPrint('Orientation error: $e');
-    }
+  // Set orientations (non-critical)
+  try {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  } catch (e) {
+    debugPrint('Orientation error: $e');
+  }
 
-    // Initialize Hive first (critical for app state)
-    try {
-      await HiveStorageService.init();
-    } catch (e) {
-      debugPrint('Hive init error: $e');
-      // Continue anyway - app can work without persistent storage
-    }
+  // Initialize Hive (critical for app state)
+  try {
+    await HiveStorageService.init();
+  } catch (e) {
+    debugPrint('Hive init error: $e');
+  }
 
-    // Run app immediately - don't wait for other services
-    runApp(const FitHerApp());
+  // Run app
+  runApp(const FitHerApp());
 
-    // Initialize other services in background AFTER app starts
-    _initServicesInBackground();
-  }, (error, stack) {
-    debugPrint('App error: $error\n$stack');
-  });
+  // Initialize other services in background AFTER app starts
+  _initServicesInBackground();
 }
 
 // Initialize non-critical services in background
@@ -132,7 +132,7 @@ class _FitHerAppState extends State<FitHerApp> {
             builder: (context, child) {
               return Directionality(
                 textDirection: languageProvider.textDirection,
-                child: child!,
+                child: child ?? const SizedBox.shrink(),
               );
             },
           );

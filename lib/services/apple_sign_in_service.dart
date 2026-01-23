@@ -12,8 +12,13 @@ import 'package:http/http.dart' as http;
 class AppleSignInService {
   /// Check if Apple Sign In is available on this device
   static Future<bool> isAvailable() async {
-    if (!Platform.isIOS) return false;
-    return await SignInWithApple.isAvailable();
+    try {
+      if (!Platform.isIOS) return false;
+      return await SignInWithApple.isAvailable();
+    } catch (e) {
+      debugPrint('Apple Sign In availability check error: $e');
+      return false;
+    }
   }
 
   /// Sign in with Apple

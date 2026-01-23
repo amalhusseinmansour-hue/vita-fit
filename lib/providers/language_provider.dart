@@ -12,7 +12,13 @@ class LanguageProvider with ChangeNotifier {
 
   LanguageProvider() {
     // Load settings without notifyListeners in constructor
-    _loadSettingsSync();
+    // Wrapped in try-catch to prevent any crash during app startup
+    try {
+      _loadSettingsSync();
+    } catch (e) {
+      debugPrint('LanguageProvider init error: $e');
+      // Use defaults - already set in field declarations
+    }
   }
 
   // Getters
