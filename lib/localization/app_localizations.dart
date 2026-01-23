@@ -62,7 +62,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 
 /// Extension لسهولة الاستخدام
 extension TranslateExtension on BuildContext {
-  AppLocalizations get tr => AppLocalizations.of(this)!;
+  AppLocalizations? get tr => AppLocalizations.of(this);
   String t(String key) => AppLocalizations.of(this)?.translate(key) ?? key;
   bool get isRTL => AppLocalizations.of(this)?.isRTL ?? true;
   TextDirection get textDirection =>

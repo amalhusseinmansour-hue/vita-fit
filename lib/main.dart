@@ -22,7 +22,7 @@ void main() {
   runZonedGuarded<void>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // Set orientations
+    // Set orientations (non-critical)
     try {
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
@@ -32,17 +32,19 @@ void main() {
       debugPrint('Orientation error: $e');
     }
 
-    // Initialize Hive first (critical)
+    // Initialize Hive first (critical for app state)
     try {
       await HiveStorageService.init();
     } catch (e) {
       debugPrint('Hive init error: $e');
+      // Continue anyway - app can work without persistent storage
     }
 
-    // Initialize other services (non-critical)
-    _initServicesInBackground();
-
+    // Run app immediately - don't wait for other services
     runApp(const FitHerApp());
+
+    // Initialize other services in background AFTER app starts
+    _initServicesInBackground();
   }, (error, stack) {
     debugPrint('App error: $error\n$stack');
   });

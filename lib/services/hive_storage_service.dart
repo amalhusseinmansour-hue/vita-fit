@@ -10,34 +10,44 @@ class HiveStorageService {
 
   /// Initialize Hive storage
   static Future<void> init() async {
-    if (_initialized) return;
+    if (_initialized && _box != null) return;
 
     try {
       await Hive.initFlutter();
+    } catch (e) {
+      debugPrint('Hive.initFlutter error (may already be initialized): $e');
+      // Continue - Hive might already be initialized
+    }
+
+    try {
       _box = await Hive.openBox(_boxName);
       _initialized = true;
       debugPrint('Hive initialized successfully');
+      return;
     } catch (e) {
-      debugPrint('Hive initialization error: $e');
-      // Try to recover by deleting corrupted box and reinitializing
-      try {
-        // Don't call initFlutter again - it's already initialized
-        await Hive.deleteBoxFromDisk(_boxName);
-        _box = await Hive.openBox(_boxName);
-        _initialized = true;
-        debugPrint('Hive recovered after deleting corrupted box');
-      } catch (e2) {
-        debugPrint('Hive recovery failed: $e2');
-        // Last resort: try with a different box name to prevent permanent crash
-        try {
-          _box = await Hive.openBox('${_boxName}_recovery');
-          _initialized = true;
-          debugPrint('Hive opened with recovery box');
-        } catch (e3) {
-          debugPrint('Hive final recovery failed: $e3');
-          _initialized = false;
-        }
-      }
+      debugPrint('Hive open box error: $e');
+    }
+
+    // Try to recover by deleting corrupted box
+    try {
+      await Hive.deleteBoxFromDisk(_boxName);
+      _box = await Hive.openBox(_boxName);
+      _initialized = true;
+      debugPrint('Hive recovered after deleting corrupted box');
+      return;
+    } catch (e2) {
+      debugPrint('Hive recovery failed: $e2');
+    }
+
+    // Last resort: try with a different box name
+    try {
+      _box = await Hive.openBox('${_boxName}_v2');
+      _initialized = true;
+      debugPrint('Hive opened with alternative box name');
+    } catch (e3) {
+      debugPrint('Hive final recovery failed: $e3');
+      _initialized = false;
+      _box = null;
     }
   }
 

@@ -91,7 +91,14 @@ class ConnectivityService {
 
   /// إيقاف الخدمة
   static void dispose() {
-    _subscription?.cancel();
-    _connectionController.close();
+    try {
+      _subscription?.cancel();
+      _subscription = null;
+      // Don't close the broadcast controller - it can't be reused after closing
+      // Just cancel the subscription
+      _isInitialized = false;
+    } catch (e) {
+      debugPrint('Error disposing connectivity service: $e');
+    }
   }
 }
