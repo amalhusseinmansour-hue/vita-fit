@@ -1,7 +1,5 @@
 import Flutter
 import UIKit
-import FirebaseCore
-import FirebaseMessaging
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -9,10 +7,22 @@ import FirebaseMessaging
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    // Initialize Firebase
-    FirebaseApp.configure()
+    // Initialize Firebase safely
+    initializeFirebase()
 
     // Register for remote notifications
+    registerForNotifications(application)
+
+    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  private func initializeFirebase() {
+    // Firebase is initialized automatically via Flutter plugin
+    // No need to call FirebaseApp.configure() manually when using firebase_core Flutter package
+  }
+
+  private func registerForNotifications(_ application: UIApplication) {
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self
       let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
@@ -27,30 +37,17 @@ import FirebaseMessaging
     }
 
     application.registerForRemoteNotifications()
-
-    // Set Firebase Messaging delegate
-    Messaging.messaging().delegate = self
-
-    GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   // Handle device token for APNs
   override func application(_ application: UIApplication,
                             didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-    Messaging.messaging().apnsToken = deviceToken
+    // Pass token to Firebase Messaging (handled by Flutter plugin)
     super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
   }
-}
 
-// MARK: - MessagingDelegate
-extension AppDelegate: MessagingDelegate {
-  func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-    let dataDict: [String: String] = ["token": fcmToken ?? ""]
-    NotificationCenter.default.post(
-      name: Notification.Name("FCMToken"),
-      object: nil,
-      userInfo: dataDict
-    )
+  override func application(_ application: UIApplication,
+                            didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    print("Failed to register for remote notifications: \(error)")
   }
 }
