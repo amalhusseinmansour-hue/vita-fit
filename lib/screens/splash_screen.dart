@@ -1,9 +1,6 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
-import '../services/app_tracking_service.dart';
 import '../services/hive_storage_service.dart';
 import 'onboarding_screen.dart';
 
@@ -49,15 +46,6 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 3));
-
-    // Request App Tracking Transparency permission (iOS 14+)
-    try {
-      if (!kIsWeb && Platform.isIOS) {
-        await AppTrackingService.requestTrackingPermission();
-      }
-    } catch (e) {
-      debugPrint('Error requesting tracking permission: $e');
-    }
 
     if (!mounted) return;
 

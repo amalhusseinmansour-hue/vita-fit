@@ -19,59 +19,56 @@ import 'services/toast_service.dart';
 import 'localization/app_localizations.dart';
 
 void main() {
-  // Use runZonedGuarded to catch all errors
   runZonedGuarded<void>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // Set preferred orientations
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    // Set orientations
+    try {
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    } catch (e) {
+      debugPrint('Orientation error: $e');
+    }
 
-    // Initialize services with proper error handling
-    await _initializeServices();
+    // Initialize Hive first (critical)
+    try {
+      await HiveStorageService.init();
+    } catch (e) {
+      debugPrint('Hive init error: $e');
+    }
+
+    // Initialize other services (non-critical)
+    _initServicesInBackground();
 
     runApp(const FitHerApp());
   }, (error, stack) {
-    debugPrint('Uncaught error: $error');
-    debugPrint('Stack trace: $stack');
+    debugPrint('App error: $error\n$stack');
   });
 }
 
-Future<void> _initializeServices() async {
-  // Initialize Hive Storage first (most critical for app to work)
-  try {
-    await HiveStorageService.init();
-    debugPrint('Hive initialized successfully');
-  } catch (e) {
-    debugPrint('Error initializing Hive: $e');
-  }
+// Initialize non-critical services in background
+void _initServicesInBackground() {
+  Future.microtask(() async {
+    try {
+      await LocalStorageService.init();
+    } catch (e) {
+      debugPrint('LocalStorage error: $e');
+    }
 
-  // Initialize Local Storage for offline support
-  try {
-    await LocalStorageService.init();
-    debugPrint('LocalStorage initialized successfully');
-  } catch (e) {
-    debugPrint('Error initializing LocalStorage: $e');
-  }
+    try {
+      await FirebaseService.initialize();
+    } catch (e) {
+      debugPrint('Firebase error: $e');
+    }
 
-  // Initialize Firebase only if not on simulator/having issues
-  // Firebase is optional - app should work without it
-  try {
-    await FirebaseService.initialize();
-    debugPrint('Firebase initialized successfully');
-  } catch (e) {
-    debugPrint('Error initializing Firebase (non-fatal): $e');
-  }
-
-  // Initialize Connectivity Service
-  try {
-    await ConnectivityService.init();
-    debugPrint('Connectivity initialized successfully');
-  } catch (e) {
-    debugPrint('Error initializing Connectivity: $e');
-  }
+    try {
+      await ConnectivityService.init();
+    } catch (e) {
+      debugPrint('Connectivity error: $e');
+    }
+  });
 }
 
 class FitHerApp extends StatefulWidget {
@@ -96,7 +93,7 @@ class _FitHerAppState extends State<FitHerApp> {
     try {
       ConnectivityService.dispose();
     } catch (e) {
-      debugPrint('Error disposing ConnectivityService: $e');
+      debugPrint('Dispose error: $e');
     }
     super.dispose();
   }
@@ -117,15 +114,11 @@ class _FitHerAppState extends State<FitHerApp> {
             theme: AppTheme.darkTheme,
             scaffoldMessengerKey: _messengerKey,
             home: const SplashScreen(),
-
-            // Routes
             routes: {
               '/login': (context) => const LoginScreen(),
               '/signup': (context) => const SignUpScreen(),
               '/home': (context) => const RoleRouterScreen(),
             },
-
-            // Localization support
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
@@ -134,8 +127,6 @@ class _FitHerAppState extends State<FitHerApp> {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             locale: languageProvider.locale,
-
-            // Builder for text direction
             builder: (context, child) {
               return Directionality(
                 textDirection: languageProvider.textDirection,
