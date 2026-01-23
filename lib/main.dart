@@ -59,11 +59,12 @@ void _initServicesInBackground() {
       debugPrint('LocalStorage error: $e');
     }
 
-    try {
-      await FirebaseService.initialize();
-    } catch (e) {
-      debugPrint('Firebase error: $e');
-    }
+    // Firebase disabled temporarily for debugging iOS crash
+    // try {
+    //   await FirebaseService.initialize();
+    // } catch (e) {
+    //   debugPrint('Firebase error: $e');
+    // }
 
     try {
       await ConnectivityService.init();

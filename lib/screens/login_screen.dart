@@ -32,16 +32,20 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _loadSavedCredentials();
     _checkAppleSignInAvailability();
-    // Track screen view
-    FirebaseService.logScreenView('login_screen');
+    // Track screen view - disabled temporarily
+    // FirebaseService.logScreenView('login_screen');
   }
 
   Future<void> _checkAppleSignInAvailability() async {
-    if (Platform.isIOS) {
-      final available = await AppleSignInService.isAvailable();
-      if (mounted) {
-        setState(() => _isAppleAvailable = available);
+    try {
+      if (Platform.isIOS) {
+        final available = await AppleSignInService.isAvailable();
+        if (mounted) {
+          setState(() => _isAppleAvailable = available);
+        }
       }
+    } catch (e) {
+      debugPrint('Apple Sign In check error: $e');
     }
   }
 
