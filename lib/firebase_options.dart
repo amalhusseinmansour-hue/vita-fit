@@ -52,11 +52,11 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA-TUZBgdvGj90g_nL7EnaxLMZCtupRxYA',
-    appId: '1:70941510996:ios:c5d0f1f848c6beb6ff0cc1',
-    messagingSenderId: '70941510996',
-    projectId: 'vitafit-d580c',
-    storageBucket: 'vitafit-d580c.firebasestorage.app',
+    apiKey: 'AIzaSyB39pufVkWCOX3_KCiyAnLXrlBFUTKioes',
+    appId: '1:100672549900:ios:10f476529c3ea4814baa29',
+    messagingSenderId: '100672549900',
+    projectId: 'vitafit-794a6',
+    storageBucket: 'vitafit-794a6.firebasestorage.app',
     iosBundleId: 'com.vitafitapp.fitness',
   );
 }
