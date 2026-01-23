@@ -8,10 +8,11 @@ class LanguageProvider with ChangeNotifier {
   String _currency = 'AED';
   String _currencySymbol = 'د.إ';
   String _phoneCode = '+971';
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   LanguageProvider() {
-    _loadSettings();
+    // Load settings without notifyListeners in constructor
+    _loadSettingsSync();
   }
 
   // Getters
@@ -25,18 +26,41 @@ class LanguageProvider with ChangeNotifier {
   bool get isRTL => _locale.languageCode == 'ar';
   TextDirection get textDirection => isRTL ? TextDirection.rtl : TextDirection.ltr;
 
+  /// تحميل الإعدادات بشكل متزامن (للـ constructor)
+  void _loadSettingsSync() {
+    try {
+      final settings = AppSettingsService.getSettings();
+      _locale = Locale(settings['language'] ?? 'ar', settings['country'] ?? 'AE');
+      _country = settings['country'] ?? 'AE';
+      _currency = settings['currency'] ?? 'AED';
+      _currencySymbol = settings['currencySymbol'] ?? 'د.إ';
+      _phoneCode = settings['phoneCode'] ?? '+971';
+    } catch (e) {
+      debugPrint('Error loading settings: $e');
+      // Use defaults
+      _locale = const Locale('ar', 'AE');
+      _country = 'AE';
+      _currency = 'AED';
+      _currencySymbol = 'د.إ';
+      _phoneCode = '+971';
+    }
+  }
+
   /// تحميل الإعدادات المحفوظة
   Future<void> _loadSettings() async {
     _isLoading = true;
     notifyListeners();
 
-    final settings = AppSettingsService.getSettings();
-
-    _locale = Locale(settings['language'], settings['country']);
-    _country = settings['country'];
-    _currency = settings['currency'];
-    _currencySymbol = settings['currencySymbol'];
-    _phoneCode = settings['phoneCode'];
+    try {
+      final settings = AppSettingsService.getSettings();
+      _locale = Locale(settings['language'] ?? 'ar', settings['country'] ?? 'AE');
+      _country = settings['country'] ?? 'AE';
+      _currency = settings['currency'] ?? 'AED';
+      _currencySymbol = settings['currencySymbol'] ?? 'د.إ';
+      _phoneCode = settings['phoneCode'] ?? '+971';
+    } catch (e) {
+      debugPrint('Error loading settings: $e');
+    }
 
     _isLoading = false;
     notifyListeners();
