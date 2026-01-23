@@ -18,54 +18,60 @@ import 'services/connectivity_service.dart';
 import 'services/toast_service.dart';
 import 'localization/app_localizations.dart';
 
-void main() async {
-  // Wrap the entire app in a zone to catch errors
-  runZonedGuarded<Future<void>>(() async {
+void main() {
+  // Use runZonedGuarded to catch all errors
+  runZonedGuarded<void>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     // Set preferred orientations
-    SystemChrome.setPreferredOrientations([
+    await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
 
-    // Initialize Hive Storage (iPad compatible - replaces SharedPreferences)
-    try {
-      await HiveStorageService.init();
-    } catch (e) {
-      debugPrint('Error initializing Hive: $e');
-    }
-
-    // Initialize Local Storage for offline support
-    try {
-      await LocalStorageService.init();
-    } catch (e) {
-      debugPrint('Error initializing LocalStorage: $e');
-    }
-
-    // Initialize Firebase (includes Crashlytics, Analytics, and Notifications)
-    try {
-      await FirebaseService.initialize();
-    } catch (e) {
-      debugPrint('Error initializing Firebase: $e');
-    }
-
-    // Initialize Connectivity Service
-    try {
-      await ConnectivityService.init();
-    } catch (e) {
-      debugPrint('Error initializing Connectivity: $e');
-    }
+    // Initialize services with proper error handling
+    await _initializeServices();
 
     runApp(const FitHerApp());
   }, (error, stack) {
-    // Log uncaught errors to Crashlytics (safely)
-    try {
-      FirebaseService.logError(error, stack, reason: 'Uncaught error in main zone');
-    } catch (e) {
-      debugPrint('Failed to log error: $e');
-    }
+    debugPrint('Uncaught error: $error');
+    debugPrint('Stack trace: $stack');
   });
+}
+
+Future<void> _initializeServices() async {
+  // Initialize Hive Storage first (most critical for app to work)
+  try {
+    await HiveStorageService.init();
+    debugPrint('Hive initialized successfully');
+  } catch (e) {
+    debugPrint('Error initializing Hive: $e');
+  }
+
+  // Initialize Local Storage for offline support
+  try {
+    await LocalStorageService.init();
+    debugPrint('LocalStorage initialized successfully');
+  } catch (e) {
+    debugPrint('Error initializing LocalStorage: $e');
+  }
+
+  // Initialize Firebase only if not on simulator/having issues
+  // Firebase is optional - app should work without it
+  try {
+    await FirebaseService.initialize();
+    debugPrint('Firebase initialized successfully');
+  } catch (e) {
+    debugPrint('Error initializing Firebase (non-fatal): $e');
+  }
+
+  // Initialize Connectivity Service
+  try {
+    await ConnectivityService.init();
+    debugPrint('Connectivity initialized successfully');
+  } catch (e) {
+    debugPrint('Error initializing Connectivity: $e');
+  }
 }
 
 class FitHerApp extends StatefulWidget {
@@ -82,14 +88,16 @@ class _FitHerAppState extends State<FitHerApp> {
   @override
   void initState() {
     super.initState();
-    // تهيئة خدمة الرسائل
     ToastService.init(_messengerKey);
   }
 
   @override
   void dispose() {
-    // Clean up services to prevent memory leaks on iOS
-    ConnectivityService.dispose();
+    try {
+      ConnectivityService.dispose();
+    } catch (e) {
+      debugPrint('Error disposing ConnectivityService: $e');
+    }
     super.dispose();
   }
 

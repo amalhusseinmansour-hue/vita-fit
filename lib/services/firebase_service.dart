@@ -11,98 +11,98 @@ import 'api_service.dart';
 
 /// Firebase Service for handling Push Notifications, Analytics, and Crashlytics
 class FirebaseService {
-  // Lazy initialization - only access after Firebase.initializeApp() is called
   static FirebaseMessaging? _messaging;
   static FirebaseAnalytics? _analytics;
   static FlutterLocalNotificationsPlugin? _localNotifications;
 
   static bool _initialized = false;
+  static bool _firebaseAvailable = false;
 
-  // Getters for lazy initialization
-  static FirebaseMessaging get _messagingInstance {
-    _messaging ??= FirebaseMessaging.instance;
-    return _messaging!;
-  }
-
-  static FirebaseAnalytics get _analyticsInstance {
-    _analytics ??= FirebaseAnalytics.instance;
-    return _analytics!;
-  }
-
-  static FlutterLocalNotificationsPlugin get _localNotificationsInstance {
-    _localNotifications ??= FlutterLocalNotificationsPlugin();
-    return _localNotifications!;
-  }
+  /// Check if Firebase is available
+  static bool get isAvailable => _firebaseAvailable;
 
   /// Initialize Firebase services
   static Future<void> initialize() async {
     if (_initialized) return;
 
     try {
-      // Initialize Firebase with platform-specific options
+      // Initialize Firebase Core first
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      _firebaseAvailable = true;
+      debugPrint('Firebase Core initialized');
 
-      // Initialize Crashlytics (not available on web)
-      if (!kIsWeb) {
-        await _initCrashlytics();
-      }
-
-      // Notifications are not fully supported on web
-      if (!kIsWeb) {
-        // Request notification permissions
-        await _requestPermissions();
-
-        // Initialize local notifications
-        await _initLocalNotifications();
-
-        // Configure message handlers
-        _configureMessageHandlers();
-
-        // Get and save FCM token
-        await _saveFcmToken();
+      // Initialize other services only if Firebase Core succeeded
+      if (_firebaseAvailable && !kIsWeb) {
+        await _initCrashlyticsSafely();
+        await _initNotificationsSafely();
       }
 
       _initialized = true;
-    } catch (e) {
-      // Firebase not configured - skip initialization
-      // This allows the app to work without Firebase in demo mode
-      debugPrint('Firebase initialization error: $e');
+      debugPrint('Firebase fully initialized');
+    } catch (e, stack) {
+      debugPrint('Firebase initialization failed: $e');
+      debugPrint('Stack: $stack');
+      _firebaseAvailable = false;
+      _initialized = true; // Mark as initialized to prevent retry
     }
   }
 
-  /// Initialize Crashlytics
-  static Future<void> _initCrashlytics() async {
-    // Disable Crashlytics in debug mode
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
+  /// Initialize Crashlytics safely
+  static Future<void> _initCrashlyticsSafely() async {
+    try {
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
+      debugPrint('Crashlytics initialized');
+    } catch (e) {
+      debugPrint('Crashlytics init failed: $e');
+    }
+  }
 
-    // Pass all uncaught "fatal" errors to Crashlytics
-    FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
+  /// Initialize notifications safely
+  static Future<void> _initNotificationsSafely() async {
+    try {
+      _messaging = FirebaseMessaging.instance;
+      _localNotifications = FlutterLocalNotificationsPlugin();
 
-    // Pass all uncaught asynchronous errors to Crashlytics
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
+      // Request permissions
+      await _messaging!.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      // Initialize local notifications
+      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const iosSettings = DarwinInitializationSettings(
+        requestAlertPermission: false, // Already requested above
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      );
+
+      await _localNotifications!.initialize(
+        const InitializationSettings(android: androidSettings, iOS: iosSettings),
+        onDidReceiveNotificationResponse: _onNotificationTapped,
+      );
+
+      // Setup message handlers
+      FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
+      FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
+
+      // Get FCM token
+      await _saveFcmToken();
+
+      debugPrint('Notifications initialized');
+    } catch (e) {
+      debugPrint('Notifications init failed: $e');
+    }
   }
 
   /// Log error to Crashlytics
   static Future<void> logError(dynamic error, StackTrace? stack, {String? reason}) async {
-    // Don't try to log if Firebase isn't initialized
-    if (!_initialized) {
-      debugPrint('Firebase not initialized, skipping error log: $error');
-      return;
-    }
+    if (!_firebaseAvailable) return;
     try {
-      await FirebaseCrashlytics.instance.recordError(
-        error,
-        stack,
-        reason: reason ?? 'Non-fatal error',
-        fatal: false,
-      );
+      await FirebaseCrashlytics.instance.recordError(error, stack, reason: reason);
     } catch (e) {
       debugPrint('Crashlytics error logging failed: $e');
     }
@@ -110,6 +110,7 @@ class FirebaseService {
 
   /// Log message to Crashlytics
   static Future<void> logMessage(String message) async {
+    if (!_firebaseAvailable) return;
     try {
       await FirebaseCrashlytics.instance.log(message);
     } catch (e) {
@@ -119,6 +120,7 @@ class FirebaseService {
 
   /// Set user identifier for Crashlytics
   static Future<void> setCrashlyticsUser(String userId) async {
+    if (!_firebaseAvailable) return;
     try {
       await FirebaseCrashlytics.instance.setUserIdentifier(userId);
     } catch (e) {
@@ -128,6 +130,7 @@ class FirebaseService {
 
   /// Set custom key for Crashlytics
   static Future<void> setCrashlyticsCustomKey(String key, dynamic value) async {
+    if (!_firebaseAvailable) return;
     try {
       await FirebaseCrashlytics.instance.setCustomKey(key, value.toString());
     } catch (e) {
@@ -135,81 +138,32 @@ class FirebaseService {
     }
   }
 
-  /// Request notification permissions
-  static Future<void> _requestPermissions() async {
-    final settings = await _messagingInstance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      // User granted permission
-    }
-  }
-
-  /// Initialize local notifications
-  static Future<void> _initLocalNotifications() async {
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-
-    const initSettings = InitializationSettings(
-      android: androidSettings,
-      iOS: iosSettings,
-    );
-
-    await _localNotificationsInstance.initialize(
-      initSettings,
-      onDidReceiveNotificationResponse: _onNotificationTapped,
-    );
-
-    // Create notification channel for Android
-    const channel = AndroidNotificationChannel(
-      'vitafit_channel',
-      'VitaFit Notifications',
-      description: 'Notifications from VitaFit app',
-      importance: Importance.high,
-    );
-
-    await _localNotificationsInstance
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
-  }
-
-  /// Configure message handlers
-  static void _configureMessageHandlers() {
-    // Handle foreground messages
-    FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
-
-    // Handle background messages
-    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
-
-    // Handle notification taps when app is in background/terminated
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
-  }
-
   /// Handle foreground messages
   static Future<void> _handleForegroundMessage(RemoteMessage message) async {
-    final notification = message.notification;
-    if (notification != null) {
-      await _showLocalNotification(
-        title: notification.title ?? 'VitaFit',
-        body: notification.body ?? '',
-        payload: message.data.toString(),
-      );
+    try {
+      final notification = message.notification;
+      if (notification != null && _localNotifications != null) {
+        await _localNotifications!.show(
+          DateTime.now().millisecondsSinceEpoch.remainder(100000),
+          notification.title ?? 'VitaFit',
+          notification.body ?? '',
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'vitafit_channel',
+              'VitaFit Notifications',
+              importance: Importance.high,
+              priority: Priority.high,
+            ),
+            iOS: DarwinNotificationDetails(),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error handling foreground message: $e');
     }
   }
 
-  /// Handle background messages (must be top-level function)
+  /// Handle background messages
   @pragma('vm:entry-point')
   static Future<void> _handleBackgroundMessage(RemoteMessage message) async {
     // Handle background message
@@ -218,10 +172,6 @@ class FirebaseService {
   /// Handle notification tap
   static void _handleNotificationTap(RemoteMessage message) {
     // Navigate to specific screen based on notification data
-    final data = message.data;
-    if (data.containsKey('screen')) {
-      // Handle navigation
-    }
   }
 
   /// Handle local notification tap
@@ -229,63 +179,19 @@ class FirebaseService {
     // Handle navigation based on payload
   }
 
-  /// Show local notification
-  static Future<void> _showLocalNotification({
-    required String title,
-    required String body,
-    String? payload,
-  }) async {
-    const androidDetails = AndroidNotificationDetails(
-      'vitafit_channel',
-      'VitaFit Notifications',
-      channelDescription: 'Notifications from VitaFit app',
-      importance: Importance.high,
-      priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
-    );
-
-    const iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
-
-    const details = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await _localNotificationsInstance.show(
-      DateTime.now().millisecondsSinceEpoch.remainder(100000),
-      title,
-      body,
-      details,
-      payload: payload,
-    );
-  }
-
   /// Get and save FCM token
   static Future<void> _saveFcmToken() async {
+    if (_messaging == null) return;
     try {
-      final token = await _messagingInstance.getToken();
+      final token = await _messaging!.getToken();
       if (token != null) {
-        // Save token locally using Hive
         await HiveStorageService.setString('fcm_token', token);
-
-        // Send token to server if user is logged in
         final authToken = HiveStorageService.getString('token');
         if (authToken != null) {
           await _sendTokenToServer(token);
         }
       }
-
-      // Listen for token refresh
-      _messagingInstance.onTokenRefresh.listen((newToken) async {
-        await HiveStorageService.setString('fcm_token', newToken);
-        await _sendTokenToServer(newToken);
-      });
     } catch (e) {
-      // Handle error
       debugPrint('Error saving FCM token: $e');
     }
   }
@@ -293,17 +199,17 @@ class FirebaseService {
   /// Send FCM token to server
   static Future<void> _sendTokenToServer(String token) async {
     try {
-      // Send to your backend API
       await ApiService.updateFcmToken(token);
     } catch (e) {
-      // Handle error
+      // Ignore errors
     }
   }
 
   /// Get current FCM token
   static Future<String?> getFcmToken() async {
+    if (_messaging == null) return null;
     try {
-      return await _messagingInstance.getToken();
+      return await _messaging!.getToken();
     } catch (e) {
       return null;
     }
@@ -311,77 +217,84 @@ class FirebaseService {
 
   // ============ Analytics ============
 
-  /// Log screen view
   static Future<void> logScreenView(String screenName) async {
+    if (!_firebaseAvailable) return;
     try {
-      await _analyticsInstance.logScreenView(screenName: screenName);
+      _analytics ??= FirebaseAnalytics.instance;
+      await _analytics!.logScreenView(screenName: screenName);
     } catch (e) {
-      // Analytics not available
+      // Ignore
     }
   }
 
-  /// Log event
   static Future<void> logEvent(String name, {Map<String, dynamic>? parameters}) async {
+    if (!_firebaseAvailable) return;
     try {
-      await _analyticsInstance.logEvent(
+      _analytics ??= FirebaseAnalytics.instance;
+      await _analytics!.logEvent(
         name: name,
         parameters: parameters?.map((key, value) => MapEntry(key, value.toString())),
       );
     } catch (e) {
-      // Analytics not available
+      // Ignore
     }
   }
 
-  /// Log login
   static Future<void> logLogin(String method) async {
+    if (!_firebaseAvailable) return;
     try {
-      await _analyticsInstance.logLogin(loginMethod: method);
+      _analytics ??= FirebaseAnalytics.instance;
+      await _analytics!.logLogin(loginMethod: method);
     } catch (e) {
-      // Analytics not available
+      // Ignore
     }
   }
 
-  /// Log sign up
   static Future<void> logSignUp(String method) async {
+    if (!_firebaseAvailable) return;
     try {
-      await _analyticsInstance.logSignUp(signUpMethod: method);
+      _analytics ??= FirebaseAnalytics.instance;
+      await _analytics!.logSignUp(signUpMethod: method);
     } catch (e) {
-      // Analytics not available
+      // Ignore
     }
   }
 
-  /// Log purchase
   static Future<void> logPurchase({
     required String currency,
     required double value,
     String? transactionId,
   }) async {
+    if (!_firebaseAvailable) return;
     try {
-      await _analyticsInstance.logPurchase(
+      _analytics ??= FirebaseAnalytics.instance;
+      await _analytics!.logPurchase(
         currency: currency,
         value: value,
         transactionId: transactionId,
       );
     } catch (e) {
-      // Analytics not available
+      // Ignore
     }
   }
 
-  /// Set user ID
   static Future<void> setUserId(String userId) async {
+    if (!_firebaseAvailable) return;
     try {
-      await _analyticsInstance.setUserId(id: userId);
+      _analytics ??= FirebaseAnalytics.instance;
+      await _analytics!.setUserId(id: userId);
     } catch (e) {
-      // Analytics not available
+      // Ignore
     }
   }
 
-  /// Set user property
   static Future<void> setUserProperty(String name, String value) async {
+    if (!_firebaseAvailable) return;
     try {
-      await _analyticsInstance.setUserProperty(name: name, value: value);
+      _analytics ??= FirebaseAnalytics.instance;
+      await _analytics!.setUserProperty(name: name, value: value);
     } catch (e) {
-      // Analytics not available
+      // Ignore
     }
   }
 }
