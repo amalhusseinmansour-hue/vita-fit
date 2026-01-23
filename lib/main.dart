@@ -87,6 +87,13 @@ class _FitHerAppState extends State<FitHerApp> {
   }
 
   @override
+  void dispose() {
+    // Clean up services to prevent memory leaks on iOS
+    ConnectivityService.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [

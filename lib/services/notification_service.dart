@@ -11,7 +11,10 @@ import 'api_service.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   try {
-    await Firebase.initializeApp();
+    // Check if Firebase is already initialized to avoid duplicate initialization crash on iOS
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp();
+    }
     await NotificationService.showNotification(message);
   } catch (e) {
     debugPrint('Error handling background message: $e');

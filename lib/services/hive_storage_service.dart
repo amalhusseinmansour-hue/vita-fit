@@ -21,14 +21,22 @@ class HiveStorageService {
       debugPrint('Hive initialization error: $e');
       // Try to recover by deleting corrupted box and reinitializing
       try {
+        // Don't call initFlutter again - it's already initialized
         await Hive.deleteBoxFromDisk(_boxName);
-        await Hive.initFlutter();
         _box = await Hive.openBox(_boxName);
         _initialized = true;
         debugPrint('Hive recovered after deleting corrupted box');
       } catch (e2) {
         debugPrint('Hive recovery failed: $e2');
-        _initialized = false;
+        // Last resort: try with a different box name to prevent permanent crash
+        try {
+          _box = await Hive.openBox('${_boxName}_recovery');
+          _initialized = true;
+          debugPrint('Hive opened with recovery box');
+        } catch (e3) {
+          debugPrint('Hive final recovery failed: $e3');
+          _initialized = false;
+        }
       }
     }
   }

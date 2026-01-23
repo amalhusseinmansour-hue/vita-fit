@@ -116,7 +116,17 @@ class AppleSignInService {
         }),
       ).timeout(ApiConfig.timeout);
 
-      final responseData = json.decode(response.body);
+      // Safe JSON parsing to prevent crash on malformed response
+      Map<String, dynamic> responseData;
+      try {
+        responseData = json.decode(response.body) as Map<String, dynamic>;
+      } catch (e) {
+        debugPrint('Error parsing response JSON: $e');
+        return {
+          'success': false,
+          'message': 'استجابة غير صالحة من الخادم',
+        };
+      }
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         // Save authentication data

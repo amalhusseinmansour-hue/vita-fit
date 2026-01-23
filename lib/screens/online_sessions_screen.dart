@@ -44,7 +44,8 @@ class _OnlineSessionsScreenState extends State<OnlineSessionsScreen>
       final past = <dynamic>[];
 
       for (var session in sessions) {
-        final scheduledAt = DateTime.parse(session['scheduled_at']);
+        final scheduledAt = _tryParseDate(session['scheduled_at']);
+        if (scheduledAt == null) continue; // Skip invalid dates
         if (scheduledAt.isAfter(now)) {
           upcoming.add(session);
         } else {
@@ -53,12 +54,18 @@ class _OnlineSessionsScreenState extends State<OnlineSessionsScreen>
       }
 
       // Sort upcoming by date (soonest first)
-      upcoming.sort((a, b) => DateTime.parse(a['scheduled_at'])
-          .compareTo(DateTime.parse(b['scheduled_at'])));
+      upcoming.sort((a, b) {
+        final dateA = _tryParseDate(a['scheduled_at']) ?? DateTime(1970);
+        final dateB = _tryParseDate(b['scheduled_at']) ?? DateTime(1970);
+        return dateA.compareTo(dateB);
+      });
 
       // Sort past by date (most recent first)
-      past.sort((a, b) => DateTime.parse(b['scheduled_at'])
-          .compareTo(DateTime.parse(a['scheduled_at'])));
+      past.sort((a, b) {
+        final dateA = _tryParseDate(a['scheduled_at']) ?? DateTime(1970);
+        final dateB = _tryParseDate(b['scheduled_at']) ?? DateTime(1970);
+        return dateB.compareTo(dateA);
+      });
 
       setState(() {
         _upcomingSessions = upcoming;
@@ -218,8 +225,19 @@ class _OnlineSessionsScreenState extends State<OnlineSessionsScreen>
     );
   }
 
+  /// Safe date parsing helper
+  DateTime? _tryParseDate(dynamic dateStr) {
+    if (dateStr == null) return null;
+    try {
+      return DateTime.parse(dateStr.toString());
+    } catch (e) {
+      debugPrint('Error parsing date: $dateStr');
+      return null;
+    }
+  }
+
   Widget _buildSessionCard(dynamic session, bool isUpcoming, int index) {
-    final scheduledAt = DateTime.parse(session['scheduled_at']);
+    final scheduledAt = _tryParseDate(session['scheduled_at']) ?? DateTime.now();
     final duration = session['duration_minutes'] ?? 45;
     final status = session['status'] ?? 'scheduled';
 
