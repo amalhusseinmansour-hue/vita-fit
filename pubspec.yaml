@@ -50,27 +50,27 @@ dependencies:
   # Crypto for HMAC
   crypto: ^3.0.3
 
-  # Firebase
-  firebase_core: ^3.8.1
-  firebase_messaging: ^15.1.6
-  firebase_analytics: ^11.3.6
-  firebase_crashlytics: ^4.1.6
+  # Firebase - TEMPORARILY DISABLED FOR iOS CRASH DEBUG
+  # firebase_core: ^3.8.1
+  # firebase_messaging: ^15.1.6
+  # firebase_analytics: ^11.3.6
+  # firebase_crashlytics: ^4.1.6
 
-  # Local Notifications
-  flutter_local_notifications: ^18.0.1
+  # Local Notifications - TEMPORARILY DISABLED
+  # flutter_local_notifications: ^18.0.1
 
   # URL Launcher
   url_launcher: ^6.2.4
 
-  # Payment
-  pay: ^2.0.0
-  webview_flutter: ^4.4.2
+  # Payment - TEMPORARILY DISABLED
+  # pay: ^2.0.0
+  # webview_flutter: ^4.4.2
 
-  # Apple Sign In (Required for App Store)
-  sign_in_with_apple: ^6.1.4
+  # Apple Sign In - TEMPORARILY DISABLED
+  # sign_in_with_apple: ^6.1.4
 
-  # App Tracking Transparency (Required for iOS 14+)
-  app_tracking_transparency: ^2.0.6
+  # App Tracking Transparency - TEMPORARILY DISABLED
+  # app_tracking_transparency: ^2.0.6
 
 dev_dependencies:
   flutter_test:
