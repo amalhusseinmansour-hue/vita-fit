@@ -1,3 +1,46 @@
+import 'package:flutter/material.dart';
+
+// MINIMAL VERSION FOR DEBUGGING iOS CRASH
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MinimalApp());
+}
+
+class MinimalApp extends StatelessWidget {
+  const MinimalApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'VitaFit',
+      debugShowCheckedModeBanner: false,
+      home: const MinimalScreen(),
+    );
+  }
+}
+
+class MinimalScreen extends StatelessWidget {
+  const MinimalScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: Color(0xFF1A1A24),
+      body: Center(
+        child: Text(
+          'VitaFit',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/* ORIGINAL CODE - COMMENTED OUT FOR DEBUGGING
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,14 +62,12 @@ import 'services/toast_service.dart';
 import 'localization/app_localizations.dart';
 
 void main() async {
-  // Wrap everything in try-catch to prevent any crash
   try {
     WidgetsFlutterBinding.ensureInitialized();
   } catch (e) {
     debugPrint('Flutter binding error: $e');
   }
 
-  // Set orientations (non-critical)
   try {
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -36,21 +77,16 @@ void main() async {
     debugPrint('Orientation error: $e');
   }
 
-  // Initialize Hive (critical for app state)
   try {
     await HiveStorageService.init();
   } catch (e) {
     debugPrint('Hive init error: $e');
   }
 
-  // Run app
   runApp(const FitHerApp());
-
-  // Initialize other services in background AFTER app starts
   _initServicesInBackground();
 }
 
-// Initialize non-critical services in background
 void _initServicesInBackground() {
   Future.microtask(() async {
     try {
@@ -59,13 +95,6 @@ void _initServicesInBackground() {
       debugPrint('LocalStorage error: $e');
     }
 
-    // Firebase disabled temporarily for debugging iOS crash
-    // try {
-    //   await FirebaseService.initialize();
-    // } catch (e) {
-    //   debugPrint('Firebase error: $e');
-    // }
-
     try {
       await ConnectivityService.init();
     } catch (e) {
@@ -73,6 +102,7 @@ void _initServicesInBackground() {
     }
   });
 }
+*/
 
 class FitHerApp extends StatefulWidget {
   const FitHerApp({super.key});
