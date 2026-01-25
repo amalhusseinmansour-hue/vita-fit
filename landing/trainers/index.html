@@ -198,13 +198,13 @@
         .page-header {
             padding: 160px 2rem 80px;
             text-align: center;
-            background: linear-gradient(180deg, var(--background-light) 0%, var(--background) 100%);
         }
 
         .page-header h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
         }
 
         .page-header h1 span {
@@ -215,43 +215,58 @@
         }
 
         .page-header p {
+            font-size: 1.25rem;
             color: var(--text-secondary);
-            font-size: 1.2rem;
             max-width: 600px;
             margin: 0 auto;
         }
 
-        /* Container */
-        .container {
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Trainers Section */
+        .trainers {
+            padding: 60px 2rem 100px;
+            background: var(--background);
+        }
+
+        .trainers-grid {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Section */
-        .section {
-            padding: 80px 2rem;
-        }
-
-        .section-alt {
-            background: var(--background-light);
-        }
-
-        /* Grid */
-        .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
         }
 
-        /* Trainer Card */
         .trainer-card {
             background: var(--card);
             border-radius: 24px;
-            padding: 2rem;
+            padding: 2.5rem;
             text-align: center;
-            border: 1px solid var(--border);
             transition: all 0.4s ease;
+            border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
         }
@@ -291,29 +306,31 @@
         }
 
         .trainer-name {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            color: var(--text);
         }
 
         .trainer-specialty {
             color: var(--primary);
             font-weight: 600;
             margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
         .trainer-bio {
             color: var(--text-secondary);
             font-size: 0.95rem;
             margin-bottom: 1.5rem;
-            line-height: 1.7;
+            line-height: 1.8;
         }
 
         .trainer-stats {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            padding-top: 1rem;
+            padding-top: 1.5rem;
             border-top: 1px solid var(--border);
         }
 
@@ -322,13 +339,16 @@
         }
 
         .stat-value {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
         }
 
@@ -342,13 +362,41 @@
 
         .cert-badge {
             background: var(--surface);
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
+            border: 1px solid var(--border);
         }
 
-        /* Buttons */
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 2rem;
+            background: linear-gradient(135deg, var(--background-light), var(--surface));
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section h2 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
@@ -482,6 +530,10 @@
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
+
+            .trainers-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
@@ -501,7 +553,11 @@
                 font-size: 2rem;
             }
 
-            .grid-3 {
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .trainers-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -517,15 +573,24 @@
             .social-links {
                 justify-content: center;
             }
+
+            .trainer-stats {
+                gap: 1.5rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .section {
-                padding: 60px 1rem;
+            .trainers {
+                padding: 40px 1rem 80px;
             }
 
             .trainer-stats {
+                flex-wrap: wrap;
                 gap: 1rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -561,175 +626,171 @@
     </section>
 
     <!-- Trainers Grid -->
-    <section class="section">
-        <div class="container">
-            <div class="grid-3">
-                <!-- Trainer 1 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩‍🦰</div>
-                    <h3 class="trainer-name">سارة أحمد</h3>
-                    <p class="trainer-specialty">متخصصة في تمارين القوة</p>
-                    <p class="trainer-bio">مدربة معتمدة بخبرة أكثر من 8 سنوات في مجال اللياقة البدنية. متخصصة في بناء العضلات وتمارين المقاومة للنساء.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">8+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">500+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">4.9</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
+    <section class="trainers">
+        <div class="trainers-grid">
+            <!-- Trainer 1 -->
+            <div class="trainer-card">
+                <div class="trainer-avatar">👩‍🦰</div>
+                <h3 class="trainer-name">سارة أحمد</h3>
+                <p class="trainer-specialty">متخصصة في تمارين القوة</p>
+                <p class="trainer-bio">مدربة معتمدة بخبرة أكثر من 8 سنوات في مجال اللياقة البدنية. متخصصة في بناء العضلات وتمارين المقاومة للنساء.</p>
+                <div class="trainer-stats">
+                    <div class="stat">
+                        <div class="stat-value">8+</div>
+                        <div class="stat-label">سنوات خبرة</div>
                     </div>
-                    <div class="certifications">
-                        <span class="cert-badge">NASM-CPT</span>
-                        <span class="cert-badge">CrossFit L2</span>
+                    <div class="stat">
+                        <div class="stat-value">500+</div>
+                        <div class="stat-label">متدربة</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.9</div>
+                        <div class="stat-label">تقييم</div>
                     </div>
                 </div>
+                <div class="certifications">
+                    <span class="cert-badge">NASM-CPT</span>
+                    <span class="cert-badge">CrossFit L2</span>
+                </div>
+            </div>
 
-                <!-- Trainer 2 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩‍🦱</div>
-                    <h3 class="trainer-name">نورا محمد</h3>
-                    <p class="trainer-specialty">خبيرة يوغا وتأمل</p>
-                    <p class="trainer-bio">معلمة يوغا معتمدة من الهند بخبرة 6 سنوات. متخصصة في اليوغا العلاجية والتأمل للتخفيف من التوتر.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">6+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">350+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">5.0</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
+            <!-- Trainer 2 -->
+            <div class="trainer-card">
+                <div class="trainer-avatar">👩‍🦱</div>
+                <h3 class="trainer-name">نورا محمد</h3>
+                <p class="trainer-specialty">خبيرة يوغا وتأمل</p>
+                <p class="trainer-bio">معلمة يوغا معتمدة من الهند بخبرة 6 سنوات. متخصصة في اليوغا العلاجية والتأمل للتخفيف من التوتر.</p>
+                <div class="trainer-stats">
+                    <div class="stat">
+                        <div class="stat-value">6+</div>
+                        <div class="stat-label">سنوات خبرة</div>
                     </div>
-                    <div class="certifications">
-                        <span class="cert-badge">RYT-500</span>
-                        <span class="cert-badge">Meditation</span>
+                    <div class="stat">
+                        <div class="stat-value">350+</div>
+                        <div class="stat-label">متدربة</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">5.0</div>
+                        <div class="stat-label">تقييم</div>
                     </div>
                 </div>
+                <div class="certifications">
+                    <span class="cert-badge">RYT-500</span>
+                    <span class="cert-badge">Meditation</span>
+                </div>
+            </div>
 
-                <!-- Trainer 3 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩</div>
-                    <h3 class="trainer-name">لينا خالد</h3>
-                    <p class="trainer-specialty">مدربة كارديو معتمدة</p>
-                    <p class="trainer-bio">متخصصة في تمارين الكارديو وحرق الدهون. بطلة سابقة في الماراثون وخبيرة في تمارين HIIT.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">5+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">400+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">4.8</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
+            <!-- Trainer 3 -->
+            <div class="trainer-card">
+                <div class="trainer-avatar">👩</div>
+                <h3 class="trainer-name">لينا خالد</h3>
+                <p class="trainer-specialty">مدربة كارديو معتمدة</p>
+                <p class="trainer-bio">متخصصة في تمارين الكارديو وحرق الدهون. بطلة سابقة في الماراثون وخبيرة في تمارين HIIT.</p>
+                <div class="trainer-stats">
+                    <div class="stat">
+                        <div class="stat-value">5+</div>
+                        <div class="stat-label">سنوات خبرة</div>
                     </div>
-                    <div class="certifications">
-                        <span class="cert-badge">ACE-CPT</span>
-                        <span class="cert-badge">HIIT Specialist</span>
+                    <div class="stat">
+                        <div class="stat-value">400+</div>
+                        <div class="stat-label">متدربة</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">تقييم</div>
                     </div>
                 </div>
+                <div class="certifications">
+                    <span class="cert-badge">ACE-CPT</span>
+                    <span class="cert-badge">HIIT Specialist</span>
+                </div>
+            </div>
 
-                <!-- Trainer 4 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩‍🦳</div>
-                    <h3 class="trainer-name">هدى علي</h3>
-                    <p class="trainer-specialty">أخصائية تغذية رياضية</p>
-                    <p class="trainer-bio">أخصائية تغذية معتمدة مع ماجستير في التغذية الرياضية. خبيرة في إعداد خطط غذائية للرياضيات.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">10+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">800+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">4.9</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
+            <!-- Trainer 4 -->
+            <div class="trainer-card">
+                <div class="trainer-avatar">👩‍🦳</div>
+                <h3 class="trainer-name">هدى علي</h3>
+                <p class="trainer-specialty">أخصائية تغذية رياضية</p>
+                <p class="trainer-bio">أخصائية تغذية معتمدة مع ماجستير في التغذية الرياضية. خبيرة في إعداد خطط غذائية للرياضيات.</p>
+                <div class="trainer-stats">
+                    <div class="stat">
+                        <div class="stat-value">10+</div>
+                        <div class="stat-label">سنوات خبرة</div>
                     </div>
-                    <div class="certifications">
-                        <span class="cert-badge">RD</span>
-                        <span class="cert-badge">Sports Nutrition</span>
+                    <div class="stat">
+                        <div class="stat-value">800+</div>
+                        <div class="stat-label">متدربة</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.9</div>
+                        <div class="stat-label">تقييم</div>
                     </div>
                 </div>
+                <div class="certifications">
+                    <span class="cert-badge">RD</span>
+                    <span class="cert-badge">Sports Nutrition</span>
+                </div>
+            </div>
 
-                <!-- Trainer 5 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👱‍♀️</div>
-                    <h3 class="trainer-name">رنا سعيد</h3>
-                    <p class="trainer-specialty">مدربة بيلاتس</p>
-                    <p class="trainer-bio">مدربة بيلاتس معتمدة متخصصة في تقوية العضلات الأساسية وتحسين المرونة والتوازن.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">7+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">300+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">4.9</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
+            <!-- Trainer 5 -->
+            <div class="trainer-card">
+                <div class="trainer-avatar">👱‍♀️</div>
+                <h3 class="trainer-name">رنا سعيد</h3>
+                <p class="trainer-specialty">مدربة بيلاتس</p>
+                <p class="trainer-bio">مدربة بيلاتس معتمدة متخصصة في تقوية العضلات الأساسية وتحسين المرونة والتوازن.</p>
+                <div class="trainer-stats">
+                    <div class="stat">
+                        <div class="stat-value">7+</div>
+                        <div class="stat-label">سنوات خبرة</div>
                     </div>
-                    <div class="certifications">
-                        <span class="cert-badge">PMA-CPT</span>
-                        <span class="cert-badge">Mat Pilates</span>
+                    <div class="stat">
+                        <div class="stat-value">300+</div>
+                        <div class="stat-label">متدربة</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.9</div>
+                        <div class="stat-label">تقييم</div>
                     </div>
                 </div>
+                <div class="certifications">
+                    <span class="cert-badge">PMA-CPT</span>
+                    <span class="cert-badge">Mat Pilates</span>
+                </div>
+            </div>
 
-                <!-- Trainer 6 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩‍🦲</div>
-                    <h3 class="trainer-name">مريم حسن</h3>
-                    <p class="trainer-specialty">مدربة لياقة للحوامل</p>
-                    <p class="trainer-bio">متخصصة في تمارين ما قبل وبعد الولادة. خبيرة في التمارين الآمنة للحوامل والأمهات الجدد.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">4+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">200+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">5.0</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
+            <!-- Trainer 6 -->
+            <div class="trainer-card">
+                <div class="trainer-avatar">👩‍🦲</div>
+                <h3 class="trainer-name">مريم حسن</h3>
+                <p class="trainer-specialty">مدربة لياقة للحوامل</p>
+                <p class="trainer-bio">متخصصة في تمارين ما قبل وبعد الولادة. خبيرة في التمارين الآمنة للحوامل والأمهات الجدد.</p>
+                <div class="trainer-stats">
+                    <div class="stat">
+                        <div class="stat-value">4+</div>
+                        <div class="stat-label">سنوات خبرة</div>
                     </div>
-                    <div class="certifications">
-                        <span class="cert-badge">Pre/Postnatal</span>
-                        <span class="cert-badge">AFAA</span>
+                    <div class="stat">
+                        <div class="stat-value">200+</div>
+                        <div class="stat-label">متدربة</div>
                     </div>
+                    <div class="stat">
+                        <div class="stat-value">5.0</div>
+                        <div class="stat-label">تقييم</div>
+                    </div>
+                </div>
+                <div class="certifications">
+                    <span class="cert-badge">Pre/Postnatal</span>
+                    <span class="cert-badge">AFAA</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Join Team CTA -->
-    <section class="section section-alt" style="text-align: center;">
-        <div class="container">
-            <h2 style="font-size: 2rem; margin-bottom: 1rem;">هل أنتِ مدربة معتمدة؟</h2>
-            <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">انضمي لفريق VITA FIT وساعدي آلاف النساء في تحقيق أهدافهن الصحية</p>
-            <a href="../contact" class="btn-secondary">تواصلي معنا للانضمام</a>
-        </div>
+    <section class="cta-section">
+        <h2>هل أنتِ <span>مدربة معتمدة</span>؟</h2>
+        <p>انضمي لفريق VITA FIT وساعدي آلاف النساء في تحقيق أهدافهن الصحية</p>
+        <a href="../contact" class="btn-secondary">تواصلي معنا للانضمام</a>
     </section>
 
     <!-- Footer -->
@@ -741,7 +802,7 @@
                         <img src="../logo.jpeg" alt="VITA FIT" style="height: 40px;">
                         <span class="logo-text">VITA FIT</span>
                     </a>
-                    <p>تطبيق اللياقة البدنية الأول للنساء في المنطقة.</p>
+                    <p>تطبيق اللياقة البدنية الأول للنساء في المنطقة. نساعدك على تحقيق أهدافك الصحية بطريقة ممتعة وفعالة.</p>
                 </div>
                 <div class="footer-column">
                     <h4>روابط سريعة</h4>
