@@ -423,7 +423,14 @@
       "Bash(powershell.exe -Command \"Get-ChildItem -Path ''C:\\\\'' -Filter ''flutter.bat'' -Recurse -ErrorAction SilentlyContinue -Force | Select-Object -First 1 -ExpandProperty FullName\")",
       "Bash(adb logcat:*)",
       "Bash(cmd.exe /c \"echo %PATH%\")",
-      "Bash(tr:*)"
+      "Bash(tr:*)",
+      "Bash(git log:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(/c/Users/HP/fvm/default/bin/flutter.bat build:*)",
+      "Bash(powershell.exe -Command \"cd ''C:\\\\Users\\\\HP\\\\Desktop\\\\projects\\\\vitafit''; flutter build apk --release\")",
+      "Bash(powershell.exe:*)",
+      "Bash(pacman -S:*)",
+      "Bash(apt-get install:*)"
     ],
     "deny": [],
     "ask": []
