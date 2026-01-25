@@ -394,6 +394,82 @@ class ApiService {
     }
   }
 
+  // Register Trainer (pending approval)
+  static Future<Map<String, dynamic>> registerTrainer({
+    required String name,
+    required String email,
+    required String password,
+    required String phone,
+    required String specialty,
+    required int experienceYears,
+    required List<String> certifications,
+    required String bio,
+  }) async {
+    // Demo mode
+    if (ApiConfig.isDemoMode) {
+      return await DemoService.registerUser(
+        name: name,
+        email: email,
+        password: password,
+        phone: phone,
+        role: 'trainer',
+      );
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/trainer/register'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: json.encode({
+          'name': name,
+          'email': email,
+          'password': password,
+          'password_confirmation': password,
+          'phone': phone,
+          'specialty': specialty,
+          'experience_years': experienceYears,
+          'certifications': certifications,
+          'bio': bio,
+        }),
+      ).timeout(ApiConfig.timeout);
+
+      final data = json.decode(response.body);
+      print('📥 Trainer Register response: $data');
+
+      // Handle validation errors
+      if (data['success'] == false && data['errors'] != null) {
+        final errors = data['errors'] as Map<String, dynamic>;
+        final errorMessages = <String>[];
+        errors.forEach((key, value) {
+          if (value is List) {
+            errorMessages.addAll(value.map((e) => e.toString()));
+          } else {
+            errorMessages.add(value.toString());
+          }
+        });
+        return {
+          'success': false,
+          'message': errorMessages.join('\n'),
+        };
+      }
+
+      if (data['success'] == true) {
+        return {
+          'success': true,
+          'message': data['message'] ?? 'تم استلام طلبك بنجاح. سنراجع معلوماتك قريباً',
+          'data': data['data'],
+        };
+      }
+      return data;
+    } catch (e) {
+      print('❌ Trainer Register error: $e');
+      return {'success': false, 'message': 'خطأ في الاتصال بالخادم: $e'};
+    }
+  }
+
   // Forgot Password - Send OTP
   static Future<Map<String, dynamic>> forgotPassword(String email) async {
     if (ApiConfig.isDemoMode) {

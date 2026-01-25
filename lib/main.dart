@@ -8,6 +8,8 @@ import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/role_router_screen.dart';
+import 'screens/trainer_signup_screen.dart';
+import 'screens/trainer_pending_screen.dart';
 import 'providers/cart_provider.dart';
 import 'providers/favorites_provider.dart';
 import 'providers/language_provider.dart';
@@ -92,6 +94,7 @@ class _VitaFitAppState extends State<VitaFitApp> {
             routes: {
               '/login': (context) => const LoginScreen(),
               '/signup': (context) => const SignUpScreen(),
+              '/trainer-signup': (context) => const TrainerSignupScreen(),
               '/home': (context) => const RoleRouterScreen(),
             },
             localizationsDelegates: const [

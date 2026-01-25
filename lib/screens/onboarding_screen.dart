@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../constants/app_theme.dart';
 import 'login_screen.dart';
+import 'trainer_signup_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -162,7 +163,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                 // Next/Start button
                 Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
                   child: SizedBox(
                     width: double.infinity,
                     height: 56,
@@ -198,6 +199,43 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         ],
                       ),
+                    ),
+                  ),
+                ),
+
+                // Trainer Registration Button
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TrainerSignupScreen(),
+                        ),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.fitness_center,
+                          size: 20,
+                          color: AppTheme.secondary,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'هل أنتِ مدربة؟ سجلي الآن',
+                          style: TextStyle(
+                            color: AppTheme.secondary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

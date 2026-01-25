@@ -8,6 +8,7 @@ import '../services/firebase_service.dart';
 import '../services/apple_sign_in_service.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
+import 'trainer_signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -804,6 +805,39 @@ class _LoginScreenState extends State<LoginScreen> {
                     )
                         .animate()
                         .fadeIn(delay: 900.ms, duration: 600.ms),
+
+                    // Trainer Registration Link
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TrainerSignupScreen(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.fitness_center,
+                            size: 18,
+                            color: AppTheme.secondary,
+                          ),
+                          const SizedBox(width: AppTheme.xs),
+                          const Text(
+                            'هل أنتِ مدربة؟ سجلي الآن',
+                            style: TextStyle(
+                              color: AppTheme.secondary,
+                              fontSize: AppTheme.fontMd,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                        .animate()
+                        .fadeIn(delay: 950.ms, duration: 600.ms),
 
                     // Apple Sign In Button (iOS only)
                     if (_isAppleAvailable) ...[
