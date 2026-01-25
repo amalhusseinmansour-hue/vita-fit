@@ -1,343 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="تعرفي على مدربات VITA FIT المعتمدات - خبيرات في اللياقة والتغذية">
-    <title>المدربات | VITA FIT</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/jpeg" href="logo.jpeg">
-    <style>
-        .trainer-card {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: center;
-            border: 1px solid var(--border);
-            transition: all 0.4s ease;
-        }
-        .trainer-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.2);
-            border-color: var(--primary);
-        }
-        .trainer-avatar {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-        .trainer-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        .trainer-specialty {
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        .trainer-bio {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-        }
-        .trainer-stats {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-        }
-        .stat {
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-        .certifications {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        .cert-badge {
-            background: var(--surface);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-    </style>
+    <meta http-equiv="refresh" content="0; url=trainers/">
+    <title>Redirecting...</title>
+    <script>window.location.href = "trainers/";</script>
 </head>
 <body>
-    <div class="bg-animation"></div>
-
-    <!-- Header -->
-    <header id="header">
-        <nav>
-            <a href="index.html" class="logo">
-                <img src="logo.jpeg" alt="VITA FIT Logo">
-                <span class="logo-text">VITA FIT</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="features.html">المميزات</a></li>
-                <li><a href="trainers.html" class="active">المدربات</a></li>
-                <li><a href="download.html">التحميل</a></li>
-            </ul>
-            <a href="download.html" class="download-btn">حملي التطبيق</a>
-            <div class="menu-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Page Header -->
-    <section class="page-header">
-        <h1>تعرفي على <span>مدرباتنا</span></h1>
-        <p>فريق من أفضل المدربات المعتمدات لمساعدتك في تحقيق أهدافك الصحية واللياقية</p>
-    </section>
-
-    <!-- Trainers Grid -->
-    <section class="section">
-        <div class="container">
-            <div class="grid-3">
-                <!-- Trainer 1 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩‍🦰</div>
-                    <h3 class="trainer-name">سارة أحمد</h3>
-                    <p class="trainer-specialty">متخصصة في تمارين القوة</p>
-                    <p class="trainer-bio">مدربة معتمدة بخبرة أكثر من 8 سنوات في مجال اللياقة البدنية. متخصصة في بناء العضلات وتمارين المقاومة للنساء.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">8+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">500+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">4.9</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
-                    </div>
-                    <div class="certifications">
-                        <span class="cert-badge">NASM-CPT</span>
-                        <span class="cert-badge">CrossFit L2</span>
-                    </div>
-                </div>
-
-                <!-- Trainer 2 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩‍🦱</div>
-                    <h3 class="trainer-name">نورا محمد</h3>
-                    <p class="trainer-specialty">خبيرة يوغا وتأمل</p>
-                    <p class="trainer-bio">معلمة يوغا معتمدة من الهند بخبرة 6 سنوات. متخصصة في اليوغا العلاجية والتأمل للتخفيف من التوتر.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">6+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">350+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">5.0</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
-                    </div>
-                    <div class="certifications">
-                        <span class="cert-badge">RYT-500</span>
-                        <span class="cert-badge">Meditation</span>
-                    </div>
-                </div>
-
-                <!-- Trainer 3 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩</div>
-                    <h3 class="trainer-name">لينا خالد</h3>
-                    <p class="trainer-specialty">مدربة كارديو معتمدة</p>
-                    <p class="trainer-bio">متخصصة في تمارين الكارديو وحرق الدهون. بطلة سابقة في الماراثون وخبيرة في تمارين HIIT.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">5+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">400+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">4.8</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
-                    </div>
-                    <div class="certifications">
-                        <span class="cert-badge">ACE-CPT</span>
-                        <span class="cert-badge">HIIT Specialist</span>
-                    </div>
-                </div>
-
-                <!-- Trainer 4 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩‍🦳</div>
-                    <h3 class="trainer-name">هدى علي</h3>
-                    <p class="trainer-specialty">أخصائية تغذية رياضية</p>
-                    <p class="trainer-bio">أخصائية تغذية معتمدة مع ماجستير في التغذية الرياضية. خبيرة في إعداد خطط غذائية للرياضيات.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">10+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">800+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">4.9</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
-                    </div>
-                    <div class="certifications">
-                        <span class="cert-badge">RD</span>
-                        <span class="cert-badge">Sports Nutrition</span>
-                    </div>
-                </div>
-
-                <!-- Trainer 5 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👱‍♀️</div>
-                    <h3 class="trainer-name">رنا سعيد</h3>
-                    <p class="trainer-specialty">مدربة بيلاتس</p>
-                    <p class="trainer-bio">مدربة بيلاتس معتمدة متخصصة في تقوية العضلات الأساسية وتحسين المرونة والتوازن.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">7+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">300+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">4.9</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
-                    </div>
-                    <div class="certifications">
-                        <span class="cert-badge">PMA-CPT</span>
-                        <span class="cert-badge">Mat Pilates</span>
-                    </div>
-                </div>
-
-                <!-- Trainer 6 -->
-                <div class="trainer-card">
-                    <div class="trainer-avatar">👩‍🦲</div>
-                    <h3 class="trainer-name">مريم حسن</h3>
-                    <p class="trainer-specialty">مدربة لياقة للحوامل</p>
-                    <p class="trainer-bio">متخصصة في تمارين ما قبل وبعد الولادة. خبيرة في التمارين الآمنة للحوامل والأمهات الجدد.</p>
-                    <div class="trainer-stats">
-                        <div class="stat">
-                            <div class="stat-value">4+</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">200+</div>
-                            <div class="stat-label">متدربة</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">5.0</div>
-                            <div class="stat-label">تقييم</div>
-                        </div>
-                    </div>
-                    <div class="certifications">
-                        <span class="cert-badge">Pre/Postnatal</span>
-                        <span class="cert-badge">AFAA</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Join Team CTA -->
-    <section class="section section-alt" style="text-align: center;">
-        <div class="container">
-            <h2 style="font-size: 2rem; margin-bottom: 1rem;">هل أنتِ مدربة معتمدة؟</h2>
-            <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">انضمي لفريق VITA FIT وساعدي آلاف النساء في تحقيق أهدافهن الصحية</p>
-            <a href="contact.html" class="btn-secondary">تواصلي معنا للانضمام</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="index.html" class="logo">
-                        <img src="logo.jpeg" alt="VITA FIT" style="height: 40px;">
-                        <span class="logo-text">VITA FIT</span>
-                    </a>
-                    <p>تطبيق اللياقة البدنية الأول للنساء في المنطقة.</p>
-                </div>
-                <div class="footer-column">
-                    <h4>روابط سريعة</h4>
-                    <ul>
-                        <li><a href="features.html">المميزات</a></li>
-                        <li><a href="trainers.html">المدربات</a></li>
-                        <li><a href="download.html">التحميل</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>الدعم</h4>
-                    <ul>
-                        <li><a href="faq.html">الأسئلة الشائعة</a></li>
-                        <li><a href="contact.html">تواصلي معنا</a></li>
-                        <li><a href="privacy.html">سياسة الخصوصية</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>تابعينا</h4>
-                    <div class="social-links">
-                        <a href="#">📸</a>
-                        <a href="#">🐦</a>
-                        <a href="#">📘</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2025 VITA FIT. جميع الحقوق محفوظة</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-    </script>
+    <p>جاري التحويل... <a href="trainers/">اضغط هنا إذا لم يتم التحويل تلقائياً</a></p>
 </body>
 </html>
