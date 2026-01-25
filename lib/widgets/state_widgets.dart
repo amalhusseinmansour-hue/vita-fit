@@ -45,7 +45,7 @@ class LoadingWidget extends StatelessWidget {
 }
 
 /// Widget لعرض حالة الخطأ مع إمكانية إعادة المحاولة
-class ErrorWidget extends StatelessWidget {
+class AppErrorWidget extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
   final IconData icon;
@@ -118,7 +118,7 @@ class NoConnectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ErrorWidget(
+    return AppErrorWidget(
       message: 'لا يوجد اتصال بالإنترنت\nتحقق من اتصالك وحاول مرة أخرى',
       icon: Icons.wifi_off,
       onRetry: onRetry,

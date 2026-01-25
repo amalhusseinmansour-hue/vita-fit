@@ -66,29 +66,6 @@
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>VitaFit sends notifications for workout reminders, trainer messages, and subscription updates.</string>
 
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>VitaFit uses your location to find nearby gyms and fitness centers.</string>
-
-	<key>NSHealthShareUsageDescription</key>
-	<string>VitaFit reads your health data to track your fitness progress and provide personalized recommendations.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>VitaFit writes workout data to Health to keep your fitness records synchronized.</string>
-
-	<key>NSFaceIDUsageDescription</key>
-	<string>VitaFit uses Face ID for quick and secure login to protect your account.</string>
-
-	<key>NSUserTrackingUsageDescription</key>
-	<string>VitaFit would like permission to track your activity to provide personalized fitness recommendations.</string>
-
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
-	</array>
-
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<false/>
-
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

@@ -2,7 +2,7 @@ name: gym
 description: "Gym - تطبيق إدارة النادي الرياضي"
 publish_to: 'none'
 
-version: 1.0.9+49
+version: 1.0.10+56
 
 environment:
   sdk: ^3.9.2
@@ -15,71 +15,67 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  # === MINIMAL DEPENDENCIES FOR iOS CRASH DEBUG ===
-  # All other plugins temporarily disabled
+  # State Management
+  provider: ^6.1.1
 
-  # # State Management
-  # provider: ^6.1.1
+  # Navigation
+  go_router: ^14.0.2
 
-  # # Navigation
-  # go_router: ^14.0.2
+  # UI & Animations
+  flutter_animate: ^4.5.0
+  shimmer: ^3.0.0
 
-  # # UI & Animations
-  # flutter_animate: ^4.5.0
-  # shimmer: ^3.0.0
+  # Utilities
+  intl: ^0.20.2
 
-  # # Utilities
-  # intl: ^0.20.2
+  # API & Storage
+  http: ^1.1.0
+  dio: ^5.4.0
 
-  # # API & Storage
-  # http: ^1.1.0
-  # dio: ^5.4.0
+  # Local Storage - Using Hive (iPad compatible)
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.2
 
-  # # Local Storage - Using Hive (iPad compatible)
-  # hive: ^2.2.3
-  # hive_flutter: ^1.1.0
-  # path_provider: ^2.1.2
+  # Secure Storage for sensitive data (tokens, credentials)
+  flutter_secure_storage: ^9.2.2
 
-  # # Secure Storage for sensitive data (tokens, credentials)
-  # flutter_secure_storage: ^9.2.2
+  # Network Connectivity
+  connectivity_plus: ^6.1.0
 
-  # # Network Connectivity
-  # connectivity_plus: ^6.1.0
+  # SQLite Database
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
-  # # SQLite Database
-  # sqflite: ^2.3.0
-  # path: ^1.8.3
+  # Crypto for HMAC
+  crypto: ^3.0.3
 
-  # # Crypto for HMAC
-  # crypto: ^3.0.3
+  # URL Launcher
+  url_launcher: ^6.2.4
 
-  # # Firebase
+  # Payment
+  pay: ^2.0.0
+  webview_flutter: ^4.4.2
+
+  # Apple Sign In
+  sign_in_with_apple: ^6.1.4
+
+  # === FIREBASE - DISABLED FOR NOW ===
+  # Uncomment after confirming app works without it
   # firebase_core: ^3.8.1
   # firebase_messaging: ^15.1.6
   # firebase_analytics: ^11.3.6
   # firebase_crashlytics: ^4.1.6
-
-  # # Local Notifications
   # flutter_local_notifications: ^18.0.1
 
-  # # URL Launcher
-  # url_launcher: ^6.2.4
-
-  # # Payment
-  # pay: ^2.0.0
-  # webview_flutter: ^4.4.2
-
-  # # Apple Sign In
-  # sign_in_with_apple: ^6.1.4
-
-  # # App Tracking Transparency
+  # === DISABLED - Not needed for App Store ===
   # app_tracking_transparency: ^2.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  # flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
