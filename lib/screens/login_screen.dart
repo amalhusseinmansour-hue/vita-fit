@@ -6,6 +6,7 @@ import '../constants/app_theme.dart';
 import '../services/api_service.dart';
 import '../services/firebase_service.dart';
 import '../services/apple_sign_in_service.dart';
+import '../services/biometric_service.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 import 'trainer_signup_screen.dart';
@@ -24,8 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
   bool _isAppleLoading = false;
+  bool _isBiometricLoading = false;
   bool _rememberMe = true;
   bool _isAppleAvailable = false;
+  bool _isBiometricAvailable = false;
+  bool _isBiometricEnabled = false;
+  String _biometricTypeName = '';
   String _userType = 'trainee';
 
   @override
@@ -33,8 +38,71 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _loadSavedCredentials();
     _checkAppleSignInAvailability();
+    _checkBiometricAvailability();
     // Track screen view - disabled temporarily
     // FirebaseService.logScreenView('login_screen');
+  }
+
+  Future<void> _checkBiometricAvailability() async {
+    try {
+      final isSupported = await BiometricService.isDeviceSupported();
+      final canCheck = await BiometricService.canCheckBiometrics();
+      final isEnabled = BiometricService.isBiometricEnabled();
+      final typeName = await BiometricService.getBiometricTypeName();
+
+      if (mounted) {
+        setState(() {
+          _isBiometricAvailable = isSupported && canCheck;
+          _isBiometricEnabled = isEnabled;
+          _biometricTypeName = typeName;
+        });
+
+        // Auto login with biometric if enabled and credentials saved
+        if (_isBiometricEnabled && _isBiometricAvailable) {
+          final savedEmail = HiveStorageService.getString('saved_email');
+          final savedPassword = HiveStorageService.getString('saved_password');
+          if (savedEmail != null && savedPassword != null) {
+            _handleBiometricLogin();
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Biometric check error: $e');
+    }
+  }
+
+  Future<void> _handleBiometricLogin() async {
+    setState(() => _isBiometricLoading = true);
+
+    try {
+      final authenticated = await BiometricService.authenticateForLogin();
+
+      if (authenticated) {
+        final savedEmail = HiveStorageService.getString('saved_email');
+        final savedPassword = HiveStorageService.getString('saved_password');
+
+        if (savedEmail != null && savedPassword != null) {
+          _emailController.text = savedEmail;
+          _passwordController.text = savedPassword;
+          await _handleLogin();
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('يرجى تسجيل الدخول أولاً ثم تفعيل البصمة'),
+                backgroundColor: AppTheme.error,
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Biometric login error: $e');
+    }
+
+    if (mounted) {
+      setState(() => _isBiometricLoading = false);
+    }
   }
 
   Future<void> _checkAppleSignInAvailability() async {
@@ -939,6 +1007,73 @@ class _LoginScreenState extends State<LoginScreen> {
                             duration: 600.ms,
                             curve: Curves.easeOut,
                           ),
+                    ],
+
+                    // Biometric Login Button
+                    if (_isBiometricAvailable && _isBiometricEnabled) ...[
+                      const SizedBox(height: AppTheme.md),
+
+                      Container(
+                        width: double.infinity,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+                          gradient: LinearGradient(
+                            colors: [
+                              AppTheme.secondary.withValues(alpha: 0.3),
+                              AppTheme.primary.withValues(alpha: 0.3),
+                            ],
+                          ),
+                          border: Border.all(
+                            color: AppTheme.primary.withValues(alpha: 0.5),
+                            width: 1.5,
+                          ),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: _isBiometricLoading ? null : _handleBiometricLogin,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: AppTheme.white,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+                            ),
+                          ),
+                          child: _isBiometricLoading
+                              ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: AppTheme.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      _biometricTypeName.contains('الوجه')
+                                          ? Icons.face
+                                          : Icons.fingerprint,
+                                      size: 28,
+                                      color: AppTheme.primary,
+                                    ),
+                                    const SizedBox(width: AppTheme.sm),
+                                    Text(
+                                      'الدخول بـ $_biometricTypeName',
+                                      style: const TextStyle(
+                                        fontSize: AppTheme.fontLg,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppTheme.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      )
+                          .animate()
+                          .fadeIn(delay: 1050.ms, duration: 600.ms)
+                          .slideY(begin: 0.2, end: 0),
                     ],
                   ],
                 ),

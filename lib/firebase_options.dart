@@ -1,30 +1,57 @@
-/// Firebase Options - Disabled
-/// This is a stub file. Firebase will be re-enabled after iOS crash is resolved.
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-class FirebaseOptions {
-  final String apiKey;
-  final String appId;
-  final String messagingSenderId;
-  final String projectId;
-  final String? storageBucket;
-
-  const FirebaseOptions({
-    required this.apiKey,
-    required this.appId,
-    required this.messagingSenderId,
-    required this.projectId,
-    this.storageBucket,
-  });
-}
-
+/// Default [FirebaseOptions] for use with your Firebase apps.
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    // Return a dummy object since Firebase is disabled
-    return const FirebaseOptions(
-      apiKey: '',
-      appId: '',
-      messagingSenderId: '',
-      projectId: '',
-    );
+    if (kIsWeb) {
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
+    }
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return android;
+      case TargetPlatform.iOS:
+        return ios;
+      case TargetPlatform.macOS:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.windows:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.linux:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for linux - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      default:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions are not supported for this platform.',
+        );
+    }
   }
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyAYoFJ7YtrxCMYbjJvG3LP29Lv0XRmHLpM',
+    appId: '1:100672549900:android:4eeec5c9f7a531584baa29',
+    messagingSenderId: '100672549900',
+    projectId: 'vitafit-794a6',
+    storageBucket: 'vitafit-794a6.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyB39pufVkWCOX3_KCiyAnLXrlBFUTKioes',
+    appId: '1:100672549900:ios:10f476529c3ea4814baa29',
+    messagingSenderId: '100672549900',
+    projectId: 'vitafit-794a6',
+    storageBucket: 'vitafit-794a6.firebasestorage.app',
+    iosBundleId: 'com.vitafitapp.fitness',
+  );
 }

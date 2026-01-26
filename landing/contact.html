@@ -413,6 +413,45 @@
             font-weight: 600;
         }
 
+        .file-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--card);
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input:hover {
+            border-color: var(--primary);
+            background: var(--surface);
+        }
+
+        .file-input::-webkit-file-upload-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-family: inherit;
+        }
+
+        .file-input::-webkit-file-upload-button:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
         /* Footer */
         footer {
             background: var(--background);
@@ -639,8 +678,12 @@
                             <input type="email" id="email" name="email" placeholder="example@email.com" required>
                         </div>
                         <div class="form-group">
+                            <label for="phone">رقم الجوال</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+966 5xxxxxxxx">
+                        </div>
+                        <div class="form-group">
                             <label for="subject">الموضوع</label>
-                            <select id="subject" name="subject" required>
+                            <select id="subject" name="subject" required onchange="toggleTrainerFields()">
                                 <option value="">اختاري الموضوع</option>
                                 <option value="general">استفسار عام</option>
                                 <option value="technical">مشكلة تقنية</option>
@@ -650,6 +693,47 @@
                                 <option value="other">أخرى</option>
                             </select>
                         </div>
+
+                        <!-- Trainer Documents Section (Hidden by default) -->
+                        <div id="trainerDocuments" style="display: none;">
+                            <div style="background: var(--surface); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px dashed var(--primary);">
+                                <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                                    <i class="fas fa-file-upload"></i>
+                                    المستندات المطلوبة للمدربات
+                                </h4>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                                    يرجى رفع المستندات التالية لإتمام طلب الانضمام
+                                </p>
+
+                                <div class="form-group">
+                                    <label for="identity">
+                                        <i class="fas fa-id-card" style="color: var(--primary);"></i>
+                                        الهوية الوطنية / الإقامة *
+                                    </label>
+                                    <input type="file" id="identity" name="identity" accept="image/*,.pdf" class="file-input">
+                                    <small style="color: var(--text-secondary);">صورة واضحة للهوية (PNG, JPG, PDF)</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="experience_certificate">
+                                        <i class="fas fa-certificate" style="color: var(--secondary);"></i>
+                                        شهادة الخبرة *
+                                    </label>
+                                    <input type="file" id="experience_certificate" name="experience_certificate" accept="image/*,.pdf" class="file-input">
+                                    <small style="color: var(--text-secondary);">شهادة خبرة في مجال اللياقة</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="professional_license">
+                                        <i class="fas fa-file-medical" style="color: var(--success);"></i>
+                                        رخصة مزاولة المهنة *
+                                    </label>
+                                    <input type="file" id="professional_license" name="professional_license" accept="image/*,.pdf" class="file-input">
+                                    <small style="color: var(--text-secondary);">رخصة مزاولة مهنة التدريب</small>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="message">الرسالة</label>
                             <textarea id="message" name="message" placeholder="اكتبي رسالتك هنا..." required></textarea>
@@ -730,9 +814,65 @@
             }
         });
 
+        // Toggle trainer documents visibility
+        function toggleTrainerFields() {
+            const subject = document.getElementById('subject').value;
+            const trainerDocs = document.getElementById('trainerDocuments');
+
+            if (subject === 'trainer') {
+                trainerDocs.style.display = 'block';
+                // Make files required
+                document.getElementById('identity').required = true;
+                document.getElementById('experience_certificate').required = true;
+                document.getElementById('professional_license').required = true;
+            } else {
+                trainerDocs.style.display = 'none';
+                // Remove required
+                document.getElementById('identity').required = false;
+                document.getElementById('experience_certificate').required = false;
+                document.getElementById('professional_license').required = false;
+            }
+        }
+
+        // Validate trainer files
+        function validateTrainerFiles() {
+            const subject = document.getElementById('subject').value;
+            if (subject !== 'trainer') return true;
+
+            const identity = document.getElementById('identity').files[0];
+            const experience = document.getElementById('experience_certificate').files[0];
+            const license = document.getElementById('professional_license').files[0];
+
+            if (!identity) {
+                alert('يرجى رفع صورة الهوية');
+                return false;
+            }
+            if (!experience) {
+                alert('يرجى رفع شهادة الخبرة');
+                return false;
+            }
+            if (!license) {
+                alert('يرجى رفع رخصة مزاولة المهنة');
+                return false;
+            }
+
+            // Check file sizes (max 10MB each)
+            const maxSize = 10 * 1024 * 1024;
+            if (identity.size > maxSize || experience.size > maxSize || license.size > maxSize) {
+                alert('حجم الملف يجب أن لا يتجاوز 10 ميجابايت');
+                return false;
+            }
+
+            return true;
+        }
+
         // Form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // Validate trainer files if needed
+            if (!validateTrainerFiles()) return;
+
             const formData = new FormData(this);
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
@@ -747,6 +887,7 @@
             .then(data => {
                 if (data.success) {
                     document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('trainerDocuments').style.display = 'none';
                     this.reset();
                     setTimeout(() => {
                         document.getElementById('successMessage').style.display = 'none';

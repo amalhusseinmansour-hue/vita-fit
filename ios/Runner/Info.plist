@@ -61,7 +61,10 @@
 	<string>VitaFit needs access to your photo library to select and upload your profile picture and progress photos.</string>
 
 	<key>NSCameraUsageDescription</key>
-	<string>VitaFit needs camera access to take progress photos and profile pictures.</string>
+	<string>VitaFit needs camera access to take progress photos, profile pictures, and upload identity documents.</string>
+
+	<key>NSFaceIDUsageDescription</key>
+	<string>VitaFit uses Face ID for secure and quick login to your account.</string>
 
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>VitaFit sends notifications for workout reminders, trainer messages, and subscription updates.</string>

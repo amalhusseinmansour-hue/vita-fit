@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,12 +8,13 @@ import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/role_router_screen.dart';
 import 'screens/trainer_signup_screen.dart';
-import 'screens/trainer_pending_screen.dart';
 import 'providers/cart_provider.dart';
 import 'providers/favorites_provider.dart';
 import 'providers/language_provider.dart';
 import 'services/hive_storage_service.dart';
 import 'services/toast_service.dart';
+import 'services/firebase_service.dart';
+import 'services/screen_security_service.dart';
 import 'localization/app_localizations.dart';
 
 void main() async {
@@ -26,6 +26,12 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  // Initialize Firebase
+  await FirebaseService.initialize();
+
+  // Enable screen security (prevent screenshots)
+  await ScreenSecurityService.enableSecurity();
 
   // Initialize Hive storage with error handling
   try {

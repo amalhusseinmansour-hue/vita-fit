@@ -60,13 +60,18 @@ dependencies:
   # Apple Sign In
   sign_in_with_apple: ^6.1.4
 
-  # === FIREBASE - DISABLED FOR NOW ===
-  # Uncomment after confirming app works without it
-  # firebase_core: ^3.8.1
-  # firebase_messaging: ^15.1.6
-  # firebase_analytics: ^11.3.6
-  # firebase_crashlytics: ^4.1.6
-  # flutter_local_notifications: ^18.0.1
+  # Biometric Authentication (Face ID / Fingerprint)
+  local_auth: ^2.3.0
+
+  # Image Picker for document upload
+  image_picker: ^1.1.2
+
+  # === FIREBASE ===
+  firebase_core: ^3.8.1
+  firebase_messaging: ^15.1.6
+  firebase_analytics: ^11.3.6
+  firebase_crashlytics: ^4.1.6
+  flutter_local_notifications: ^18.0.1
 
   # === DISABLED - Not needed for App Store ===
   # app_tracking_transparency: ^2.0.6
