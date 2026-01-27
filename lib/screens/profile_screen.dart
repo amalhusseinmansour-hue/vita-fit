@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../services/hive_storage_service.dart';
 import '../constants/app_theme.dart';
 import '../services/api_service.dart';
+import '../services/biometric_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -22,11 +23,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _activityLevel = 'moderate';
   bool _isLoading = true;
   bool _isSaving = false;
+  bool _isBiometricAvailable = false;
+  bool _isBiometricEnabled = false;
+  String _biometricTypeName = '';
 
   @override
   void initState() {
     super.initState();
     _loadProfile();
+    _checkBiometric();
+  }
+
+  Future<void> _checkBiometric() async {
+    final isSupported = await BiometricService.isDeviceSupported();
+    final canCheck = await BiometricService.canCheckBiometrics();
+    final isEnabled = BiometricService.isBiometricEnabled();
+    final typeName = await BiometricService.getBiometricTypeName();
+
+    if (mounted) {
+      setState(() {
+        _isBiometricAvailable = isSupported && canCheck;
+        _isBiometricEnabled = isEnabled;
+        _biometricTypeName = typeName;
+      });
+    }
+  }
+
+  Future<void> _toggleBiometric(bool value) async {
+    if (value) {
+      // Authenticate first before enabling
+      final authenticated = await BiometricService.authenticate(
+        reason: 'يرجى التحقق من هويتك لتفعيل الدخول بالبصمة',
+      );
+      if (authenticated) {
+        await BiometricService.enableBiometric();
+        setState(() => _isBiometricEnabled = true);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('تم تفعيل الدخول بـ $_biometricTypeName'),
+              backgroundColor: AppTheme.success,
+            ),
+          );
+        }
+      }
+    } else {
+      await BiometricService.disableBiometric();
+      setState(() => _isBiometricEnabled = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تم إلغاء تفعيل الدخول بالبصمة'),
+            backgroundColor: AppTheme.warning,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _loadProfile() async {
@@ -337,6 +389,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 delay: 400,
                               ),
                               const SizedBox(height: AppTheme.xl),
+
+                              // إعدادات الأمان
+                              if (_isBiometricAvailable) ...[
+                                const Text(
+                                  'إعدادات الأمان',
+                                  style: TextStyle(
+                                    fontSize: AppTheme.fontXl,
+                                    fontWeight: AppTheme.fontBold,
+                                    color: AppTheme.white,
+                                  ),
+                                ).animate().fadeIn(delay: 500.ms),
+                                const SizedBox(height: AppTheme.md),
+                                Container(
+                                  padding: const EdgeInsets.all(AppTheme.md),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.surface,
+                                    borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                                    border: Border.all(color: AppTheme.border),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.primary.withValues(alpha: 0.2),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Icon(
+                                          _biometricTypeName.contains('الوجه')
+                                              ? Icons.face
+                                              : Icons.fingerprint,
+                                          color: AppTheme.primary,
+                                          size: 28,
+                                        ),
+                                      ),
+                                      const SizedBox(width: AppTheme.md),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'الدخول بـ $_biometricTypeName',
+                                              style: const TextStyle(
+                                                color: AppTheme.white,
+                                                fontSize: AppTheme.fontMd,
+                                                fontWeight: AppTheme.fontSemibold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              _isBiometricEnabled
+                                                  ? 'مفعّل - يمكنك الدخول بالبصمة'
+                                                  : 'غير مفعّل',
+                                              style: TextStyle(
+                                                color: _isBiometricEnabled
+                                                    ? AppTheme.success
+                                                    : AppTheme.textSecondary,
+                                                fontSize: AppTheme.fontSm,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Switch(
+                                        value: _isBiometricEnabled,
+                                        onChanged: _toggleBiometric,
+                                        activeColor: AppTheme.primary,
+                                        activeTrackColor: AppTheme.primary.withValues(alpha: 0.3),
+                                      ),
+                                    ],
+                                  ),
+                                ).animate().fadeIn(delay: 550.ms).slideX(begin: 0.2, end: 0),
+                                const SizedBox(height: AppTheme.xl),
+                              ],
 
                               // زر الحفظ
                               SizedBox(

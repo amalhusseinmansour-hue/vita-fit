@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="حملي تطبيق VITA FIT الآن - متاح لأجهزة Android و iOS">
-    <title>تحميل التطبيق | VITA FIT</title>
+    <meta name="description" content="الشروط والأحكام لتطبيق VITA FIT - اقرئي شروط الاستخدام">
+    <title>الشروط والأحكام | VITA FIT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -48,7 +48,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -78,7 +77,6 @@
             66% { transform: translate(-20px, 20px) rotate(-5deg); }
         }
 
-        /* Header */
         header {
             position: fixed;
             top: 0;
@@ -151,13 +149,11 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
+        .nav-links a:hover {
             color: var(--primary);
         }
 
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
+        .nav-links a:hover::after {
             width: 100%;
         }
 
@@ -177,7 +173,6 @@
             box-shadow: 0 6px 30px rgba(255, 105, 180, 0.6);
         }
 
-        /* Mobile Menu */
         .menu-toggle {
             display: none;
             flex-direction: column;
@@ -194,7 +189,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Page Header */
         .page-header {
             padding: 150px 2rem 60px;
             text-align: center;
@@ -220,244 +214,131 @@
             margin: 0 auto;
         }
 
-        /* Section */
         .section {
             padding: 80px 2rem;
         }
 
-        .section-alt {
-            background: var(--background-light);
-        }
-
-        .container {
-            max-width: 1200px;
+        .terms-content {
+            max-width: 900px;
             margin: 0 auto;
         }
 
-        .section-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 60px;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .section-header h2 span {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        /* Buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 16px 36px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 35px rgba(255, 105, 180, 0.6);
-        }
-
-        .btn-secondary {
-            background: var(--surface);
-            color: var(--text);
-            padding: 16px 36px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border: 2px solid var(--border);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
+        .terms-section {
             background: var(--card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
         }
 
-        /* Download Page Specific */
-        .download-options {
+        .terms-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .terms-section h3 {
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text);
+        }
+
+        .terms-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.9;
+        }
+
+        .terms-section ul {
+            color: var(--text-secondary);
+            margin: 1rem 0;
+            padding-right: 1.5rem;
+        }
+
+        .terms-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .terms-section ol {
+            color: var(--text-secondary);
+            margin: 1rem 0;
+            padding-right: 1.5rem;
+        }
+
+        .terms-section ol li {
+            margin-bottom: 0.75rem;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .highlight-box {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-right: 4px solid var(--primary);
+        }
+
+        .highlight-box p {
+            margin: 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 105, 180, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-right: 4px solid #ff6b6b;
+        }
+
+        .warning-box p {
+            margin: 0;
+            color: #ffb3b3;
+        }
+
+        .toc {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
             margin-bottom: 3rem;
         }
 
-        .download-card {
-            background: var(--card);
-            border: 2px solid var(--border);
-            border-radius: 24px;
-            padding: 2.5rem;
-            text-align: center;
-            min-width: 280px;
-            max-width: 350px;
-            transition: all 0.3s ease;
-        }
-
-        .download-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.2);
-        }
-
-        .download-card.featured {
-            border-color: var(--primary);
-            position: relative;
-        }
-
-        .download-card.featured::before {
-            content: 'متاح الآن';
-            position: absolute;
-            top: -12px;
-            right: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .download-icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
+        .toc h3 {
+            margin-bottom: 1rem;
             color: var(--text);
         }
 
-        .download-icon svg {
-            width: 64px;
-            height: 64px;
-        }
-
-        .download-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .download-card .version {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .download-card .btn-primary,
-        .download-card .btn-secondary {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .requirements {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            text-align: right;
-        }
-
-        .requirements h4 {
-            margin-bottom: 1rem;
-            color: var(--primary);
-            font-size: 1rem;
-        }
-
-        .requirements ul {
+        .toc ul {
             list-style: none;
+            padding: 0;
+            column-count: 2;
+        }
+
+        .toc ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .toc ul li a {
             color: var(--text-secondary);
-        }
-
-        .requirements ul li {
-            margin-bottom: 0.5rem;
-            padding-right: 1.5rem;
-            position: relative;
-            font-size: 0.9rem;
-        }
-
-        .requirements ul li::before {
-            content: '✓';
-            position: absolute;
-            right: 0;
-            color: var(--success);
-        }
-
-        .qr-section {
-            margin-top: 4rem;
-            padding: 3rem;
-            background: var(--surface);
-            border-radius: 24px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
-
-        .qr-code {
-            width: 180px;
-            height: 180px;
-            background: white;
-            border-radius: 16px;
-            margin: 1.5rem auto;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            color: var(--background);
+            gap: 0.5rem;
+            transition: color 0.3s ease;
         }
 
-        /* Grid Layouts */
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+        .toc ul li a:hover {
+            color: var(--primary);
         }
 
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
-        }
-
-        /* Footer */
         footer {
             background: var(--background);
             padding: 60px 2rem 30px;
@@ -542,21 +423,6 @@
             font-size: 0.9rem;
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
-            .grid-3 {
-                grid-template-columns: 1fr;
-            }
-
-            .grid-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -570,18 +436,8 @@
                 font-size: 2rem;
             }
 
-            .section-header h2 {
-                font-size: 1.8rem;
-            }
-
-            .download-options {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .download-card {
-                width: 100%;
-                max-width: 100%;
+            .terms-section {
+                padding: 1.5rem;
             }
 
             .footer-content {
@@ -597,8 +453,8 @@
                 justify-content: center;
             }
 
-            .grid-4 {
-                grid-template-columns: repeat(2, 1fr);
+            .toc ul {
+                column-count: 1;
             }
         }
 
@@ -616,7 +472,6 @@
 <body>
     <div class="bg-animation"></div>
 
-    <!-- Header -->
     <header id="header">
         <nav>
             <a href="/" class="logo">
@@ -626,7 +481,7 @@
             <ul class="nav-links">
                 <li><a href="/features">المميزات</a></li>
                 <li><a href="/trainers">المدربات</a></li>
-                <li><a href="/download" class="active">التحميل</a></li>
+                <li><a href="/download">التحميل</a></li>
             </ul>
             <a href="/download" class="download-btn">حملي التطبيق</a>
             <div class="menu-toggle">
@@ -637,130 +492,205 @@
         </nav>
     </header>
 
-    <!-- Page Header -->
     <section class="page-header">
-        <h1>حملي <span>VITA FIT</span> الآن</h1>
-        <p>ابدئي رحلتك نحو حياة أكثر صحة ونشاطاً مع تطبيق VITA FIT المجاني</p>
+        <h1>الشروط <span>والأحكام</span></h1>
+        <p>يرجى قراءة هذه الشروط والأحكام بعناية قبل استخدام التطبيق</p>
     </section>
 
-    <!-- Download Options -->
     <section class="section">
-        <div class="container">
-            <div class="download-options">
-                <!-- Android -->
-                <div class="download-card featured">
-                    <div class="download-icon">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
-                        </svg>
-                    </div>
-                    <h3>Android</h3>
-                    <p class="version">الإصدار 1.0.0 • 45 MB</p>
-                    <a href="/app-release.apk" class="btn-primary" download>
-                        <span>📥</span>
-                        تحميل APK
-                    </a>
-                    <div class="requirements">
-                        <h4>متطلبات النظام</h4>
+        <div class="terms-content">
+            <p class="last-updated">آخر تحديث: يناير 2026</p>
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h3>محتويات الشروط والأحكام</h3>
+                <ul>
+                    <li><a href="#definitions">1. التعريفات العامة</a></li>
+                    <li><a href="#general">2. شروط الاستخدام العامة</a></li>
+                    <li><a href="#medical">3. المسؤولية الطبية والصحية</a></li>
+                    <li><a href="#trainee">4. التزامات المتدربات</a></li>
+                    <li><a href="#trainer">5. التزامات المدربات</a></li>
+                    <li><a href="#payment">6. سياسة الدفع والاشتراكات</a></li>
+                    <li><a href="#intellectual">7. الملكية الفكرية</a></li>
+                    <li><a href="#privacy">8. الخصوصية وحماية البيانات</a></li>
+                    <li><a href="#content">9. المحتوى والبث المباشر</a></li>
+                    <li><a href="#disclaimer">10. إخلاء المسؤولية القانونية</a></li>
+                    <li><a href="#changes">11. التعديلات</a></li>
+                    <li><a href="#contact">12. التواصل القانوني</a></li>
+                </ul>
+            </div>
+
+            <!-- Definitions -->
+            <div class="terms-section" id="definitions">
+                <h2>1. التعريفات العامة</h2>
+                <ul>
+                    <li><strong>التطبيق:</strong> Vita Fit</li>
+                    <li><strong>المالك:</strong> الشركة المالكة والمشغلة للتطبيق</li>
+                    <li><strong>المدربة:</strong> أي مدربة رياضية معتمدة أو مقدمة محتوى تدريبي</li>
+                    <li><strong>المتدربة:</strong> أي مستخدمة مشتركة في التطبيق</li>
+                    <li><strong>الخدمة:</strong> التمارين، البث المباشر، الفيديوهات، الاستشارات، البرامج التدريبية</li>
+                    <li><strong>المحتوى:</strong> فيديو، صوت، صور، نصوص، بث مباشر</li>
+                </ul>
+            </div>
+
+            <!-- General Terms -->
+            <div class="terms-section" id="general">
+                <h2>2. شروط الاستخدام العامة</h2>
+                <ol>
+                    <li>استخدام التطبيق متاح للنساء فقط.</li>
+                    <li>يجب أن يكون عمر المشتركة 18 سنة فما فوق أو بموافقة ولي الأمر.</li>
+                    <li>يمنع مشاركة الحساب مع أي شخص آخر.</li>
+                    <li>يحق لإدارة التطبيق تعليق أو إلغاء الحساب عند مخالفة الشروط دون إنذار مسبق.</li>
+                    <li>جميع التمارين مقدمة لأغراض رياضية وتثقيفية فقط.</li>
+                </ol>
+            </div>
+
+            <!-- Medical Responsibility -->
+            <div class="terms-section" id="medical">
+                <h2>3. المسؤولية الطبية والصحية</h2>
+                <div class="warning-box">
+                    <p><strong>تنبيه مهم:</strong> التطبيق لا يُعد بديلاً عن الاستشارة الطبية. يُنصح باستشارة طبيب قبل بدء أي برنامج تدريبي.</p>
+                </div>
+                <p>المتدربة تتحمل كامل المسؤولية الصحية عن:</p>
+                <ul>
+                    <li>حالتها البدنية</li>
+                    <li>أي إصابة أو مضاعفات</li>
+                </ul>
+                <p>المالك والمدربات غير مسؤولين عن:</p>
+                <ul>
+                    <li>الإصابات</li>
+                    <li>الإجهاد</li>
+                    <li>مشاكل القلب أو العضلات</li>
+                    <li>أي نتائج صحية غير متوقعة</li>
+                </ul>
+            </div>
+
+            <!-- Trainee Obligations -->
+            <div class="terms-section" id="trainee">
+                <h2>4. التزامات المتدربات</h2>
+                <ol>
+                    <li>الالتزام بالتعليمات الرياضية المعروضة.</li>
+                    <li>عدم تصوير أو إعادة نشر المحتوى خارج التطبيق.</li>
+                    <li>عدم الإساءة أو التحرش أو التنمر في التعليقات أو البث المباشر.</li>
+                    <li>الالتزام بالآداب العامة والأخلاق.</li>
+                    <li>عدم إعطاء نصائح طبية أو غذائية لباقي المشتركات.</li>
+                </ol>
+            </div>
+
+            <!-- Trainer Obligations -->
+            <div class="terms-section" id="trainer">
+                <h2>5. التزامات المدربات</h2>
+                <ol>
+                    <li>الالتزام بالمحتوى الرياضي فقط دون تشخيص طبي أو وصف أدوية.</li>
+                    <li>تقديم تمارين آمنة ومناسبة للنساء.</li>
+                    <li>احترام الخصوصية وعدم طلب معلومات شخصية حساسة.</li>
+                    <li>عدم استغلال المتدربات مادياً أو نفسياً.</li>
+                    <li>الالتزام بالأخلاق المهنية والسلوك اللائق.</li>
+                </ol>
+            </div>
+
+            <!-- Payment Policy -->
+            <div class="terms-section" id="payment">
+                <h2>6. سياسة الدفع والاشتراكات</h2>
+                <ol>
+                    <li>جميع المدفوعات غير قابلة للاسترداد بعد بدء الاشتراك.</li>
+                    <li>يحق للتطبيق تغيير الأسعار مع إشعار مسبق.</li>
+                    <li>في حال توقف الخدمة مؤقتاً لأسباب تقنية، لا يترتب تعويض مالي.</li>
+                    <li>الاشتراكات تُجدد تلقائياً ما لم يتم الإلغاء.</li>
+                </ol>
+                <div class="highlight-box">
+                    <p>يمكنك إلغاء اشتراكك في أي وقت من خلال إعدادات التطبيق قبل موعد التجديد.</p>
+                </div>
+            </div>
+
+            <!-- Intellectual Property -->
+            <div class="terms-section" id="intellectual">
+                <h2>7. الملكية الفكرية</h2>
+                <ol>
+                    <li>جميع المحتويات داخل التطبيق مملوكة لـ Vita Fit.</li>
+                    <li>يمنع منعاً باتاً:
                         <ul>
-                            <li>Android 5.0 أو أحدث</li>
-                            <li>مساحة تخزين 100 MB</li>
-                            <li>اتصال بالإنترنت</li>
+                            <li>النسخ</li>
+                            <li>التسجيل</li>
+                            <li>إعادة النشر</li>
+                            <li>البيع أو التوزيع</li>
                         </ul>
-                    </div>
-                </div>
+                    </li>
+                    <li>أي انتهاك يعرض صاحبه للمساءلة القانونية.</li>
+                </ol>
+            </div>
 
-                <!-- iOS -->
-                <div class="download-card">
-                    <div class="download-icon">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                        </svg>
-                    </div>
-                    <h3>iOS</h3>
-                    <p class="version">قريباً</p>
-                    <button class="btn-secondary" disabled style="opacity: 0.6; cursor: not-allowed;">
-                        <span>⏳</span>
-                        قريباً على App Store
-                    </button>
-                    <div class="requirements">
-                        <h4>متطلبات النظام</h4>
+            <!-- Privacy -->
+            <div class="terms-section" id="privacy">
+                <h2>8. الخصوصية وحماية البيانات</h2>
+                <ol>
+                    <li>يتم حفظ بيانات المستخدمين بسرية تامة.</li>
+                    <li>لا يتم مشاركة البيانات مع أي طرف ثالث إلا:
                         <ul>
-                            <li>iOS 12.0 أو أحدث</li>
-                            <li>iPhone 6s أو أحدث</li>
-                            <li>مساحة تخزين 120 MB</li>
+                            <li>بموافقة المستخدم</li>
+                            <li>أو بأمر قانوني</li>
                         </ul>
-                    </div>
+                    </li>
+                    <li>يحق للمستخدم طلب حذف حسابه وبياناته.</li>
+                </ol>
+                <p>لمزيد من التفاصيل، يرجى الاطلاع على <a href="/privacy" style="color: var(--primary);">سياسة الخصوصية</a>.</p>
+            </div>
+
+            <!-- Content and Live -->
+            <div class="terms-section" id="content">
+                <h2>9. المحتوى والبث المباشر</h2>
+                <ol>
+                    <li>يمنع:
+                        <ul>
+                            <li>الملابس غير اللائقة</li>
+                            <li>الإيحاءات</li>
+                            <li>أي محتوى مخالف للآداب العامة</li>
+                        </ul>
+                    </li>
+                    <li>يحق للتطبيق إيقاف أي بث مباشر مخالف فوراً.</li>
+                    <li>يتم تسجيل بعض الجلسات لأغراض الجودة والحماية القانونية.</li>
+                </ol>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="terms-section" id="disclaimer">
+                <h2>10. إخلاء المسؤولية القانونية</h2>
+                <div class="warning-box">
+                    <p>يستخدم التطبيق على مسؤولية المستخدم الشخصية.</p>
+                </div>
+                <p>لا يتحمل المالك أي خسائر:</p>
+                <ul>
+                    <li>صحية</li>
+                    <li>مالية</li>
+                    <li>نفسية</li>
+                </ul>
+                <div class="highlight-box">
+                    <p><strong>القانون المعمول به:</strong> في حال النزاع، يكون القانون الإماراتي هو المرجع.</p>
                 </div>
             </div>
 
-            <!-- QR Code -->
-            <div class="qr-section">
-                <h3>امسحي الكود للتحميل</h3>
-                <div class="qr-code">
-                    <div style="text-align: center;">
-                        <div style="font-size: 3rem;">📱</div>
-                        <small>QR Code</small>
-                    </div>
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">استخدمي كاميرا هاتفك لمسح الكود والتحميل مباشرة</p>
+            <!-- Changes -->
+            <div class="terms-section" id="changes">
+                <h2>11. التعديلات</h2>
+                <ul>
+                    <li>يحق لإدارة Vita Fit تعديل هذه الشروط في أي وقت.</li>
+                    <li>استمرار الاستخدام يعني الموافقة على التحديثات.</li>
+                </ul>
             </div>
+
+            <!-- Contact -->
+            <div class="terms-section" id="contact">
+                <h2>12. التواصل القانوني</h2>
+                <p>أي استفسار أو شكوى يتم عبر:</p>
+                <ul>
+                    <li><strong>البريد الإلكتروني:</strong> <a href="mailto:info@vitafit.online" style="color: var(--primary);">info@vitafit.online</a></li>
+                    <li><strong>صفحة الدعم الفني:</strong> <a href="/contact" style="color: var(--primary);">تواصلي معنا</a></li>
+                </ul>
+            </div>
+
         </div>
     </section>
 
-    <!-- Installation Guide -->
-    <section class="section section-alt">
-        <div class="container">
-            <div class="section-header">
-                <h2>كيفية <span>التثبيت</span></h2>
-                <p>خطوات بسيطة لتثبيت التطبيق على جهازك</p>
-            </div>
-            <div class="grid-3">
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">1️⃣</div>
-                    <h3 style="margin-bottom: 0.5rem;">حملي الملف</h3>
-                    <p style="color: var(--text-secondary);">اضغطي على زر التحميل وانتظري حتى يكتمل تنزيل ملف APK</p>
-                </div>
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">2️⃣</div>
-                    <h3 style="margin-bottom: 0.5rem;">فعّلي التثبيت</h3>
-                    <p style="color: var(--text-secondary);">اذهبي للإعدادات > الأمان > فعّلي "مصادر غير معروفة"</p>
-                </div>
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">3️⃣</div>
-                    <h3 style="margin-bottom: 0.5rem;">ثبتي التطبيق</h3>
-                    <p style="color: var(--text-secondary);">افتحي ملف APK واضغطي "تثبيت" ثم "فتح" للبدء</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Reminder -->
-    <section class="section" style="text-align: center;">
-        <div class="container">
-            <h2 style="font-size: 2rem; margin-bottom: 2rem;">ماذا ستحصلين عند التحميل؟</h2>
-            <div class="grid-4">
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏋️</div>
-                    <p style="color: var(--text-secondary);">+500 تمرين</p>
-                </div>
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🥗</div>
-                    <p style="color: var(--text-secondary);">خطط غذائية</p>
-                </div>
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👩‍🏫</div>
-                    <p style="color: var(--text-secondary);">مدربات معتمدات</p>
-                </div>
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📊</div>
-                    <p style="color: var(--text-secondary);">تتبع التقدم</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer>
         <div class="footer-container">
             <div class="footer-content">
@@ -785,6 +715,7 @@
                         <li><a href="/faq">الأسئلة الشائعة</a></li>
                         <li><a href="/contact">تواصلي معنا</a></li>
                         <li><a href="/privacy">سياسة الخصوصية</a></li>
+                        <li><a href="/terms">الشروط والأحكام</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -822,6 +753,19 @@
             } else {
                 header.classList.remove('scrolled');
             }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 </body>

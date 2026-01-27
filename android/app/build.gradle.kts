@@ -23,10 +23,6 @@ android {
     ndkVersion = "27.0.12077973"
 
     packaging {
-        jniLibs {
-            useLegacyPackaging = true
-            keepDebugSymbols += listOf("**/*.so")
-        }
         resources {
             excludes += listOf("META-INF/*")
         }
@@ -45,7 +41,7 @@ android {
 
     defaultConfig {
         applicationId = "com.vitafit.app"
-        minSdk = 21
+        minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
