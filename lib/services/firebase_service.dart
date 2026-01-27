@@ -30,19 +30,32 @@ class FirebaseService {
       _firebaseAvailable = true;
       _initialized = true;
 
-      // Initialize Analytics
-      _analytics = FirebaseAnalytics.instance;
+      // Initialize Analytics (safe)
+      try {
+        _analytics = FirebaseAnalytics.instance;
+      } catch (e) {
+        debugPrint('Analytics init error: $e');
+      }
 
-      // Initialize Crashlytics
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-      PlatformDispatcher.instance.onError = (error, stack) {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-        return true;
-      };
+      // Initialize Crashlytics (safe)
+      try {
+        FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+        PlatformDispatcher.instance.onError = (error, stack) {
+          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+          return true;
+        };
+      } catch (e) {
+        debugPrint('Crashlytics init error: $e');
+      }
 
-      // Initialize Messaging
-      _messaging = FirebaseMessaging.instance;
-      await _setupMessaging();
+      // Initialize Messaging (deferred - don't request permissions at startup)
+      try {
+        _messaging = FirebaseMessaging.instance;
+        // Note: Permission request moved to when user first needs notifications
+        // This prevents iOS crash from early permission request
+      } catch (e) {
+        debugPrint('Messaging init error: $e');
+      }
 
       debugPrint('Firebase initialized successfully');
     } catch (e, stack) {
@@ -52,35 +65,45 @@ class FirebaseService {
     }
   }
 
-  /// Setup Firebase Messaging
+  /// Setup Firebase Messaging - Call this after app is ready
+  /// This requests notification permissions and sets up listeners
+  static Future<void> setupMessaging() async {
+    if (!_firebaseAvailable || _messaging == null) return;
+
+    try {
+      // Request permission
+      NotificationSettings settings = await _messaging!.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+
+      debugPrint('Notification permission: ${settings.authorizationStatus}');
+
+      // Get FCM token
+      String? token = await _messaging!.getToken();
+      debugPrint('FCM Token: $token');
+
+      // Handle foreground messages
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        debugPrint('Foreground message: ${message.notification?.title}');
+        // Handle foreground notification
+      });
+
+      // Handle background messages
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    } catch (e) {
+      debugPrint('Setup messaging error: $e');
+    }
+  }
+
+  // Keep the old method name for backwards compatibility
   static Future<void> _setupMessaging() async {
-    if (_messaging == null) return;
-
-    // Request permission
-    NotificationSettings settings = await _messaging!.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    debugPrint('Notification permission: ${settings.authorizationStatus}');
-
-    // Get FCM token
-    String? token = await _messaging!.getToken();
-    debugPrint('FCM Token: $token');
-
-    // Handle foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      debugPrint('Foreground message: ${message.notification?.title}');
-      // Handle foreground notification
-    });
-
-    // Handle background messages
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    await setupMessaging();
   }
 
   /// Get FCM token

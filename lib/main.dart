@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,16 +29,27 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Initialize Firebase
-  await FirebaseService.initialize();
+  // Initialize Firebase with error handling
+  try {
+    await FirebaseService.initialize();
+  } catch (e) {
+    debugPrint('Firebase initialization error: $e');
+    // Continue even if Firebase fails
+  }
 
-  // Enable screen security (prevent screenshots)
-  await ScreenSecurityService.enableSecurity();
+  // Enable screen security (prevent screenshots) with error handling
+  try {
+    await ScreenSecurityService.enableSecurity();
+  } catch (e) {
+    debugPrint('Screen security error: $e');
+    // Continue even if screen security fails
+  }
 
   // Initialize Hive storage with error handling
   try {
     await HiveStorageService.init();
   } catch (e) {
+    debugPrint('Hive initialization error: $e');
     // Continue even if Hive fails
   }
 

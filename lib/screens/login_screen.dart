@@ -58,11 +58,16 @@ class _LoginScreenState extends State<LoginScreen> {
         });
 
         // Auto login with biometric if enabled and credentials saved
+        // Add delay to ensure UI is ready
         if (_isBiometricEnabled && _isBiometricAvailable) {
           final savedEmail = HiveStorageService.getString('saved_email');
           final savedPassword = HiveStorageService.getString('saved_password');
           if (savedEmail != null && savedPassword != null) {
-            _handleBiometricLogin();
+            // Small delay to ensure the screen is fully rendered
+            await Future.delayed(const Duration(milliseconds: 500));
+            if (mounted) {
+              _handleBiometricLogin();
+            }
           }
         }
       }

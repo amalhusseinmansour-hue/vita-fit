@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/api_service.dart';
+import '../services/firebase_service.dart';
 import '../constants/app_theme.dart';
 import 'trainer_main_screen.dart';
 import 'home_screen.dart';
@@ -36,12 +38,16 @@ class _RoleRouterScreenState extends State<RoleRouterScreen> {
         return;
       }
 
+      // Setup Firebase messaging after user is logged in
+      // This is safer than requesting permissions at app startup
+      FirebaseService.setupMessaging();
+
       setState(() {
         _userType = userType;
         _isLoading = false;
       });
     } catch (e) {
-      print('Error checking user role: $e');
+      debugPrint('Error checking user role: $e');
       setState(() {
         _isLoading = false;
       });
